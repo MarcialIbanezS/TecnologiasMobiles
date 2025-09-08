@@ -5,7 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/stan
 import { IonBreadcrumb, IonBreadcrumbs } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
-
+import { IonDatetime } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-marcial3',
@@ -13,7 +13,7 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./marcial3.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, RouterModule,
-    IonToolbar, CommonModule, FormsModule,IonBreadcrumb, IonBreadcrumbs,
+    IonToolbar, CommonModule, FormsModule,IonBreadcrumb, IonBreadcrumbs, IonDatetime
   ]
 })
 export class Marcial3Page implements OnInit {

@@ -5,6 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/stan
 import { IonBreadcrumb, IonBreadcrumbs } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
+import { IonAlert, IonButton } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-marcial4',
@@ -12,7 +13,7 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./marcial4.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, RouterModule,
-    IonToolbar, CommonModule, FormsModule,IonBreadcrumb, IonBreadcrumbs,
+    IonToolbar, CommonModule, FormsModule,IonBreadcrumb, IonBreadcrumbs, IonAlert, IonButton
   ]
 })
 export class Marcial4Page implements OnInit {
@@ -25,21 +26,25 @@ export class Marcial4Page implements OnInit {
   irAMarcial1() {
     this.router.navigate(['/pagina1']);       
   }
-  irAMarcial2() {
-    this.router.navigate(['/marcial2']);       
-  }
-  irAMarcial3() {
-    this.router.navigate(['/marcial3']);       
-  }
+
   irAMarcial4() {
     this.router.navigate(['/marcial4']);       
   }
-  irAMarcial5() {
-    this.router.navigate(['/marcial5']);       
-  }
-  irAMarcial6() {
-    this.router.navigate(['/marcial6']);       
-  }
+  public alertButtons = ['OK'];
+  public alertInputs = [
+    {
+      label: 'Silker',
+      type: 'radio',
+      value: 'silk',
+    },
+    {
+      label: 'Skonger',
+      type: 'radio',
+      value: 'song',
+    },
+
+  ];
+
 
   ngOnInit() {
   }

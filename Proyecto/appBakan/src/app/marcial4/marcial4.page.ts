@@ -5,25 +5,17 @@ import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/stan
 import { IonBreadcrumb, IonBreadcrumbs } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-} from '@ionic/angular/standalone';
 
 @Component({
-  selector: 'app-pagina1',
-  templateUrl: './pagina1.page.html',
-  styleUrls: ['./pagina1.page.scss'],
+  selector: 'app-marcial4',
+  templateUrl: './marcial4.page.html',
+  styleUrls: ['./marcial4.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, RouterModule,
     IonToolbar, CommonModule, FormsModule,IonBreadcrumb, IonBreadcrumbs,
-  IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle]
+  ]
 })
-export class Pagina1Page implements OnInit {
+export class Marcial4Page implements OnInit {
 
   constructor(private router: Router) {}
   
@@ -48,9 +40,11 @@ export class Pagina1Page implements OnInit {
   irAMarcial6() {
     this.router.navigate(['/marcial6']);       
   }
-  
 
   ngOnInit() {
   }
 
 }
+
+
+

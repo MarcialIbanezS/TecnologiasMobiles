@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { IonBreadcrumb, IonBreadcrumbs } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import {
   IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonModal,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
-
+import { IonImg } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-marcial2',
@@ -21,13 +21,20 @@ import {
   styleUrls: ['./marcial2.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, RouterModule,
-    IonToolbar, CommonModule, FormsModule, IonBreadcrumb, IonBreadcrumbs]
+    IonToolbar, CommonModule, FormsModule, IonBreadcrumb, IonBreadcrumbs,
+  IonButton, IonButtons, IonContent, IonHeader, IonModal, IonTitle, IonToolbar,IonImg]
 
 })
 
 export class Marcial2Page implements OnInit {
 
   constructor(private router: Router) {}
+
+  isModalOpen = false;
+
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
+  }
   
   irAHome() {
     this.router.navigate(['/home']);       

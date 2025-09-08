@@ -4,11 +4,17 @@
   </ion-toolbar>
 </ion-header>
 
+
+
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">martin3</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-breadcrumbs>
+ <ion-breadcrumb expand="block" (click)="irAHome()">Home</ion-breadcrumb>
+ <ion-breadcrumb expand="block" (click)="irAMartin0()">Volver</ion-breadcrumb>
+</ion-breadcrumbs>
   <ion-button>Default</ion-button> <ion-button [disabled]="true">Disabled</ion-button>
 </ion-content>

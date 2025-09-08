@@ -10,7 +10,13 @@
       <ion-title size="large">martin5</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-chip>Default</ion-chip>
-<ion-chip [disabled]="true">Disabled</ion-chip>
-<ion-chip [outline]="true">Outline</ion-chip>
+   <ion-breadcrumbs>
+ <ion-breadcrumb expand="block" (click)="irAHome()">Home</ion-breadcrumb>
+ <ion-breadcrumb expand="block" (click)="irAMartin0()">Volver</ion-breadcrumb>
+</ion-breadcrumbs>
+
+<ion-toggle (ionChange)="cambiarModo($event)">
+  Activar modo silksong
+</ion-toggle>
+
 </ion-content>

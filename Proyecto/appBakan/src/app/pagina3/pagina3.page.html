@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>pagina3</ion-title>
+    <ion-title>Top 5 Profesores más Gigachad</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,4 +10,26 @@
       <ion-title size="large">pagina3</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-breadcrumbs>
+    <ion-breadcrumb expand="block" (click)="irAHome()">inicio</ion-breadcrumb>
+    <ion-breadcrumb expand="block" (click)="irAmatias1()">top profes</ion-breadcrumb>
+  </ion-breadcrumbs>
+
+  <ion-list>
+    <ion-item
+      button
+      detail="true"
+      *ngFor="let p of top5; index as i"
+      [routerLink]="p.url"
+      routerDirection="forward"
+    >
+      <ion-label>
+        <h2>{{ i + 1 }}. {{ p.name }}</h2>
+        <p>Ir al perfil</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  
 </ion-content>

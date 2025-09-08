@@ -66,6 +66,26 @@ export const routes: Routes = [
     path: 'marcial6',
     loadComponent: () => import('./marcial6/marcial6.page').then( m => m.Marcial6Page)
   },
+  {
+    path: 'matias2',
+    loadComponent: () => import('./matias2/matias2.page').then( m => m.Matias2Page)
+  },
+  {
+    path: 'matias3',
+    loadComponent: () => import('./matias3/matias3.page').then( m => m.Matias3Page)
+  },
+  {
+    path: 'matias4',
+    loadComponent: () => import('./matias4/matias4.page').then( m => m.Matias4Page)
+  },
+  {
+    path: 'matias5',
+    loadComponent: () => import('./matias5/matias5.page').then( m => m.Matias5Page)
+  },
+  {
+    path: 'matias6',
+    loadComponent: () => import('./matias6/matias6.page').then( m => m.Matias6Page)
+  },
 
 ];
 

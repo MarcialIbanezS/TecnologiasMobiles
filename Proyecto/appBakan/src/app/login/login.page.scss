@@ -1,0 +1,51 @@
+.fondo {
+  --background: #9be3ff url('/assets/imagen_login.png') no-repeat center bottom / cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 150px;       // ancho fijo
+  height: 150px;      // alto fijo
+  object-fit: cover;  // recorta la imagen si no encaja
+ // border-radius: 10px; // esquinas redondeadas
+  margin: 10px auto; // centra con márgenes
+  display: block;    // asegura que respete el centrado
+  position: relative; // cambiar a absoluto para ubicacion absoluta
+  top: 15px;     // baja la imagen
+  right: 20px;    // mueve hacia la izquierda
+}
+
+.login-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(245, 16, 16, 0.3);
+  width: 90%;
+  max-width: 500px;
+  margin-top: 100px;
+}
+
+.btn-login {
+  margin-top: 20px;
+  --background: #e7ebf0;
+  --color: rgb(0, 0, 0);
+  --border-radius: 10px;
+}
+
+.footer-icons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 40px;
+  font-size: 30px;
+  color: #0056b3;
+}
+
+ion-label,ion-item{
+    --color: #000000;
+    --background: #ffffff;
+}
+
+//funciones con punto para las nombradas, colocar el nombre del componente para cambiar todos los de ese tipo en la pagina

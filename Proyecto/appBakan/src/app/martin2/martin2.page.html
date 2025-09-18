@@ -11,18 +11,27 @@
     </ion-toolbar>
   </ion-header>
 
-<ion-breadcrumbs>
- <ion-breadcrumb expand="block" (click)="irAHome()">Home</ion-breadcrumb>
- <ion-breadcrumb expand="block" (click)="irAMartin0()">Volver</ion-breadcrumb>
-</ion-breadcrumbs>
+  <ion-breadcrumbs>
+    <ion-breadcrumb (click)="irAHome()">Home</ion-breadcrumb>
+    <ion-breadcrumb (click)="irAMartin0()">Volver</ion-breadcrumb>
+  </ion-breadcrumbs>
 
-  <ion-button id="present-alert">Click Me</ion-button>
-<ion-alert
-  trigger="present-alert"
-  header="adsfhadfhardfh"
-  subHeader="sdfhsdfhsdfh"
-  message="sdfhsdfhsdfhsdfh"
-  [buttons]="alertButtons"
-></ion-alert>
+  <ion-searchbar
+    color="medium"
+    placeholder="Buscar paciente"
+    (ionInput)="onBuscar($event)">
+  </ion-searchbar>
 
+  <ion-list>
+    <ion-item *ngFor="let item of items; let index = index">
+      <ion-avatar slot="start">
+        <img [src]="'https://picsum.photos/80/80?random=' + index" alt="avatar" />
+      </ion-avatar>
+      <ion-label>{{ item }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

@@ -86,6 +86,10 @@ export const routes: Routes = [
     path: 'matias6',
     loadComponent: () => import('./matias6/matias6.page').then( m => m.Matias6Page)
   },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+  },
 
 ];
 

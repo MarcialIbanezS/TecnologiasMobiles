@@ -1,20 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton} from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonCol,IonButton
+  
+} from '@ionic/angular/standalone';
 import {IonBreadcrumb, IonBreadcrumbs} from  '@ionic/angular/standalone';
 import {Router} from '@angular/router';
 import {RouterModule} from '@angular/router';
+
+
 
 @Component({
   selector: 'app-martin3',
   templateUrl: './martin3.page.html',
   styleUrls: ['./martin3.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton
-    , IonBreadcrumb, IonBreadcrumbs, RouterModule
-  ]
-})
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule
+    , IonBreadcrumb, IonBreadcrumbs, RouterModule, IonGrid, IonRow, IonCol, IonButton]})
 export class Martin3Page implements OnInit {
 
   constructor(private router: Router) { }
@@ -42,6 +44,10 @@ export class Martin3Page implements OnInit {
   irAMartin6() {
     this.router.navigate(['/martin6']);       
   }
+
+
+
+
   ngOnInit() {
   }
 

@@ -1,0 +1,25 @@
+.fondo {
+  --background: #9be3ff url('/assets/imagen_login.png') no-repeat center bottom / cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+ion-card {
+  --background: #ffffff;   
+  --color: #ffffff;      
+}
+
+ion-card-title,
+ion-card-subtitle,
+ion-card-content,
+ion-label {
+  color: #000000 !important; 
+  background: #ffffff !important;
+}
+
+ion-item,ion-list,ion-row,Ion-Content { //COMO SACO ESAS LINEAS NEGRAS ME TIENEN PODRIDOOOOOOOO AYUDAAAAAAAAAAA
+  --background: #ffffff;   // blanco
+  --color: #ffffff;
+}

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonList, IonInfiniteScroll, IonItem,
- IonAvatar, IonInfiniteScrollContent, IonLabel } from '@ionic/angular/standalone';
-import { IonBreadcrumb, IonBreadcrumbs, InfiniteScrollCustomEvent } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonList, IonItem,
+ IonAvatar, IonLabel } from '@ionic/angular/standalone';
+import { IonBreadcrumb, IonBreadcrumbs } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -14,60 +14,35 @@ import { Router, RouterModule } from '@angular/router';
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,
     IonBreadcrumb, IonBreadcrumbs, RouterModule, IonSearchbar,
-    IonList, IonInfiniteScroll, IonItem, IonAvatar, IonInfiniteScrollContent,
-    IonLabel
+    IonList, IonItem, IonAvatar, IonLabel
   ]
 })
 export class Martin2Page implements OnInit {
 
-  pacientes: string[] = [];   
-  items: string[] = [];       
-  searchTerm = '';            
-  pageSize = 20;              
+  pacientes = [
+    { id: 1, nombre: 'Martín Gottschalk', rut: '12.345.678-9' },
+    { id: 2, nombre: 'Silk Song', rut: '23.456.789-0' },
+    { id: 3, nombre: 'Jolou Nait', rut: '34.567.890-1' },
+    { id: 4, nombre: 'Gara Ma', rut: '45.678.901-2' },
+    { id: 5, nombre: 'Shaw Ediro', rut: '56.789.012-3' },
+    { id: 6, nombre: 'Oe Callate Un Rato XD', rut: '56.789.012-3' }
+  ];
+
+  searchTerm = '';
+  items = [...this.pacientes];
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
-    this.pacientes = Array.from({ length: 200 }, (_, i) => `Paciente ${i + 1}`);
-    this.cargarMas(); 
-  }
+  ngOnInit() {}
 
   irAHome() { this.router.navigate(['/home']); }
   irAMartin0() { this.router.navigate(['/pagina2']); }
-  irAMartin1() { this.router.navigate(['/martin1']); }
-  irAMartin2() { this.router.navigate(['/martin2']); }
-  irAMartin3() { this.router.navigate(['/martin3']); }
-  irAMartin4() { this.router.navigate(['/martin4']); }
-  irAMartin5() { this.router.navigate(['/martin5']); }
-  irAMartin6() { this.router.navigate(['/martin6']); }
 
   onBuscar(event: any) {
     this.searchTerm = event.detail.value.toLowerCase();
-    this.items = [];
-    this.cargarMas();
-  }
-
-  filtrarPacientes(): string[] {
-    if (!this.searchTerm) return this.pacientes;
-    return this.pacientes.filter(p => p.toLowerCase().includes(this.searchTerm));
-  }
-
-  cargarMas(event?: InfiniteScrollCustomEvent) {
-    const start = this.items.length;
-    const end = start + this.pageSize;
-    const nuevos = this.filtrarPacientes().slice(start, end);
-
-    this.items = [...this.items, ...nuevos];
-
-    if (event) {
-      event.target.complete();
-      if (this.items.length >= this.filtrarPacientes().length) {
-        event.target.disabled = true;
-      }
-    }
-  }
-
-  onIonInfinite(event: InfiniteScrollCustomEvent) {
-    this.cargarMas(event);
+    this.items = this.pacientes.filter(p =>
+      p.nombre.toLowerCase().includes(this.searchTerm) ||
+      p.rut.includes(this.searchTerm)
+    );
   }
 }

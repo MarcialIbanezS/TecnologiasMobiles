@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="fondo">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">martin2</ion-title>
@@ -16,22 +16,25 @@
     <ion-breadcrumb (click)="irAMartin0()">Volver</ion-breadcrumb>
   </ion-breadcrumbs>
 
-  <ion-searchbar
-    color="medium"
-    placeholder="Buscar paciente"
-    (ionInput)="onBuscar($event)">
-  </ion-searchbar>
+  <div class="searchbar">
+    <ion-searchbar
+      color="medium"
+      placeholder="Buscar paciente"
+      (ionInput)="onBuscar($event)">
+    </ion-searchbar>
+  </div>
 
-  <ion-list>
-    <ion-item *ngFor="let item of items; let index = index">
-      <ion-avatar slot="start">
-        <img [src]="'https://picsum.photos/80/80?random=' + index" alt="avatar" />
-      </ion-avatar>
-      <ion-label>{{ item }}</ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+  <div class="scroll">
+    <ion-list>
+      <ion-item *ngFor="let paciente of pacientes">
+        <ion-avatar slot="start">
+          <img [src]="'https://picsum.photos/80/80?random=' + paciente.id" alt="avatar" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ paciente.nombre }}</h2>
+          <p>{{ paciente.rut }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

@@ -7,7 +7,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   {
@@ -46,7 +46,8 @@ export const routes: Routes = [
   {
     path: 'martin6',
     loadComponent: () => import('./martin6/martin6.page').then( m => m.Martin6Page)
-  },  {
+  },
+  {
     path: 'marcial2',
     loadComponent: () => import('./marcial2/marcial2.page').then( m => m.Marcial2Page)
   },

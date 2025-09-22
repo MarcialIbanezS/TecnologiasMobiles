@@ -38,6 +38,13 @@ export class Martin2Page implements OnInit {
   irAHome() { this.router.navigate(['/home']); }
   irAMartin0() { this.router.navigate(['/pagina2']); }
 
+  verPaciente(paciente: any) {
+  console.log("Paciente seleccionado:", paciente);
+
+  //this.router.navigate(['/paciente-detalle', paciente.id]);
+
+   alert(`Seleccionaste a ${paciente.nombre} (${paciente.rut})`);
+}
   onBuscar(event: any) {
     this.searchTerm = event.detail.value.toLowerCase();
     this.items = this.pacientes.filter(p =>

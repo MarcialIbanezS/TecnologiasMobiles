@@ -26,13 +26,13 @@
 
   <div class="scroll">
     <ion-list>
-      <ion-item *ngFor="let paciente of pacientes">
+      <ion-item *ngFor="let item of items; let index = index" (click)="verPaciente(item)">
         <ion-avatar slot="start">
-          <img [src]="'https://picsum.photos/80/80?random=' + paciente.id" alt="avatar" />
+          <img [src]="'https://picsum.photos/80/80?random=' + item.id" alt="avatar" />
         </ion-avatar>
         <ion-label>
-          <h2>{{ paciente.nombre }}</h2>
-          <p>{{ paciente.rut }}</p>
+          <h2>{{ item.nombre }}</h2>
+          <p>{{ item.rut }}</p>
         </ion-label>
       </ion-item>
     </ion-list>

@@ -29,6 +29,9 @@ export class LoginPage {
   irAHome() {
     this.router.navigate(['/home']);       
   }
+  irAMartin2() {
+    this.router.navigate(['/martin2']);       
+  }
   login() {
     console.log('Correo:', this.correo);
     console.log('Contraseña:', this.contrasena);

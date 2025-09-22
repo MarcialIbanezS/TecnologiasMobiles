@@ -22,10 +22,10 @@ export class Martin2Page implements OnInit {
   pacientes = [
     { id: 1, nombre: 'Martín Gottschalk', rut: '12.345.678-9' },
     { id: 2, nombre: 'Silk Song', rut: '23.456.789-0' },
-    { id: 3, nombre: 'Jolou Nait', rut: '34.567.890-1' },
-    { id: 4, nombre: 'Gara Ma', rut: '45.678.901-2' },
-    { id: 5, nombre: 'Shaw Ediro', rut: '56.789.012-3' },
-    { id: 6, nombre: 'Oe Callate Un Rato XD', rut: '56.789.012-3' }
+    { id: 3, nombre: 'John Persona', rut: '34.567.890-1' },
+    { id: 4, nombre: 'Jane Persona', rut: '45.678.901-2' },
+    { id: 5, nombre: 'La Roca', rut: '56.789.012-3' },
+    { id: 6, nombre: 'Mike Persona', rut: '56.789.012-3' }
   ];
 
   searchTerm = '';
@@ -41,9 +41,9 @@ export class Martin2Page implements OnInit {
   verPaciente(paciente: any) {
   console.log("Paciente seleccionado:", paciente);
 
-  //this.router.navigate(['/paciente-detalle', paciente.id]);
+  this.router.navigate(['/martin1']);
 
-   alert(`Seleccionaste a ${paciente.nombre} (${paciente.rut})`);
+  // alert(`Seleccionaste a ${paciente.nombre} (${paciente.rut})`);
 }
   onBuscar(event: any) {
     this.searchTerm = event.detail.value.toLowerCase();

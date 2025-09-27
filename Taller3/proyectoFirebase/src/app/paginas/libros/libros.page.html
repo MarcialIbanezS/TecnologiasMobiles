@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar><ion-title>Firestore: Agregar & Listar</ion-title></ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="agregar()">
+    <ion-item>
+      <ion-label position="stacked">Título</ion-label>
+      <ion-input formControlName="titulo" placeholder="Ej: El gato Feliz"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Detalle</ion-label>
+      <ion-input formControlName="detalle" placeholder="(opcional)"></ion-input>
+    </ion-item>
+    <div style="margin-top:12px;">
+      <ion-button type="submit" [disabled]="form.invalid">Agregar</ion-button>
+    </div>
+  </form>
+
+  <ion-list style="margin-top:20px;">
+    <ion-item *ngFor="let it of (items$ | async)">
+      <ion-label>
+        <h2>{{ it.titulo }}</h2>
+        <p *ngIf="it.detalle">{{ it.detalle }}</p>
+        <ion-note>Creado: {{ it.creadoEn.toDate() | date:'short' }}</ion-note>
+      </ion-label>
+      <ion-button slot="end" fill="clear" (click)="eliminar(it)">Eliminar</ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

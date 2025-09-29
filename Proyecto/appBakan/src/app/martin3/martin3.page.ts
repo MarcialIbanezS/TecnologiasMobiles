@@ -1,7 +1,8 @@
 import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonCol,IonButton
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader,
+  IonCardSubtitle, IonCardTitle, IonGrid, IonCol, IonRow, IonButton
   
 } from '@ionic/angular/standalone';
 import {IonBreadcrumb, IonBreadcrumbs} from  '@ionic/angular/standalone';
@@ -16,12 +17,13 @@ import {RouterModule} from '@angular/router';
   styleUrls: ['./martin3.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule
-    , IonBreadcrumb, IonBreadcrumbs, RouterModule, IonGrid, IonRow, IonCol, IonButton]})
+    , IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
+    IonGrid, IonCol, IonRow, IonButton, IonBreadcrumb, IonBreadcrumbs, RouterModule]})
 export class Martin3Page implements OnInit {
 
   constructor(private router: Router) { }
  irAHome() {
-    this.router.navigate(['/home']);       
+    this.router.navigate(['/login']);       
   }
   irAMartin0() {
     this.router.navigate(['/pagina2']);       

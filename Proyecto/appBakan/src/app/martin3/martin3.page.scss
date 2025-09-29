@@ -1,0 +1,37 @@
+.fondo {
+  --background: #9be3ff url('/assets/imagen_login.png') no-repeat center bottom / cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+Ion-card{
+    color: rgb(0, 0, 0);
+    background-color: white;
+}
+Ion-card-title {
+    color: black;
+}
+Ion-card-subtitle {
+    color: black;
+}
+Ion-button {
+    --color: rgb(0, 0, 0);
+    --background-color: rgb(255, 255, 255);
+    --background: white;
+    --padding-top: 10px;
+}
+
+
+.huella {
+  width: 550px;       // ancho fijo
+  height: 550px;      // alto fijo
+  object-fit: cover;  // recorta la imagen si no encaja
+ // border-radius: 10px; // esquinas redondeadas
+  margin: 10px auto; // centra con márgenes
+  display: block;    // asegura que respete el centrado
+  position: relative; // cambiar a absoluto para ubicacion absoluta
+
+  
+}

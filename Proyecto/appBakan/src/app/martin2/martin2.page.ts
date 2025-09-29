@@ -35,8 +35,8 @@ export class Martin2Page implements OnInit {
 
   ngOnInit() {}
 
-  irAHome() { this.router.navigate(['/home']); }
-  irAMartin0() { this.router.navigate(['/pagina2']); }
+  irAHome() { this.router.navigate(['/login']); }
+  irAMartin3() { this.router.navigate(['/martin3']); }
 
   verPaciente(paciente: any) {
   console.log("Paciente seleccionado:", paciente);

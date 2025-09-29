@@ -29,8 +29,8 @@ export class LoginPage {
   irAHome() {
     this.router.navigate(['/home']);       
   }
-  irAMartin2() {
-    this.router.navigate(['/martin2']);       
+  irAMartin3() {
+    this.router.navigate(['/martin3']);       
   }
   login() {
     console.log('Correo:', this.correo);

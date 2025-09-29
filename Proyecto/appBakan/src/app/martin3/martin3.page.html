@@ -1,10 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>martin3</ion-title>
+    <ion-title>Menú</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true"  class="fondo">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">martin3</ion-title>
@@ -12,30 +12,30 @@
   </ion-header>
 
 <ion-breadcrumbs>
- <ion-breadcrumb expand="block" (click)="irAHome()">Home</ion-breadcrumb>
- <ion-breadcrumb expand="block" (click)="irAMartin0()">Volver</ion-breadcrumb>
+ <ion-breadcrumb expand="block" (click)="irAHome()">Cerrar sesión</ion-breadcrumb>
 </ion-breadcrumbs>
-<ion-content color="light content" class="ion-padding">
-  <h1>Heading 1</h1>
-  <ion-grid>
 
-  <ion-row>
-    <ion-col size="5">
+<ion-grid>
+  <ion-row  class="ion-justify-content-center">
+    <ion-col></ion-col>
+    <ion-col size="auto">
 
+<ion-button expand="block" size="large" (click)="irAMartin2()">Busqueda básica</ion-button >
+
+ <div class="huella">
+<ion-card size="medium">
+  <ion-card-header>
+    <ion-card-title>      Escanee la huella del paciente</ion-card-title>
+    <ion-card-subtitle></ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content size="medium" (click)="irAMartin1()">
+    <img alt="SHAW" src="https://media.istockphoto.com/id/1480047786/es/vector/icono-de-huella-digital-concepto-de-firma-para-el-cifrado-de-contrase%C3%B1as-para-proteger-la.jpg?s=612x612&w=0&k=20&c=dhg6lhngB4D3U4OW9z3M3xBc6HQyFnmzI4cFkNvc1FI=" />
+  </ion-card-content>
+</ion-card>
+</div> 
     </ion-col>
-    <ion-col size="2">
-      <ion-button>Default</ion-button>
-    </ion-col>
-    
+    <ion-col></ion-col>
   </ion-row>
-
 </ion-grid>
-</ion-content>
-
-
-
-
-
-
 
 </ion-content>

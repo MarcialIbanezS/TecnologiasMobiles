@@ -1,36 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar,IonBreadcrumb, IonBreadcrumbs,
-  IonList, IonItem, IonLabel
- } from '@ionic/angular/standalone';
-import { Router,RouterLink } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import {
+  IonContent, IonHeader, IonToolbar, IonTitle,
+  IonList, IonItem, IonInput, IonButton, IonText,IonCard, IonCardHeader, IonCardTitle, IonCardContent
+} from '@ionic/angular/standalone';
+import { Router } from '@angular/router'; // opcional: solo para navegar de demo
+
 @Component({
   selector: 'app-pagina3',
+  standalone: true,
   templateUrl: './pagina3.page.html',
   styleUrls: ['./pagina3.page.scss'],
-  standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RouterModule,IonBreadcrumb, IonBreadcrumbs,RouterLink ,IonList, IonItem, IonLabel]
+  imports: [
+    ReactiveFormsModule, NgIf,
+    IonContent, IonHeader, IonToolbar, IonTitle,
+    IonList, IonItem, IonInput, IonButton, IonText,IonCard, IonCardHeader, IonCardTitle, IonCardContent
+  ],
 })
-export class Pagina3Page implements OnInit {
+export class Pagina3Page {
+  form = this.fb.group({
+    user: ['', Validators.required],
+    pass: ['', Validators.required],
+  });
+  error = ''; // solo para mostrar mensajes en la UI
 
-  constructor(private router: Router) { }
+  constructor(private fb: FormBuilder, private router: Router) {}
 
-  ngOnInit() {
+  submit() {
+    if (this.form.invalid) return;
+    // 👇 Solo demo de navegación. No hay login real.
+    this.router.navigate(['/ingreso']);
+    // Si quieres que NO navegue (solo vista), comenta la línea de arriba.
   }
-   irAHome() {
-    this.router.navigate(['/home']);       
-  }
-  irAmatias1() {
-    this.router.navigate(['/pagina3']);       
-  }
-  top5 = [
-    { name: 'El goat', url: '/matias2' },
-    { name: 'el villano', url: '/matias3' },
-    { name: 'bleyder x', url: '/matias4' },
-    { name: 'ayton', url: '/matias5' },
-    { name: 'sarmisiniestro', url: '/matias6' },
-  ];
-
 }
+

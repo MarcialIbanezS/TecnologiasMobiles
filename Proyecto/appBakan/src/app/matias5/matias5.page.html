@@ -1,14 +1,137 @@
-<ion-header [translucent]="true">
+<ion-header translucent="true">
   <ion-toolbar>
-    <ion-title>ayton</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/matias4" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Reporte de Paciente</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content fullscreen>
+  <div class="page">
+    <h1 class="page-title">Intervención en terreno</h1>
 
-  <ion-breadcrumbs>
-    <ion-breadcrumb expand="block" (click)="irAHome()">Home</ion-breadcrumb>
-    <ion-breadcrumb expand="block" (click)="irAmatias1()">Top Profes</ion-breadcrumb>
-    <ion-breadcrumb expand="block" (click)="irAmatias5()">matias5</ion-breadcrumb>
-  </ion-breadcrumbs>
+    <!-- Formulario -->
+    <ion-card class="section card">
+      <ion-card-header>
+        <ion-card-title>Datos del reporte</ion-card-title>
+        <ion-card-subtitle class="k">Completa la información para registrar la atención</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item class="item">
+            <ion-label position="stacked">Lugar *</ion-label>
+            <ion-input
+              [(ngModel)]="reporte.lugar"
+              placeholder="Domicilio, vía pública, empresa, etc.">
+            </ion-input>
+          </ion-item>
+
+          <ion-item class="item">
+            <ion-label position="stacked">Procedimiento *</ion-label>
+            <ion-select
+              interface="popover"
+              placeholder="Selecciona"
+              [(ngModel)]="reporte.procedimiento">
+              <ion-select-option *ngFor="let p of procedimientos" [value]="p">
+                {{ p }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item class="item">
+            <ion-label position="stacked">Razón / Diagnóstico preliminar *</ion-label>
+            <ion-input
+              [(ngModel)]="reporte.diagnostico"
+              placeholder="Ej: Traumatismo leve">
+            </ion-input>
+          </ion-item>
+
+          <!-- Sugerencias rápidas -->
+          <div class="filters">
+            <button class="pill pill-outline" *ngFor="let d of diagnosticosSugeridos" (click)="setDiagnostico(d)">
+              {{ d }}
+            </button>
+          </div>
+
+          <ion-item class="item">
+            <ion-label position="stacked">Fecha *</ion-label>
+            <ion-datetime
+              presentation="date"
+              [(ngModel)]="reporte.fecha">
+            </ion-datetime>
+          </ion-item>
+
+          <ion-item class="item">
+            <ion-label position="stacked">Hora *</ion-label>
+            <ion-datetime
+              presentation="time"
+              [(ngModel)]="reporte.hora">
+            </ion-datetime>
+          </ion-item>
+
+          <ion-item class="item">
+            <ion-label position="stacked">Notas</ion-label>
+            <ion-textarea
+              auto-grow="true"
+              rows="3"
+              placeholder="Observaciones, signos, evolución, indicaciones…"
+              [(ngModel)]="reporte.notas">
+            </ion-textarea>
+          </ion-item>
+        </ion-list>
+
+        <div class="actions">
+          <ion-button color="success" (click)="guardarReporte()" [disabled]="!camposRequeridosCompletos()">
+            Guardar reporte
+          </ion-button>
+          <ion-button fill="outline" (click)="limpiarFormulario()">
+            Limpiar
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Ultimos reportes -->
+    <ion-card class="section card" *ngIf="reportesGuardados.length">
+      <ion-card-header>
+        <ion-card-title>Reportes recientes</ion-card-title>
+        <ion-card-subtitle class="k">Últimos registros realizados</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="full">
+          <ion-item class="item" *ngFor="let r of reportesGuardados">
+            <ion-label>
+              <h2>{{ r.diagnostico }}</h2>
+              <p class="k">{{ r.procedimiento }} · {{ r.lugar }}</p>
+              <p class="k">{{ r.fecha }} {{ r.hora }}</p>
+              <p *ngIf="r.notas">{{ r.notas }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Accesos rápidos -->
+    <ion-grid class="grid-cards">
+      <ion-row>
+        <ion-col size="6">
+          <ion-card button [routerLink]="['/matias6']">
+            <ion-card-content class="ion-text-center">
+              <ion-icon name="time-outline"></ion-icon><br>
+              Historial
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card button [routerLink]="['/matias7']">
+            <ion-card-content class="ion-text-center">
+              <ion-icon name="grid-outline"></ion-icon><br>
+              Dashboard
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

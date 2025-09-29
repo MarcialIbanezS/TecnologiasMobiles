@@ -18,8 +18,15 @@ import { RouterLink} from '@angular/router'; // 👈 para [routerLink]
 export class AppComponent {
   constructor() {}
     pages = [
-    { title: 'Matias',  url: '/pagina3' },
+    { title: 'Login',  url: '/pagina3' },
+    { title: 'Busqueda', url: '/ingreso' },
+    { title: 'Ficha medica', url: '/ficha/p001' },
+    { title: 'Lista de medicamentos', url: '/triage/p001' },
+    { title: 'Reporte del Paciente', url: '/signos/p001' },
+    { title: 'Historial del paciente', url: '/meds/p001' },
+    { title: 'Dashboard', url: '/historial/p001' },
     { title: 'marcial',    url: '/pagina1' },
     { title: 'martin',    url: '/pagina2' },
+    
   ];
 }

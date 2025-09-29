@@ -1,35 +1,48 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>Top 5 Profesores más Gigachad</ion-title>
+    <ion-title>Ingresar</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">pagina3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="auth">
+  <div class="center-grid">
+    <ion-card class="login-card">
+      <ion-card-header>
+        <ion-card-title>Bienvenido</ion-card-title>
+      </ion-card-header>
 
-  <ion-breadcrumbs>
-    <ion-breadcrumb expand="block" (click)="irAHome()">Home</ion-breadcrumb>
-    <ion-breadcrumb expand="block" (click)="irAmatias1()">top profes</ion-breadcrumb>
-  </ion-breadcrumbs>
+      <ion-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+          <ion-list>
+            <ion-item>
+              <ion-input
+                label="Usuario"
+                labelPlacement="floating"
+                formControlName="user"
+                autocomplete="username">
+              </ion-input>
+            </ion-item>
 
-  <ion-list>
-    <ion-item
-      button
-      detail="true"
-      *ngFor="let p of top5; index as i"
-      [routerLink]="p.url"
-      routerDirection="forward"
-    >
-      <ion-label>
-        <h2>{{ i + 1 }}. {{ p.name }}</h2>
-        <p>Ir al perfil</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+            <ion-item>
+              <ion-input
+                type="password"
+                label="Contraseña"
+                labelPlacement="floating"
+                formControlName="pass"
+                autocomplete="current-password">
+              </ion-input>
+            </ion-item>
+          </ion-list>
 
-  
+          <ion-button expand="block" type="submit" [disabled]="form.invalid">
+            Entrar
+          </ion-button>
+
+
+          <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
+

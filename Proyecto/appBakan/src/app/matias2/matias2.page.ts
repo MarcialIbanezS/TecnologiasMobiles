@@ -1,29 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar ,IonBreadcrumb, IonBreadcrumbs } from '@ionic/angular/standalone';
+import { IonicModule } from '@ionic/angular';
 import { Router, RouterModule } from '@angular/router';
+
+type PacienteListItem = { id: string; name: string; rut?: string; photoUrl?: string; tag?: string };
+
 @Component({
   selector: 'app-matias2',
+  standalone: true,
+  imports: [CommonModule, FormsModule, IonicModule, RouterModule],
   templateUrl: './matias2.page.html',
   styleUrls: ['./matias2.page.scss'],
-  standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RouterModule,IonBreadcrumb, IonBreadcrumbs ]
 })
-export class Matias2Page implements OnInit {
+export class Matias2Page {
+  query = '';
+  resultados: PacienteListItem[] = [];
+  filtro: string | null = null;
 
-  constructor(private router: Router) { }
+  private all: PacienteListItem[] = [
+    { id: 'demo-001', name: 'Martin Jairo Ibarra Zamiro', rut: '21.111.333-K', photoUrl: 'assets/avatar-placeholder.png', tag: 'control' },
+    { id: 'demo-002', name: 'Ana Torres', rut: '18.555.222-1', photoUrl: 'assets/avatar-placeholder.png', tag: 'urgente' },
+  ];
 
-  ngOnInit() {
-  }
-   irAHome() {
-    this.router.navigate(['/home']);       
-  }
-  irAmatias1() {
-    this.router.navigate(['/pagina3']);       
-  }
-  irAmatias2() {
-    this.router.navigate(['/matias2']);       
-  }
+  constructor(private router: Router) { this.buscar(); }
 
+  buscar() {
+    const q = (this.query || '').trim().toLowerCase();
+    let list = q
+      ? this.all.filter(p => p.name.toLowerCase().includes(q) || (p.rut || '').toLowerCase().includes(q))
+      : [...this.all];
+    if (this.filtro) list = list.filter(x => x.tag === this.filtro);
+    this.resultados = list;
+  }
+  filtrar(tag: string) { this.filtro = tag; this.buscar(); }
+  limpiar() { this.filtro = null; this.query=''; this.buscar(); }
+  abrirDetalle(id: string) { this.router.navigate(['/matias3', id]); }
 }

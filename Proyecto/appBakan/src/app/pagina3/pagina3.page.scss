@@ -1,0 +1,53 @@
+/* Fondo del contenido usando la variable --background de ion-content */
+.auth {
+  /* overlay suave + imagen de fondo centrada/cover */
+  --background:
+    linear-gradient(0deg, rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
+    url('/assets/img/diseno-de-salas-de-espera.jpg') center / cover no-repeat fixed;
+
+  /* Centrado con grid y padding responsivo */
+  display: grid;
+  min-height: 100%;
+  padding: clamp(12px, 2vw, 24px);
+}
+ion-toolbar { --background:#97dbff; --border-color:transparent; } 
+
+/* Contenedor que centra la card vertical y horizontalmente */
+.center-grid {
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+}
+
+/* Card “celeste agua” con leve transparencia y blur */
+.login-card {
+  width: min(92vw, 420px);
+  border-radius: 20px;
+  /* Celeste agua (tuneable) */
+  --background: rgba(0, 190, 220, 0.88);
+  /* Para iOS/Android se ve mejor con sombra y blur */
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  ion-toolbar { --background:#97dbff; --border-color:transparent; }
+  ion-content { --background: #f5f6f8 !important; }
+  ion-card { --background: #ffffff !important; color:#111; border-radius:18px; box-shadow:0 6px 18px rgba(0,0,0,.05); }
+  ion-item { --background:#ffffff !important; --color:#111; border:1px solid #e8eaef; border-radius:12px; margin-bottom:10px; padding-inline:8px; }
+  /* Contraste de textos dentro de la card */
+  color: #062b35; /* azul petróleo oscuro para buen contraste */
+}
+
+.login-card ion-card-title {
+  font-weight: 700;
+}
+
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.hint {
+  display: block;
+  text-align: center;
+  margin-top: 4px;
+}

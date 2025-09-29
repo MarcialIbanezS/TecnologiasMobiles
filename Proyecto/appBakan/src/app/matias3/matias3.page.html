@@ -1,7 +1,7 @@
 <ion-header translucent="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/matias2"></ion-back-button>
+      <ion-back-button defaultHref="/ingreso"></ion-back-button>
     </ion-buttons>
     <ion-title>Ficha Médica</ion-title>
   </ion-toolbar>
@@ -12,7 +12,7 @@
 
   <ion-card class="profile-card" *ngIf="patient() as p">
     <div class="profile-row">
-      <img class="avatar" [src]="p.photoUrl || 'assets/avatar-placeholder.png'" alt="foto" />
+      <img class="avatar" [src]="fotoUrl" alt="foto paciente" />
       <div class="profile-info">
         <div class="name">{{ p.name }}</div>
         <div class="rut" *ngIf="p.rut">{{ p.rut }}</div>

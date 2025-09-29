@@ -19,8 +19,8 @@ export class Matias2Page {
   filtro: string | null = null;
 
   private all: PacienteListItem[] = [
-    { id: 'demo-001', name: 'Martin Jairo Ibarra Zamiro', rut: '21.111.333-K', photoUrl: 'assets/avatar-placeholder.png', tag: 'control' },
-    { id: 'demo-002', name: 'Ana Torres', rut: '18.555.222-1', photoUrl: 'assets/avatar-placeholder.png', tag: 'urgente' },
+    { id: 'demo-001', name: 'Martin Jairo Ibarra Zamiro', rut: '21.111.333-K', photoUrl: 'assets/img/persona.jpg', tag: 'control' },
+    { id: 'demo-002', name: 'Ana Torres', rut: '18.555.222-1', photoUrl: 'assets/img/persona.jpg', tag: 'urgente' },
   ];
 
   constructor(private router: Router) { this.buscar(); }
@@ -35,5 +35,5 @@ export class Matias2Page {
   }
   filtrar(tag: string) { this.filtro = tag; this.buscar(); }
   limpiar() { this.filtro = null; this.query=''; this.buscar(); }
-  abrirDetalle(id: string) { this.router.navigate(['/matias3', id]); }
+  abrirDetalle(id: string) { this.router.navigate(['/ficha', id]); }
 }

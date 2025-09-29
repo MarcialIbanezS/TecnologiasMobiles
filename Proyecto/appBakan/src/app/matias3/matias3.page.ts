@@ -39,7 +39,7 @@ export class Matias3Page {
   patient = signal<Patient | null>(null);
   fichaMedicaUrl = signal<string | null>(null);
   hasPatient = computed(() => !!this.patient());
-
+  fotoUrl = '/assets/img/persona.jpg';
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -87,10 +87,7 @@ export class Matias3Page {
     t.present();
   }
 
-  abrirFichaMedica() {
-    const url = this.fichaMedicaUrl();
-    if (url) window.open(url, '_blank');
-  }
+  abrirFichaMedica() { window.open('/assets/pdfs/ficha.pdf', '_blank'); }
 
   descargarFicha() {
     const url = this.fichaMedicaUrl();
@@ -104,12 +101,12 @@ export class Matias3Page {
   }
 
   goToHistorial() {
-    if (this.pacienteId) this.router.navigate(['/historial', this.pacienteId]);
-    else this.router.navigate(['/historial']);
+    if (this.pacienteId) this.router.navigate(['/meds', this.pacienteId]);
+    else this.router.navigate(['/meds']);
   }
 
   goToReporte() {
-    if (this.pacienteId) this.router.navigate(['/reporte', this.pacienteId]);
-    else this.router.navigate(['/reporte']);
+    if (this.pacienteId) this.router.navigate(['/signos', this.pacienteId]);
+    else this.router.navigate(['/signos']);
   }
 }

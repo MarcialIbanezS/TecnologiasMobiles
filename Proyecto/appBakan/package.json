@@ -9,7 +9,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "server": "node server.js",
+    "dev": "concurrently \"npm run server\" \"npm start\""
   },
   "private": true,
   "dependencies": {
@@ -27,7 +29,14 @@
     "@capacitor/keyboard": "7.0.2",
     "@capacitor/status-bar": "7.0.2",
     "@ionic/angular": "^8.0.0",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
     "ionicons": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.15.1",
     "parse": "^6.1.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -48,6 +57,7 @@
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
+    "concurrently": "^9.2.1",
     "eslint": "^9.16.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.1",

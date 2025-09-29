@@ -36,6 +36,16 @@
   --border-radius: 10px;
 }
 
+.demo-info {
+  text-align: center;
+  margin: 10px 0;
+  
+  p {
+    margin: 5px 0;
+    color: #666;
+  }
+}
+
 .footer-icons {
   display: flex;
   justify-content: space-around;
@@ -47,6 +57,25 @@
 ion-label,ion-item{
     --color: #000000;
     --background: #ffffff;
+}
+
+.demo-info {
+  text-align: center;
+  margin: 10px 0;
+  padding: 8px;
+  background-color: #e3f2fd;
+  border-radius: 5px;
+  border-left: 4px solid #2196f3;
+  
+  p {
+    margin: 0;
+    color: #1976d2;
+    font-weight: 500;
+  }
+  
+  small {
+    font-size: 0.85em;
+  }
 }
 
 //funciones con punto para las nombradas, colocar el nombre del componente para cambiar todos los de ese tipo en la pagina

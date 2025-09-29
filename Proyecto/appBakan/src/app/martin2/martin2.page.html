@@ -25,16 +25,45 @@
   </div>
 
   <div class="scroll">
-    <ion-list>
-      <ion-item *ngFor="let item of items; let index = index" (click)="verPaciente(item)">
+    <!-- Loading spinner -->
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando pacientes...</p>
+    </div>
+
+    <!-- Patient list -->
+    <ion-list *ngIf="!isLoading">
+      <ion-item 
+        *ngFor="let item of filteredPacientes; let index = index" 
+        (click)="verPaciente(item)"
+        button>
         <ion-avatar slot="start">
-          <img [src]="'https://picsum.photos/80/80?random=' + item.id" alt="avatar" />
+          <img [src]="'https://picsum.photos/80/80?random=' + item.idpaciente" alt="avatar" />
         </ion-avatar>
         <ion-label>
           <h2>{{ item.nombre }}</h2>
           <p>{{ item.rut }}</p>
+          <p *ngIf="item.genero" class="patient-info">{{ item.genero }}</p>
+          <p *ngIf="item.fechanacimiento" class="patient-info">Nacimiento: {{ item.fechanacimiento | date:'dd/MM/yyyy' }}</p>
+        </ion-label>
+      </ion-item>
+      
+      <!-- No results message -->
+      <ion-item *ngIf="filteredPacientes.length === 0 && !isLoading">
+        <ion-label>
+          <h2>No se encontraron pacientes</h2>
+          <p *ngIf="searchTerm">No hay resultados para "{{ searchTerm }}"</p>
         </ion-label>
       </ion-item>
     </ion-list>
   </div>
+
+  <!-- Toast for error messages -->
+  <ion-toast
+    [isOpen]="showToast"
+    [message]="toastMessage"
+    [color]="toastColor"
+    [duration]="3000"
+    (didDismiss)="onToastDismiss()">
+  </ion-toast>
 </ion-content>

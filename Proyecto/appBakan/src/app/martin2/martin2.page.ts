@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonList, IonItem,
- IonAvatar, IonLabel } from '@ionic/angular/standalone';
+ IonAvatar, IonLabel, IonSpinner, IonToast } from '@ionic/angular/standalone';
 import { IonBreadcrumb, IonBreadcrumbs } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
+import { PatientService, Patient } from '../Services/patient.service';
 
 @Component({
   selector: 'app-martin2',
@@ -14,42 +15,77 @@ import { Router, RouterModule } from '@angular/router';
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,
     IonBreadcrumb, IonBreadcrumbs, RouterModule, IonSearchbar,
-    IonList, IonItem, IonAvatar, IonLabel
+    IonList, IonItem, IonAvatar, IonLabel, IonSpinner, IonToast
   ]
 })
 export class Martin2Page implements OnInit {
 
-  pacientes = [
-    { id: 1, nombre: 'Martín Gottschalk', rut: '12.345.678-9' },
-    { id: 2, nombre: 'Silk Song', rut: '23.456.789-0' },
-    { id: 3, nombre: 'John Persona', rut: '34.567.890-1' },
-    { id: 4, nombre: 'Jane Persona', rut: '45.678.901-2' },
-    { id: 5, nombre: 'La Roca', rut: '56.789.012-3' },
-    { id: 6, nombre: 'Mike Persona', rut: '56.789.012-3' }
-  ];
-
+  pacientes: Patient[] = [];
+  filteredPacientes: Patient[] = [];
+  isLoading = false;
   searchTerm = '';
-  items = [...this.pacientes];
+  
+  // Toast properties
+  showToast = false;
+  toastMessage = '';
+  toastColor = 'danger';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private patientService: PatientService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadPatients();
+  }
+
+  loadPatients() {
+    this.isLoading = true;
+    this.patientService.getPatients().subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        if (response.success) {
+          this.pacientes = response.patients;
+          this.filteredPacientes = [...this.pacientes];
+          console.log('Patients loaded:', this.pacientes);
+        } else {
+          this.showError('Error al cargar los pacientes');
+        }
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error loading patients:', error);
+        this.showError('Error de conexión al cargar los pacientes');
+      }
+    });
+  }
+
+  showError(message: string) {
+    this.toastMessage = message;
+    this.toastColor = 'danger';
+    this.showToast = true;
+  }
 
   irAHome() { this.router.navigate(['/login']); }
   irAMartin3() { this.router.navigate(['/martin3']); }
 
-  verPaciente(paciente: any) {
-  console.log("Paciente seleccionado:", paciente);
+  verPaciente(paciente: Patient) {
+    console.log("Paciente seleccionado:", paciente);
+    // Navigate to patient detail page (martin1) passing patient data
+    this.router.navigate(['/martin1'], { 
+      state: { patient: paciente } 
+    });
+  }
 
-  this.router.navigate(['/martin1']);
-
-  // alert(`Seleccionaste a ${paciente.nombre} (${paciente.rut})`);
-}
   onBuscar(event: any) {
     this.searchTerm = event.detail.value.toLowerCase();
-    this.items = this.pacientes.filter(p =>
-      p.nombre.toLowerCase().includes(this.searchTerm) ||
-      p.rut.includes(this.searchTerm)
-    );
+    this.filteredPacientes = this.pacientes.filter(p => {
+      return p.nombre.toLowerCase().includes(this.searchTerm) ||
+             p.rut.toLowerCase().includes(this.searchTerm);
+    });
+  }
+
+  onToastDismiss() {
+    this.showToast = false;
   }
 }

@@ -6,44 +6,20 @@ import { AuthService } from './auth.service';
 
 export interface Patient {
   idpaciente: number;
-  nombre: string;
-  apellidopaterno: string;
-  apellidomaterno?: string;
+  nombre: string;         // maps to nombrePaciente in DB
   rut: string;
-  fechanacimiento?: string;
-  genero?: string;
-  telefono?: string;
-  email?: string;
+  fechanacimiento?: string; // maps to fechaNacimiento in DB
+  genero?: string;        // maps to sexo in DB
   direccion?: string;
-  idcliente?: number;
-  clienteName?: string;
-  allergies?: string;
-  chronicDiseases?: string;
 }
 
 export interface PatientDetail {
   idpaciente: number;
-  nombre: string;
-  apellidopaterno: string;
-  apellidomaterno?: string;
+  nombre: string;         // maps to nombrePaciente in DB
   rut: string;
-  fechanacimiento?: string;
-  genero?: string;
-  telefono?: string;
-  email?: string;
+  fechanacimiento?: string; // maps to fechaNacimiento in DB
+  genero?: string;        // maps to sexo in DB
   direccion?: string;
-  idcliente?: number;
-  clienteName?: string;
-  allergies: Array<{
-    idalergia: number;
-    nombrealergia: string;
-    descripcionAlergia: string;
-  }>;
-  chronicDiseases: Array<{
-    idcronico: number;
-    enfermedadcronica: string;
-  }>;
-  recentConsultations: Array<any>;
 }
 
 @Injectable({

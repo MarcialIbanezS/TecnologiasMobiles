@@ -1,6 +1,5 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const { pool } = require('../config/database');
 const router = express.Router();
 
@@ -52,23 +51,9 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    console.log('Generating JWT token');
-    // Generate JWT token
-    const token = jwt.sign(
-      { 
-        id: user.idprofesional,
-        username: user.rut,
-        name: user.nombreprofesional,
-        specialty: user.especialidad
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' }
-    );
-
     console.log('Login successful for user:', user.nombreprofesional);
     res.json({
       success: true,
-      token,
       user: {
         id: user.idprofesional,
         username: user.rut,
@@ -137,57 +122,6 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ 
       error: 'Internal server error' 
     });
-  }
-});
-
-// Middleware to verify JWT token
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ error: 'No token provided' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
-};
-
-// Profile endpoint
-router.get('/profile', verifyToken, async (req, res) => {
-  try {
-    const [rows] = await pool.execute(`
-      SELECT 
-        p.idprofesional,
-        p.nombreprofesional,
-        p.rut,
-        e.especialidad
-      FROM profesional p
-      LEFT JOIN especialidad e ON p.idespecialidad = e.idespecialidad
-      WHERE p.idprofesional = ?
-    `, [req.user.id]);
-
-    if (rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    res.json({
-      success: true,
-      user: {
-        id: rows[0].idprofesional,
-        username: rows[0].rut,
-        name: rows[0].nombreprofesional,
-        specialty: rows[0].especialidad || 'General'
-      }
-    });
-
-  } catch (error) {
-    console.error('Profile error:', error);
-    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

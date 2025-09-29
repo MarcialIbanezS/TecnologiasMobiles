@@ -2,26 +2,8 @@ const express = require('express');
 const { pool } = require('../config/database');
 const router = express.Router();
 
-// Middleware to verify JWT token
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ error: 'No token provided' });
-  }
-
-  try {
-    const jwt = require('jsonwebtoken');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
-};
-
 // Get all consultations
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { page = 1, limit = 20, patientId, professionalId } = req.query;
     const offset = (page - 1) * limit;
@@ -82,7 +64,7 @@ router.get('/', verifyToken, async (req, res) => {
 });
 
 // Get consultation by ID with full details
-router.get('/:id', verifyToken, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const consultationId = req.params.id;
 
@@ -142,7 +124,7 @@ router.get('/:id', verifyToken, async (req, res) => {
 });
 
 // Create new consultation
-router.post('/', verifyToken, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const {
       idpaciente,
@@ -200,7 +182,7 @@ router.post('/', verifyToken, async (req, res) => {
 });
 
 // Update consultation
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const consultationId = req.params.id;
     const {
@@ -251,7 +233,7 @@ router.put('/:id', verifyToken, async (req, res) => {
 });
 
 // Delete consultation
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const consultationId = req.params.id;
 
@@ -278,7 +260,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
 });
 
 // Get available services
-router.get('/data/services', verifyToken, async (req, res) => {
+router.get('/data/services', async (req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM servicio ORDER BY servicio');
     res.json({ success: true, services: rows });
@@ -289,7 +271,7 @@ router.get('/data/services', verifyToken, async (req, res) => {
 });
 
 // Get available diagnoses
-router.get('/data/diagnoses', verifyToken, async (req, res) => {
+router.get('/data/diagnoses', async (req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM diagnostico ORDER BY diagnostico');
     res.json({ success: true, diagnoses: rows });
@@ -300,7 +282,7 @@ router.get('/data/diagnoses', verifyToken, async (req, res) => {
 });
 
 // Get available interventions
-router.get('/data/interventions', verifyToken, async (req, res) => {
+router.get('/data/interventions', async (req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM intervencion ORDER BY intervencion');
     res.json({ success: true, interventions: rows });

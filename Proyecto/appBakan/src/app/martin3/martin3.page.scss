@@ -32,6 +32,30 @@ Ion-button {
   margin: 10px auto; // centra con márgenes
   display: block;    // asegura que respete el centrado
   position: relative; // cambiar a absoluto para ubicacion absoluta
+}
 
+.selected-patient {
+  margin: 16px;
   
+  ion-card {
+    border-left: 4px solid #3880ff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  ion-card-header {
+    padding-bottom: 8px;
+  }
+  
+  ion-card-content {
+    padding-top: 0;
+    
+    p {
+      margin: 4px 0;
+      color: #666;
+      
+      strong {
+        color: #000;
+      }
+    }
+  }
 }

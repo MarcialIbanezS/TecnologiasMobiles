@@ -8,8 +8,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardContent, I
 import {IonBreadcrumb, IonBreadcrumbs} from  '@ionic/angular/standalone';
 import {Router} from '@angular/router';
 import {RouterModule} from '@angular/router';
-
-
+import { Patient } from '../Services/patient.service';
 
 @Component({
   selector: 'app-martin3',
@@ -21,7 +20,15 @@ import {RouterModule} from '@angular/router';
     IonGrid, IonCol, IonRow, IonButton, IonBreadcrumb, IonBreadcrumbs, RouterModule]})
 export class Martin3Page implements OnInit {
 
-  constructor(private router: Router) { }
+  selectedPatient: Patient | null = null;
+
+  constructor(private router: Router) {
+    // Get patient data from navigation state if it exists
+    const navigation = this.router.getCurrentNavigation();
+    if (navigation?.extras.state?.['patient']) {
+      this.selectedPatient = navigation.extras.state['patient'];
+    }
+  }
  irAHome() {
     this.router.navigate(['/login']);       
   }
@@ -29,7 +36,14 @@ export class Martin3Page implements OnInit {
     this.router.navigate(['/pagina2']);       
   }
   irAMartin1() {
-    this.router.navigate(['/martin1']);       
+    // Pass patient data to Martin1 if available
+    if (this.selectedPatient) {
+      this.router.navigate(['/martin1'], { 
+        state: { patient: this.selectedPatient } 
+      });
+    } else {
+      this.router.navigate(['/martin1']);
+    }
   }
   irAMartin2() {
     this.router.navigate(['/martin2']);       

@@ -2,41 +2,19 @@ const express = require('express');
 const { pool } = require('../config/database');
 const router = express.Router();
 
-// Middleware to verify JWT token
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-
-  if (!token) {
-    return res.status(401).json({ error: 'No token provided' });
-  }
-
-  try {
-    const jwt = require('jsonwebtoken');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (error) {
-    return res.status(401).json({ error: 'Invalid token' });
-  }
-};
-
 // Get all patients
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const [rows] = await pool.execute(`
       SELECT 
-        p.*,
-        c.cliente as clienteName,
-        GROUP_CONCAT(DISTINCT a.nombrealergia) as allergies,
-        GROUP_CONCAT(DISTINCT cr.enfermedadcronica) as chronicDiseases
+        p.idpaciente,
+        p.nombrePaciente as nombre,
+        p.rut,
+        p.fechaNacimiento as fechanacimiento,
+        p.sexo as genero,
+        p.direccion
       FROM paciente p
-      LEFT JOIN cliente c ON p.idcliente = c.idcliente
-      LEFT JOIN pacientealergia pa ON p.idpaciente = pa.idpaciente
-      LEFT JOIN alergia a ON pa.idalergia = a.idalergia
-      LEFT JOIN pacientecronica pc ON p.idpaciente = pc.idpaciente
-      LEFT JOIN cronico cr ON pc.idcronico = cr.idcronico
-      GROUP BY p.idpaciente
-      ORDER BY p.nombre, p.apellidopaterno
+      ORDER BY p.nombrePaciente
     `);
 
     res.json({
@@ -51,16 +29,19 @@ router.get('/', verifyToken, async (req, res) => {
 });
 
 // Get patient by ID
-router.get('/:id', verifyToken, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const patientId = req.params.id;
 
     const [patientRows] = await pool.execute(`
       SELECT 
-        p.*,
-        c.cliente as clienteName
+        p.idpaciente,
+        p.nombrePaciente as nombre,
+        p.rut,
+        p.fechaNacimiento as fechanacimiento,
+        p.sexo as genero,
+        p.direccion
       FROM paciente p
-      LEFT JOIN cliente c ON p.idcliente = c.idcliente
       WHERE p.idpaciente = ?
     `, [patientId]);
 
@@ -68,46 +49,11 @@ router.get('/:id', verifyToken, async (req, res) => {
       return res.status(404).json({ error: 'Patient not found' });
     }
 
-    // Get allergies
-    const [allergies] = await pool.execute(`
-      SELECT a.idalergia, a.nombrealergia, a.descripcionAlergia
-      FROM pacientealergia pa
-      JOIN alergia a ON pa.idalergia = a.idalergia
-      WHERE pa.idpaciente = ?
-    `, [patientId]);
-
-    // Get chronic diseases
-    const [chronicDiseases] = await pool.execute(`
-      SELECT cr.idcronico, cr.enfermedadcronica
-      FROM pacientecronica pc
-      JOIN cronico cr ON pc.idcronico = cr.idcronico
-      WHERE pc.idpaciente = ?
-    `, [patientId]);
-
-    // Get recent consultations
-    const [consultations] = await pool.execute(`
-      SELECT 
-        co.*,
-        prof.nombreprofesional,
-        s.servicio
-      FROM consulta co
-      LEFT JOIN profesional prof ON co.idprofesional = prof.idprofesional
-      LEFT JOIN servicio s ON co.idservicio = s.idservicio
-      WHERE co.idpaciente = ?
-      ORDER BY co.fecha DESC
-      LIMIT 10
-    `, [patientId]);
-
-    const patient = {
-      ...patientRows[0],
-      allergies,
-      chronicDiseases,
-      recentConsultations: consultations
-    };
+    const patient = patientRows[0];
 
     res.json({
       success: true,
-      patient
+      patient: patient
     });
 
   } catch (error) {
@@ -117,7 +63,7 @@ router.get('/:id', verifyToken, async (req, res) => {
 });
 
 // Create new patient
-router.post('/', verifyToken, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const {
       nombre,
@@ -187,7 +133,7 @@ router.post('/', verifyToken, async (req, res) => {
 });
 
 // Update patient
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const patientId = req.params.id;
     const {
@@ -227,7 +173,7 @@ router.put('/:id', verifyToken, async (req, res) => {
 });
 
 // Delete patient
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const patientId = req.params.id;
 

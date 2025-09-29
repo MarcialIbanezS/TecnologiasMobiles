@@ -26,3 +26,28 @@
   background-color: black;
   border-radius: 10px;
 }
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.client-info,
+.patient-info {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}

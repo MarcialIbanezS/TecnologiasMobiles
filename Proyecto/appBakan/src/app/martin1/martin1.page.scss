@@ -33,3 +33,22 @@ Ion-button {
     --background: white;
     --padding-top: 10px;
 }
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  height: 200px;
+  
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+  }
+}

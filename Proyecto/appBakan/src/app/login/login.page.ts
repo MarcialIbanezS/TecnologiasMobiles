@@ -59,7 +59,7 @@ export class LoginPage {
         if (response.success) {
           this.showToastMessage(`Bienvenido ${response.user.name}`, 'success');
           setTimeout(() => {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/martin3']);
           }, 1000);
         }
       },

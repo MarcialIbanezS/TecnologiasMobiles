@@ -37,26 +37,11 @@ export class LibrosPage implements OnInit {
   async agregar() {
     if (this.form.invalid) return;
     const { titulo, detalle } = this.form.value;
-    try {
-      await this.itemsSrv.agregar({ titulo: titulo!, detalle: detalle || undefined }).toPromise();
-      this.form.reset();
-      // Refresh the list after adding
-      this.items$ = this.itemsSrv.listar();
-    } catch (error) {
-      console.error('Error adding item:', error);
-      // You might want to show a toast or alert here
-    }
+    await this.itemsSrv.agregar({ titulo: titulo!, detalle: detalle || undefined });
+    this.form.reset();
   }
 
-  async eliminar(it: Item) {
-    if (!it.id) return;
-    try {
-      await this.itemsSrv.eliminar(it.id).toPromise();
-      // Refresh the list after deleting
-      this.items$ = this.itemsSrv.listar();
-    } catch (error) {
-      console.error('Error deleting item:', error);
-      // You might want to show a toast or alert here
-    }
+  eliminar(it: Item) {
+    if (it.id) this.itemsSrv.eliminar(it.id);
   }
 }

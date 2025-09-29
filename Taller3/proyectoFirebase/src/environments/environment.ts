@@ -1,22 +1,20 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { initializeApp } from "firebase/app"; //Agregar
+import { getAnalytics } from "firebase/analytics";//Agregar
 
 export const environment = {
   production: false,
-  api: {
-    baseUrl: 'http://localhost:3000/api', // Your backend API URL
-    endpoints: {
-      items: '/items'
-    }
+  firebase: {
+    apiKey: "AIzaSyA7fwtGw_rNXCFJl0o2j8O0mVS022ADrig",
+    authDomain: "proyectoejemplo-e6759.firebaseapp.com",
+    projectId: "proyectoejemplo-e6759",
+    storageBucket: "proyectoejemplo-e6759.firebasestorage.app",
+    messagingSenderId: "576366517575",
+    appId: "1:576366517575:web:085a1e89e7580c5d88c062",
+    measurementId: "G-J0RRJDTWKW"
   },
-  database: {
-    type: 'mysql',
-    host: 'database-1.cvayqu2e0wf2.us-east-1.rds.amazonaws.com',
-    port: 3306,
-    database: 'database-1',
-    // Note: Database credentials should be handled securely in the backend
-  }
 };
 
 /*

@@ -3,20 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  api: {
-    baseUrl: 'http://localhost:3000/api', // Your backend API URL
-    endpoints: {
-      items: '/items'
-    }
-  },
-  database: {
-    type: 'mysql',
-    host: 'database-1.cvayqu2e0wf2.us-east-1.rds.amazonaws.com',
-    port: 3306,
-    database: 'database-1',
-    // Note: Database credentials should be handled securely in the backend
-  }
+  production: false
 };
 
 /*

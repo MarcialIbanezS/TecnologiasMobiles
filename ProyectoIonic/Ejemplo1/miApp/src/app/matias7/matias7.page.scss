@@ -1,0 +1,98 @@
+:host {
+  --app-bg:#f5f6f8;
+  --card-bg:#fff;
+  --ink:#111;
+  --muted:#4b5563;
+  --chip-green:#19c167;
+  --line:#e5e7eb;
+  --border:#e8eaef;
+
+  ion-content { --background: var(--app-bg); }
+
+  ion-toolbar {
+    --background: var(--app-bg);
+    --border-color: transparent;
+    color: var(--ink);
+  }
+
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 12px 12px 18px;
+  }
+
+  .page-title {
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 22px;
+    letter-spacing: .2px;
+    margin: 8px 4px 14px;
+  }
+
+  .section {
+    margin: 12px 16px 20px;
+    padding: 12px 14px 8px;
+  }
+
+  ion-card,
+  .card {
+    --background: var(--card-bg);
+    color: var(--ink);
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.05);
+    border: 1px solid var(--border);
+  }
+
+  ion-card-title { color: var(--ink); font-weight: 700; }
+  ion-card-subtitle { color: var(--muted); }
+
+  /* KPIs */
+  .kpi-grid .kpi-card { padding: 0 4px; }
+  .kpi {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .kpi-label {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: .3px;
+  }
+  .kpi-value {
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.1;
+  }
+  .kpi-value.small { font-size: 16px; font-weight: 700; }
+  .kpi ion-icon { font-size: 28px; color: var(--chip-green); }
+
+  /* Lista */
+  ion-item,
+  .item {
+    --background: var(--card-bg);
+    --color: var(--ink);
+    --padding-start: 10px;
+    --inner-padding-end: 10px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    padding-inline: 8px;
+
+    &::part(native) { border-radius: 12px; }
+  }
+
+  ion-label {
+    h2 { font-weight: 700; color: var(--ink); }
+    p, .k, .subtle { color: var(--muted); font-size: 13px; }
+  }
+
+  /* Accesos rápidos */
+  .grid-cards {
+    ion-card { transition: transform .15s ease, box-shadow .15s ease; }
+    ion-card:active { transform: scale(.985); box-shadow: 0 8px 24px rgba(0,0,0,.07); }
+    ion-card ion-card-content { color: var(--ink); font-weight: 600; }
+  }
+
+  @media (min-width: 768px) {
+    .page-title { font-size: 24px; }
+  }
+}

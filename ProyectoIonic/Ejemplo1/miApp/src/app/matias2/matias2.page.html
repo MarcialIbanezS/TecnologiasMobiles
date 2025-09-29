@@ -1,0 +1,39 @@
+<ion-header translucent="true" class="hdr">
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/matias1"></ion-back-button></ion-buttons>
+    <ion-title class="title-strong">Listado</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-bg">
+  <ion-card class="card section">
+    <ion-item lines="none" class="item">
+      <ion-label position="stacked">Buscar</ion-label>
+      <ion-input [(ngModel)]="query" placeholder="Nombre, RUT, diagnóstico..."></ion-input>
+    </ion-item>
+    <div class="filters">
+      <button class="pill pill-outline" [class.on]="filtro==='urgente'" (click)="filtrar('urgente')">Urgente</button>
+      <button class="pill pill-outline" [class.on]="filtro==='control'" (click)="filtrar('control')">Control</button>
+      <button class="pill pill-outline" (click)="limpiar()">Limpiar</button>
+    </div>
+    <ion-button expand="block" color="success" (click)="buscar()">Buscar</ion-button>
+  </ion-card>
+
+  <ion-list *ngIf="resultados?.length">
+    <ion-card class="card" *ngFor="let p of resultados" (click)="abrirDetalle(p.id)">
+      <ion-item lines="none" class="item" detail="true">
+        <ion-avatar slot="start"><img [src]="p.photoUrl || 'assets/avatar-placeholder.png'"/></ion-avatar>
+        <ion-label>
+          <div class="title-strong">{{ p.name }}</div>
+          <div class="k">{{ p.rut || '—' }}</div>
+        </ion-label>
+        <ion-badge *ngIf="p.tag==='urgente'" color="danger">URGENTE</ion-badge>
+        <ion-badge *ngIf="p.tag==='control'" color="medium">CONTROL</ion-badge>
+      </ion-item>
+    </ion-card>
+  </ion-list>
+
+  <ion-card class="card section" *ngIf="resultados && !resultados.length">
+    <div class="k">Sin resultados para “{{ query }}”.</div>
+  </ion-card>
+</ion-content>

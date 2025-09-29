@@ -1,0 +1,48 @@
+<ion-header translucent="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/matias3" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Medicamentos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <div class="page">
+    <h1 class="page-title">Medicamentos disponibles</h1>
+
+    <!-- Barra de búsqueda -->
+    <ion-searchbar
+      class="searchbar"
+      placeholder="Buscar medicamento..."
+      (ionInput)="filtrarMedicamentos($event)">
+    </ion-searchbar>
+
+    <!-- Lista de medicamentos -->
+    <ion-card class="section">
+      <ion-card-header>
+        <ion-card-title>Listado</ion-card-title>
+        <ion-card-subtitle class="subtle">Selecciona un fármaco para ver detalles</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="inset">
+          <ion-item button detail="true" *ngFor="let f of farmacosFiltrados">
+            <ion-label>
+              <h2>{{ f.nombre }}</h2>
+              <p class="subtle">{{ f.tipo }}</p>
+            </ion-label>
+            <ion-badge slot="end" *ngIf="f.noCombinar?.length">No combinar</ion-badge>
+          </ion-item>
+
+          <!-- Fallback si no hay resultados -->
+          <ion-item *ngIf="farmacosFiltrados.length === 0">
+            <ion-label class="subtle">No se encontraron medicamentos</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Accesos rápidos -->
+    
+  </div>
+</ion-content>

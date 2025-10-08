@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'styles.dart' as styles;
 // function to trigger build when the app is run
 
 void main() {
@@ -21,8 +22,8 @@ class HomeRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Doble M.A.'),
-        backgroundColor: const Color.fromARGB(255, 38, 156, 158),
-        foregroundColor: const Color.fromARGB(255, 195, 213, 237),
+        backgroundColor: styles.headerBGColor,
+        foregroundColor: styles.headerFontColor,
       ), // AppBar
       body: Center(
         child: Column(
@@ -61,8 +62,8 @@ class SecondRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Click Me Page"),
-        backgroundColor: const Color.fromARGB(255, 38, 156, 158),
-        foregroundColor: const Color.fromARGB(255, 195, 213, 237),
+        backgroundColor: styles.headerBGColor,
+        foregroundColor: styles.headerFontColor,
       ), // AppBar
       body: Center(
         child: ElevatedButton(
@@ -87,8 +88,8 @@ class ThirdRoute extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Tap Me Page"),
-        backgroundColor: const Color.fromARGB(255, 38, 156, 158),
-        foregroundColor: const Color.fromARGB(255, 195, 213, 237),
+        backgroundColor: styles.headerBGColor,
+        foregroundColor: styles.headerFontColor,
       ), // AppBar
     ); // Scaffold
   }

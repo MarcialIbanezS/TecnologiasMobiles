@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'styles.dart' as styles;
 import 'header.dart' as header;
 
 class HomeRoute extends StatelessWidget {

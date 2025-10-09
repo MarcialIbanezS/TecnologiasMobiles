@@ -8,7 +8,8 @@ AppBar buildHeader(BuildContext context) {
     foregroundColor: styles.headerFontColor,
     actions: <Widget>[
       DropdownButton<String>(
-        items: <String>['A', 'B', 'C', 'D'].map((String value) {
+        icon: const Icon(Icons.menu), // Changed from default "v" to "=" (menu icon)
+        items: <String>['Inicio', 'Cuenta', 'Buscar Fichas', 'Subir Fichas'].map((String value) {
           return DropdownMenuItem<String>(
             value: value,
             child: Text(value),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'styles.dart' as styles;
+//import 'styles.dart' as styles;
+import 'header.dart' as header;
 
 
 class SecondRoute extends StatelessWidget {
@@ -8,13 +9,11 @@ class SecondRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Click Me Page"),
-        backgroundColor: styles.headerBGColor,
-        foregroundColor: styles.headerFontColor,
-      ), // AppBar
-      body: Center(
-        child: ElevatedButton(
+      appBar: header.buildHeader(context),// AppBar
+      body: ListView(
+        padding: EdgeInsets.all(16),
+        children:[
+        ElevatedButton(
           style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all(Colors.green),
               foregroundColor: WidgetStateProperty.all(Colors.white)),
@@ -22,8 +21,12 @@ class SecondRoute extends StatelessWidget {
             Navigator.pop(context);
           },
           child: const Text('Back!'),
-        ), // ElevatedButton
+          
+        ),
+        //GFG(), // ElevatedButton
+        ],
       ), // Center
     ); // Scaffold
   }
 }
+

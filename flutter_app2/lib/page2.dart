@@ -1,5 +1,8 @@
+//import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'styles.dart' as styles;
+//import 'styles.dart' as styles;
+import 'header.dart' as header;
 
 
 class ThirdRoute extends StatelessWidget {
@@ -8,11 +11,20 @@ class ThirdRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Tap Me Page"),
-        backgroundColor: styles.headerBGColor,
-        foregroundColor: styles.headerFontColor,
-      ), // AppBar
+      appBar: header.buildHeader(context),
+      body: Center(
+        
+       child:
+      DropdownButton<String>(
+        items: <String>['A', 'B', 'C', 'D'].map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (_) {},
+      ) // AppBar
+      ), // Center
     ); // Scaffold
   }
 }

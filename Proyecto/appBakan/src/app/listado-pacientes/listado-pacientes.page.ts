@@ -9,9 +9,9 @@ import { PatientService, Patient } from '../Services/patient.service';
 import { NavigationService, Breadcrumb } from '../Services/navigation.service';
 
 @Component({
-  selector: 'app-martin2',
-  templateUrl: './martin2.page.html',
-  styleUrls: ['./martin2.page.scss'],
+  selector: 'app-listado-pacientes',
+  templateUrl: './listado-pacientes.page.html',
+  styleUrls: ['./listado-pacientes.page.scss'],
   standalone: true,
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,
@@ -19,7 +19,7 @@ import { NavigationService, Breadcrumb } from '../Services/navigation.service';
     IonList, IonItem, IonAvatar, IonLabel, IonSpinner, IonToast
   ]
 })
-export class Martin2Page implements OnInit {
+export class ListadoPacientesPage implements OnInit {
 
   pacientes: Patient[] = [];
   filteredPacientes: Patient[] = [];
@@ -102,3 +102,4 @@ export class Martin2Page implements OnInit {
     this.showToast = false;
   }
 }
+

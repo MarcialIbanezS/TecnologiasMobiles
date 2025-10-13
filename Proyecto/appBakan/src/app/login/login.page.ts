@@ -35,11 +35,11 @@ export class LoginPage {
   }
   
   irAHome() {
-    this.router.navigate(['/home']);       
+    this.router.navigate(['/inicio']);       
   }
   
-  irAMartin3() {
-    this.router.navigate(['/martin3']);       
+  irAInicio() {
+    this.router.navigate(['/inicio']);       
   }
   
   login() {
@@ -59,7 +59,7 @@ export class LoginPage {
         if (response.success) {
           this.showToastMessage(`Bienvenido ${response.user.name}`, 'success');
           setTimeout(() => {
-            this.router.navigate(['/martin3']);
+            this.router.navigate(['/inicio']);
           }, 1000);
         }
       },

@@ -12,14 +12,14 @@ import { Patient } from '../Services/patient.service';
 import { NavigationService, Breadcrumb } from '../Services/navigation.service';
 
 @Component({
-  selector: 'app-martin3',
-  templateUrl: './martin3.page.html',
-  styleUrls: ['./martin3.page.scss'],
+  selector: 'app-pagina-inicio',
+  templateUrl: './pagina-inicio.page.html',
+  styleUrls: ['./pagina-inicio.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule
     , IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
     IonGrid, IonCol, IonRow, IonButton, IonBreadcrumb, IonBreadcrumbs, RouterModule]})
-export class Martin3Page implements OnInit {
+export class PaginaInicioPage implements OnInit {
 
   selectedPatient: Patient | null = null;
   breadcrumbs: Breadcrumb[] = [];
@@ -87,3 +87,4 @@ export class Martin3Page implements OnInit {
   }
 
 }
+

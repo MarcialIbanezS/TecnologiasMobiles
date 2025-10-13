@@ -10,16 +10,16 @@ import { NavigationService, Breadcrumb } from '../Services/navigation.service';
 
 
 @Component({
-  selector: 'app-martin4',
-  templateUrl: './martin4.page.html',
-  styleUrls: ['./martin4.page.scss'],
+  selector: 'app-ficha-medica',
+  templateUrl: './ficha-medica.page.html',
+  styleUrls: ['./ficha-medica.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,
     IonBreadcrumb, IonBreadcrumbs, RouterModule, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,
     IonButton
   ]
 })
-export class Martin4Page implements OnInit {
+export class FichaMedicaPage implements OnInit {
   breadcrumbs: Breadcrumb[] = [];
   selectedPatient: any = null;
 
@@ -59,3 +59,8 @@ export class Martin4Page implements OnInit {
   }
 
 }
+
+
+
+
+

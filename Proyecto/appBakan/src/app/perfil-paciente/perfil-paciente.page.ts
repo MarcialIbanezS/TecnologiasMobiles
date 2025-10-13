@@ -12,16 +12,16 @@ import { NavigationService, Breadcrumb } from '../Services/navigation.service';
 
 
 @Component({
-  selector: 'app-martin1',
-  templateUrl: './martin1.page.html',
-  styleUrls: ['./martin1.page.scss'],
+  selector: 'app-perfil-paciente',
+  templateUrl: './perfil-paciente.page.html',
+  styleUrls: ['./perfil-paciente.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, 
      RouterModule, IonBreadcrumb, IonBreadcrumbs, IonItem, IonAvatar, IonLabel,
     IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonGrid, IonRow, IonCol
   , IonList, IonButton, IonSpinner, IonToast]
 })
-export class Martin1Page implements OnInit {
+export class PerfilPacientePage implements OnInit {
 
   patient: Patient | null = null;
   isLoading = false;
@@ -74,8 +74,7 @@ export class Martin1Page implements OnInit {
     this.breadcrumbs = [
       { label: 'Inicio', path: '/inicio' },
       { label: 'Pacientes', path: '/listadoPacientes' },
-      { label: this.patient?.nombre || 'Paciente', path: '/inicio' },
-      { label: 'Perfil', path: '/perfilPaciente' }
+      { label: this.patient?.nombre || 'Paciente', path: '/perfilPaciente' }
     ];
 
     // If no patient data was passed via navigation, try to get it from storage or redirect
@@ -127,4 +126,5 @@ export class Martin1Page implements OnInit {
   }
 
 }
+
 

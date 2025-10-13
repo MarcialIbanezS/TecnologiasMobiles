@@ -4,10 +4,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="fondo">
+<ion-content 
+  [fullscreen]="true" 
+  class="fondo"
+  [scrollEvents]="true" 
+  (ionScroll)="onScroll($event)">
+
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">martin2</ion-title>
+      <ion-title size="large">Pacientes</ion-title>
     </ion-toolbar>
   </ion-header>
 
@@ -61,9 +66,26 @@
         </ion-label>
       </ion-item>
     </ion-list>
+
+    <!-- Infinite scroll -->
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="cargarMasPacientes($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Cargando más pacientes...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </div>
 
-  <!-- Toast for error messages -->
+  <!-- Botón "Subir al tope" -->
+  
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="showScrollTop">
+    <ion-fab-button (click)="scrollToTop()">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  
+
+  <!-- Toast -->
   <ion-toast
     [isOpen]="showToast"
     [message]="toastMessage"

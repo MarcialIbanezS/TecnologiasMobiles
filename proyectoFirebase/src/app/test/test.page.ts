@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonList, IonItem,
-  IonAvatar, IonLabel, IonSpinner, IonToast, IonBreadcrumb, IonBreadcrumbs
+  IonAvatar, IonLabel, IonSpinner, IonToast, IonBreadcrumb, IonBreadcrumbs,
+  IonInfiniteScroll, IonInfiniteScrollContent, IonFab, IonFabButton, IonIcon
 } from '@ionic/angular/standalone';
 
+import { addIcons } from 'ionicons';
+import { arrowUpOutline } from 'ionicons/icons';
 import { PatientService, Patient } from '../servicios/patient.service';
 
 @Component({
@@ -16,9 +18,9 @@ import { PatientService, Patient } from '../servicios/patient.service';
   styleUrls: ['./test.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,      // ✅ Siempre primero
-    FormsModule,       // ✅ Angular Forms
-    RouterModule,      // ✅ Rutas
+    CommonModule,      
+    FormsModule,       
+    RouterModule,      
     IonContent,
     IonHeader,
     IonTitle,
@@ -31,17 +33,28 @@ import { PatientService, Patient } from '../servicios/patient.service';
     IonSpinner,
     IonToast,
     IonBreadcrumb,
-    IonBreadcrumbs
+    IonBreadcrumbs,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonFab,
+    IonFabButton,
+    IonIcon
   ]
 })
 export class TestPage implements OnInit {
 
-  pacientes: Patient[] = [];
-  filteredPacientes: Patient[] = [];
+  @ViewChild(IonContent) content!: IonContent;
+
+  pacientes: Patient[] = [];           // Todos los pacientes desde Firestore
+  filteredPacientes: Patient[] = [];   // Pacientes visibles
   isLoading = false;
   searchTerm = '';
 
-  // Toast properties
+  itemsPorPagina = 20;   // 🔹 Cuántos mostrar por bloque
+  paginaActual = 0;
+  showScrollTop = false; // 🔹 Mostrar botón de subir
+
+  // Toast
   showToast = false;
   toastMessage = '';
   toastColor: 'success' | 'danger' = 'danger';
@@ -49,21 +62,24 @@ export class TestPage implements OnInit {
   constructor(
     private router: Router,
     private patientService: PatientService
-  ) {}
+  ) {
+    addIcons({ arrowUpOutline }); // Registrar ícono
+  }
 
   ngOnInit() {
     this.loadPatients();
   }
 
-  // 🔹 Cargar pacientes desde Firestore
+  // 🔹 Cargar todos los pacientes una sola vez
   loadPatients() {
     this.isLoading = true;
     this.patientService.getPatients().subscribe({
       next: (patients) => {
         this.isLoading = false;
         this.pacientes = patients;
-        this.filteredPacientes = [...this.pacientes];
-        console.log('Patients loaded:', this.pacientes);
+        this.filteredPacientes = [];
+        this.paginaActual = 0;
+        this.cargarMasPacientesLocal(); // Cargar primeros n
       },
       error: (error) => {
         this.isLoading = false;
@@ -73,47 +89,82 @@ export class TestPage implements OnInit {
     });
   }
 
-  // 🔹 Mostrar toast
+  // 🔹 Cargar porciones locales (scroll)
+  cargarMasPacientes(event?: any) {
+    this.cargarMasPacientesLocal();
+
+    if (event) {
+      setTimeout(() => {
+        event.target.complete();
+        if (this.filteredPacientes.length >= this.pacientes.length) {
+          event.target.disabled = true;
+        }
+      }, 400);
+    }
+  }
+
+  private cargarMasPacientesLocal() {
+    const inicio = this.paginaActual * this.itemsPorPagina;
+    const fin = inicio + this.itemsPorPagina;
+    const nuevos = this.pacientes.slice(inicio, fin);
+    this.filteredPacientes = [...this.filteredPacientes, ...nuevos];
+    this.paginaActual++;
+  }
+
+  // 🔹 Scroll para mostrar el botón "Subir"
+  onScroll(event: any) {
+    const scrollTop = event.detail.scrollTop;
+    this.showScrollTop = scrollTop > 300;
+  }
+
+  // 🔹 Subir al tope
+  scrollToTop() {
+    this.content.scrollToTop(400);
+  }
+
+  // 🔹 Búsqueda
+  onBuscar(event: any) {
+    this.searchTerm = event.detail.value.toLowerCase();
+
+    if (this.searchTerm.trim() === '') {
+      // Sin filtro, reinicia scroll
+      this.filteredPacientes = [];
+      this.paginaActual = 0;
+      this.cargarMasPacientesLocal();
+    } else {
+      this.filteredPacientes = this.pacientes.filter(p =>
+        p.nombrePaciente.toLowerCase().includes(this.searchTerm) ||
+        p.rut.toLowerCase().includes(this.searchTerm)
+      );
+    }
+  }
+
+  // 🔹 Toasts
   showToastMessage(message: string, color: 'success' | 'danger') {
     this.toastMessage = message;
     this.toastColor = color;
     this.showToast = true;
   }
 
-  // 🔹 Navegaciones
+  onToastDismiss() {
+    this.showToast = false;
+  }
+
+  // 🔹 Navegación
   irAHome() { this.router.navigate(['/test']); }
   irAMartin3() { this.router.navigate(['/test']); }
-
   verPaciente(paciente: Patient) {
     this.router.navigate(['/test'], { state: { patient: paciente } });
   }
 
-  editarPaciente(paciente: Patient) {
-    this.router.navigate(['/editar-paciente'], { state: { patient: paciente } });
-  }
-
-  // 🔹 Eliminar paciente
   async eliminarPaciente(idpaciente: string) {
-  try {
-    await this.patientService.deletePatient(idpaciente);
-    this.showToastMessage('Paciente eliminado', 'success');
-    this.loadPatients();
-  } catch (error) {
-    console.error('Error eliminando paciente:', error);
-    this.showToastMessage('Error al eliminar paciente', 'danger');
-  }
-}
-
-  // 🔹 Filtrado por búsqueda
-  onBuscar(event: any) {
-    this.searchTerm = event.detail.value.toLowerCase();
-    this.filteredPacientes = this.pacientes.filter(p =>
-      p.nombrePaciente.toLowerCase().includes(this.searchTerm) ||
-      p.rut.toLowerCase().includes(this.searchTerm)
-    );
-  }
-
-  onToastDismiss() {
-    this.showToast = false;
+    try {
+      await this.patientService.deletePatient(idpaciente);
+      this.showToastMessage('Paciente eliminado', 'success');
+      this.loadPatients();
+    } catch (error) {
+      console.error('Error eliminando paciente:', error);
+      this.showToastMessage('Error al eliminar paciente', 'danger');
+    }
   }
 }

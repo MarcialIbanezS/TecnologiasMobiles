@@ -6,6 +6,7 @@
   align-items: center;
 }
 
+
 .scroll {
   background-color: white;  
   padding: 8px;             
@@ -50,4 +51,16 @@
   font-size: 12px;
   color: #666;
   font-style: italic;
+}
+
+ion-fab-button {
+  --background: #ffffff;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --color: rgb(0, 0, 0);
+}
+
+ion-fab{
+  --background:#ffffff;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --color: rgb(0, 0, 0);
 }

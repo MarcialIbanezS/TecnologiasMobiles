@@ -29,7 +29,7 @@
   <ion-avatar slot="start">
     <img [src]="'https://picsum.photos/80/80?random=' + patient.idpaciente" alt="avatar" />
   </ion-avatar>
-  <ion-label>{{ patient.nombre }}</ion-label>
+  <ion-label>{{ patient.nombrePaciente }}</ion-label>
 </ion-item>
 
 <!-- Loading state -->
@@ -61,7 +61,7 @@
       <ion-card>
       <ion-card-header>
       <ion-card-title>Perfil de paciente</ion-card-title>
-      <ion-card-subtitle>{{ patient.nombre }}</ion-card-subtitle>
+      <ion-card-subtitle>{{ patient.nombrePaciente }}</ion-card-subtitle>
       </ion-card-header>
       <ion-card-content>
         <ion-list>
@@ -71,16 +71,16 @@
             <p>{{ patient.rut }}</p>
           </ion-label>
         </ion-item>
-        <ion-item *ngIf="patient.genero">
+        <ion-item *ngIf="patient.sexo">
           <ion-label>
             <h3>Género</h3>
-            <p>{{ patient.genero }}</p>
+            <p>{{ patient.sexo }}</p>
           </ion-label>
         </ion-item>
-        <ion-item *ngIf="patient.fechanacimiento">
+        <ion-item *ngIf="patient.fechaNacimiento">
           <ion-label>
             <h3>Fecha de Nacimiento</h3>
-            <p>{{ patient.fechanacimiento | date:'dd/MM/yyyy' }}</p>
+            <p>{{ patient.fechaNacimiento | date:'dd/MM/yyyy' }}</p>
           </ion-label>
         </ion-item>
         <ion-item *ngIf="patient.direccion">

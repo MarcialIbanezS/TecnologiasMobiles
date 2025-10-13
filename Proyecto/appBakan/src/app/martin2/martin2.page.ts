@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonList, IonItem,
- IonAvatar, IonLabel, IonSpinner, IonToast } from '@ionic/angular/standalone';
-import { IonBreadcrumb, IonBreadcrumbs } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
+
+import { 
+  IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonList, IonItem,
+  IonAvatar, IonLabel, IonSpinner, IonToast, IonBreadcrumb, IonBreadcrumbs
+} from '@ionic/angular/standalone';
+
 import { PatientService, Patient } from '../Services/patient.service';
 
 @Component({
@@ -13,9 +16,22 @@ import { PatientService, Patient } from '../Services/patient.service';
   styleUrls: ['./martin2.page.scss'],
   standalone: true,
   imports: [
-    IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,
-    IonBreadcrumb, IonBreadcrumbs, RouterModule, IonSearchbar,
-    IonList, IonItem, IonAvatar, IonLabel, IonSpinner, IonToast
+    CommonModule,      // ✅ Siempre primero
+    FormsModule,       // ✅ Angular Forms
+    RouterModule,      // ✅ Rutas
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonSearchbar,
+    IonList,
+    IonItem,
+    IonAvatar,
+    IonLabel,
+    IonSpinner,
+    IonToast,
+    IonBreadcrumb,
+    IonBreadcrumbs
   ]
 })
 export class Martin2Page implements OnInit {
@@ -24,11 +40,11 @@ export class Martin2Page implements OnInit {
   filteredPacientes: Patient[] = [];
   isLoading = false;
   searchTerm = '';
-  
+
   // Toast properties
   showToast = false;
   toastMessage = '';
-  toastColor = 'danger';
+  toastColor: 'success' | 'danger' = 'danger';
 
   constructor(
     private router: Router,
@@ -39,50 +55,62 @@ export class Martin2Page implements OnInit {
     this.loadPatients();
   }
 
+  // 🔹 Cargar pacientes desde Firestore
   loadPatients() {
     this.isLoading = true;
     this.patientService.getPatients().subscribe({
-      next: (response) => {
+      next: (patients) => {
         this.isLoading = false;
-        if (response.success) {
-          this.pacientes = response.patients;
-          this.filteredPacientes = [...this.pacientes];
-          console.log('Patients loaded:', this.pacientes);
-        } else {
-          this.showError('Error al cargar los pacientes');
-        }
+        this.pacientes = patients;
+        this.filteredPacientes = [...this.pacientes];
+        console.log('Patients loaded:', this.pacientes);
       },
       error: (error) => {
         this.isLoading = false;
         console.error('Error loading patients:', error);
-        this.showError('Error de conexión al cargar los pacientes');
+        this.showToastMessage('Error de conexión al cargar los pacientes', 'danger');
       }
     });
   }
 
-  showError(message: string) {
+  // 🔹 Mostrar toast
+  showToastMessage(message: string, color: 'success' | 'danger') {
     this.toastMessage = message;
-    this.toastColor = 'danger';
+    this.toastColor = color;
     this.showToast = true;
   }
 
+  // 🔹 Navegaciones
   irAHome() { this.router.navigate(['/login']); }
   irAMartin3() { this.router.navigate(['/martin3']); }
 
   verPaciente(paciente: Patient) {
-    console.log("Paciente seleccionado:", paciente);
-    // Navigate to patient detail page (martin1) passing patient data
-    this.router.navigate(['/martin1'], { 
-      state: { patient: paciente } 
-    });
+    this.router.navigate(['/martin1'], { state: { patient: paciente } });
   }
 
+  editarPaciente(paciente: Patient) {
+    this.router.navigate(['/editar-paciente'], { state: { patient: paciente } });
+  }
+
+  // 🔹 Eliminar paciente
+  async eliminarPaciente(idpaciente: string) {
+  try {
+    await this.patientService.deletePatient(idpaciente);
+    this.showToastMessage('Paciente eliminado', 'success');
+    this.loadPatients();
+  } catch (error) {
+    console.error('Error eliminando paciente:', error);
+    this.showToastMessage('Error al eliminar paciente', 'danger');
+  }
+}
+
+  // 🔹 Filtrado por búsqueda
   onBuscar(event: any) {
     this.searchTerm = event.detail.value.toLowerCase();
-    this.filteredPacientes = this.pacientes.filter(p => {
-      return p.nombre.toLowerCase().includes(this.searchTerm) ||
-             p.rut.toLowerCase().includes(this.searchTerm);
-    });
+    this.filteredPacientes = this.pacientes.filter(p =>
+      p.nombrePaciente.toLowerCase().includes(this.searchTerm) ||
+      p.rut.toLowerCase().includes(this.searchTerm)
+    );
   }
 
   onToastDismiss() {

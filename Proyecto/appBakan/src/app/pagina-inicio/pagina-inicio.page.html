@@ -25,11 +25,11 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title>Paciente Seleccionado</ion-card-title>
-      <ion-card-subtitle>{{ selectedPatient.nombre }}</ion-card-subtitle>
+      <ion-card-subtitle>{{ selectedPatient.nombrePaciente }}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
       <p><strong>RUT:</strong> {{ selectedPatient.rut }}</p>
-      <p *ngIf="selectedPatient.genero"><strong>Género:</strong> {{ selectedPatient.genero }}</p>
+      <p *ngIf="selectedPatient.sexo"><strong>Género:</strong> {{ selectedPatient.sexo }}</p>
     </ion-card-content>
   </ion-card>
 </div>

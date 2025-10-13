@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+<<<<<<< HEAD:Proyecto/appBakan/src/app/perfil-paciente/perfil-paciente.page.ts
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonBreadcrumb, IonBreadcrumbs
   , IonItem, IonAvatar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle,
 IonGrid, IonRow, IonCol, IonImg, IonList, IonButton, IonSpinner, IonToast} 
@@ -9,35 +10,72 @@ import {Router} from '@angular/router';
 import {RouterModule} from '@angular/router';
 import { PatientService, Patient } from '../Services/patient.service';
 import { NavigationService, Breadcrumb } from '../Services/navigation.service';
+=======
+import { Router, RouterModule } from '@angular/router';
+>>>>>>> firebase:Proyecto/appBakan/src/app/martin1/martin1.page.ts
 
+import { 
+  IonContent, IonHeader, IonTitle, IonToolbar, IonBreadcrumb, IonBreadcrumbs,
+  IonItem, IonAvatar, IonLabel, IonCard, IonCardContent, IonCardHeader,
+  IonCardTitle, IonCardSubtitle, IonGrid, IonRow, IonCol, IonList,
+  IonButton, IonSpinner, IonToast
+} from '@ionic/angular/standalone';
+
+import { PatientService, Patient } from '../Services/patient.service';
 
 @Component({
   selector: 'app-perfil-paciente',
   templateUrl: './perfil-paciente.page.html',
   styleUrls: ['./perfil-paciente.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, 
-     RouterModule, IonBreadcrumb, IonBreadcrumbs, IonItem, IonAvatar, IonLabel,
-    IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonGrid, IonRow, IonCol
-  , IonList, IonButton, IonSpinner, IonToast]
+  imports: [
+    CommonModule,    // ✅ Angular essentials first
+    FormsModule,
+    RouterModule,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonBreadcrumb,
+    IonBreadcrumbs,
+    IonItem,
+    IonAvatar,
+    IonLabel,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonList,
+    IonButton,
+    IonSpinner,
+    IonToast
+  ]
 })
 export class PerfilPacientePage implements OnInit {
 
   patient: Patient | null = null;
   isLoading = false;
+<<<<<<< HEAD:Proyecto/appBakan/src/app/perfil-paciente/perfil-paciente.page.ts
   breadcrumbs: Breadcrumb[] = [];
   
+=======
+
+>>>>>>> firebase:Proyecto/appBakan/src/app/martin1/martin1.page.ts
   // Toast properties
   showToast = false;
   toastMessage = '';
-  toastColor = 'danger';
+  toastColor: 'success' | 'danger' = 'danger';
 
   constructor(
     private router: Router,
     private patientService: PatientService,
     private navigationService: NavigationService
   ) {
-    // Get patient data from navigation state
+    // Obtener datos del paciente desde el estado de navegación
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state?.['patient']) {
       this.patient = navigation.extras.state['patient'];
@@ -47,6 +85,7 @@ export class PerfilPacientePage implements OnInit {
     }
   }
 
+<<<<<<< HEAD:Proyecto/appBakan/src/app/perfil-paciente/perfil-paciente.page.ts
     irAHome() {
     this.router.navigate(['/login']);       
   }
@@ -78,8 +117,10 @@ export class PerfilPacientePage implements OnInit {
     ];
 
     // If no patient data was passed via navigation, try to get it from storage or redirect
+=======
+  ngOnInit() {
+>>>>>>> firebase:Proyecto/appBakan/src/app/martin1/martin1.page.ts
     if (!this.patient) {
-      // Could implement a fallback mechanism here if needed
       console.log('No patient data received');
       this.showError('No se encontraron datos del paciente');
     } else {
@@ -87,21 +128,24 @@ export class PerfilPacientePage implements OnInit {
     }
   }
 
+<<<<<<< HEAD:Proyecto/appBakan/src/app/perfil-paciente/perfil-paciente.page.ts
   // Execute breadcrumb navigation
   onBreadcrumbClick(breadcrumb: Breadcrumb) {
     this.navigationService.executeBreadcrumbNavigation(breadcrumb);
   }
 
+=======
+  // 🔹 Cargar detalles del paciente
+>>>>>>> firebase:Proyecto/appBakan/src/app/martin1/martin1.page.ts
   loadPatientDetails() {
     if (!this.patient?.idpaciente) return;
-    
+
     this.isLoading = true;
-    this.patientService.getPatient(this.patient.idpaciente).subscribe({
-      next: (response) => {
+    this.patientService.getPatientById(this.patient.idpaciente).subscribe({
+      next: (patientDetail) => {
         this.isLoading = false;
-        if (response.success) {
-          // Merge basic patient data with detailed data
-          this.patient = { ...this.patient, ...response.patient };
+        if (patientDetail) {
+          this.patient = { ...this.patient, ...patientDetail };
           console.log('Patient details loaded:', this.patient);
         } else {
           this.showError('Error al cargar los detalles del paciente');
@@ -115,6 +159,7 @@ export class PerfilPacientePage implements OnInit {
     });
   }
 
+  // 🔹 Mostrar error
   showError(message: string) {
     this.toastMessage = message;
     this.toastColor = 'danger';
@@ -125,6 +170,18 @@ export class PerfilPacientePage implements OnInit {
     this.showToast = false;
   }
 
+  // 🔹 Navegación
+  irAHome() { this.router.navigate(['/login']); }
+  irAMartin0() { this.router.navigate(['/pagina2']); }
+  irAMartin1() { this.router.navigate(['/martin1']); }
+  irAMartin2() { this.router.navigate(['/martin2']); }
+  irAMartin3() { this.router.navigate(['/martin3']); }
+  irAMartin4() { this.router.navigate(['/martin4']); }
+  irAMartin5() { this.router.navigate(['/martin5']); }
+  irAMartin6() { this.router.navigate(['/martin6']); }
+
+<<<<<<< HEAD:Proyecto/appBakan/src/app/perfil-paciente/perfil-paciente.page.ts
+
+=======
 }
-
-
+>>>>>>> firebase:Proyecto/appBakan/src/app/martin1/martin1.page.ts

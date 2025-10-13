@@ -1,0 +1,60 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>PaginaInicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true"  class="fondo">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">PaginaInicio</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-breadcrumbs>
+  <ion-breadcrumb 
+    *ngFor="let breadcrumb of breadcrumbs; let last = last"
+    [class.active]="last"
+    (click)="onBreadcrumbClick(breadcrumb)">
+    {{ breadcrumb.label }}
+  </ion-breadcrumb>
+</ion-breadcrumbs>
+
+<!-- Patient info display if available -->
+<div *ngIf="selectedPatient" class="selected-patient">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Paciente Seleccionado</ion-card-title>
+      <ion-card-subtitle>{{ selectedPatient.nombre }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p><strong>RUT:</strong> {{ selectedPatient.rut }}</p>
+      <p *ngIf="selectedPatient.genero"><strong>Género:</strong> {{ selectedPatient.genero }}</p>
+    </ion-card-content>
+  </ion-card>
+</div>
+
+<ion-grid>
+  <ion-row  class="ion-justify-content-center">
+    <ion-col></ion-col>
+    <ion-col size="auto">
+
+<ion-button expand="block" size="large" (click)="irAListadoPacientes()">Busqueda básica</ion-button >
+
+ <div class="huella">
+<ion-card size="medium">
+  <ion-card-header>
+    <ion-card-title>Escanee la huella del paciente</ion-card-title>
+    <ion-card-subtitle>{{ selectedPatient ? 'o acceda al perfil del paciente seleccionado' : '' }}</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content size="medium" (click)="irAPerfilPaciente()">
+    <img alt="Huella Digital" src="https://media.istockphoto.com/id/1480047786/es/vector/icono-de-huella-digital-concepto-de-firma-para-el-cifrado-de-contrase%C3%B1as-para-proteger-la.jpg?s=612x612&w=0&k=20&c=dhg6lhngB4D3U4OW9z3M3xBc6HQyFnmzI4cFkNvc1FI=" />
+  </ion-card-content>
+</ion-card>
+</div> 
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+</ion-grid>
+
+</ion-content>

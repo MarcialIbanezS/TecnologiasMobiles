@@ -1,0 +1,225 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Ficha médica</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="fondo">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Ficha Médica</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <!-- Breadcrumbs -->
+  <ion-breadcrumbs>
+    <ion-breadcrumb 
+      *ngFor="let breadcrumb of breadcrumbs; let last = last"
+      [class.active]="last"
+      (click)="onBreadcrumbClick(breadcrumb)">
+      {{ breadcrumb.label }}
+    </ion-breadcrumb>
+  </ion-breadcrumbs>
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <ion-button 
+      (click)="downloadMedicalRecord()" 
+      [disabled]="!selectedMedicalRecord"
+      fill="outline">
+      <ion-icon name="download-outline" slot="start"></ion-icon>
+      Descargar Ficha
+    </ion-button>
+    
+    <ion-button 
+      (click)="refreshMedicalRecords()" 
+      [disabled]="isLoading"
+      fill="outline">
+      
+      Actualizar
+    </ion-button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner color="primary"></ion-spinner>
+    <p>Cargando ficha médica...</p>
+  </div>
+
+  <!-- Error Message -->
+  <ion-card *ngIf="error && !isLoading" color="danger">
+    <ion-card-content>
+      <p>{{ error }}</p>
+      <ion-button (click)="loadMedicalRecords()" fill="clear" color="light">
+        Intentar nuevamente
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Patient Info Card -->
+  <ion-card *ngIf="selectedMedicalRecord && !isLoading">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-icon name="person-circle-outline"></ion-icon>
+        {{ selectedMedicalRecord.patientName }}
+      </ion-card-title>
+      <ion-card-subtitle>{{ selectedMedicalRecord.rut }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Fecha de Nacimiento</h3>
+            <p>{{ formatDate(selectedMedicalRecord.birthDate) }} 
+               <span *ngIf="selectedMedicalRecord?.birthDate">
+                 ({{ calculateAge(selectedMedicalRecord.birthDate) }} años)
+               </span>
+            </p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>
+            <h3>Género</h3>
+            <p>{{ selectedMedicalRecord.gender }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="selectedMedicalRecord?.address">
+          <ion-label>
+            <h3>Dirección</h3>
+            <p>{{ selectedMedicalRecord.address }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="medical-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>Fecha de Ingreso</h3>
+            <p>{{ formatDate(selectedMedicalRecord.admissionDate) }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="selectedMedicalRecord?.serviceType">
+          <ion-label>
+            <h3>Tipo de Servicio</h3>
+            <p>{{ selectedMedicalRecord.serviceType }}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="selectedMedicalRecord?.professionalName">
+          <ion-label>
+            <h3>Profesional Tratante</h3>
+            <p>{{ selectedMedicalRecord.professionalName }}</p>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Allergies Card -->
+  <ion-card *ngIf="selectedMedicalRecord && !isLoading">
+    <ion-card-header>
+      <ion-card-title color="warning">Alergias</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div *ngIf="selectedMedicalRecord?.allergies?.length; else noAllergies">
+        
+        <ion-list>
+          <ion-item *ngFor="let allergy of selectedMedicalRecord?.allergies">
+            <ion-label>
+              <h3>{{ allergy.name }}</h3>
+              <p>{{ allergy.description }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+      <ng-template #noAllergies>
+        <div class="no-data-message">
+          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+          <p>No se han registrado alergias para este paciente.</p>
+        </div>
+      </ng-template>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Chronic Conditions Card -->
+  <ion-card *ngIf="selectedMedicalRecord && !isLoading">
+    <ion-card-header>
+      <ion-card-title color="medium">Condiciones Crónicas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div *ngIf="selectedMedicalRecord?.chronicConditions?.length; else noChronicConditions">
+        <div class="chips-container">
+          <ion-chip 
+            *ngFor="let chronic of selectedMedicalRecord?.chronicConditions" 
+            color="medium">
+            <ion-label>{{ chronic.name }}</ion-label>
+          </ion-chip>
+        </div>
+        <ion-list>
+          <ion-item *ngFor="let chronic of selectedMedicalRecord?.chronicConditions">
+            <ion-label>
+              <h3>{{ chronic.name }}</h3>
+              <p>{{ chronic.description }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+      <ng-template #noChronicConditions>
+        <div class="no-data-message">
+          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+          <p>No se han registrado condiciones crónicas para este paciente.</p>
+        </div>
+      </ng-template>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Operations Card -->
+  <ion-card *ngIf="selectedMedicalRecord && !isLoading">
+    <ion-card-header>
+      <ion-card-title color="primary">Operaciones</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div *ngIf="selectedMedicalRecord?.operations?.length; else noOperations">
+        <div class="chips-container">
+          <ion-chip 
+            *ngFor="let operation of selectedMedicalRecord?.operations" 
+            color="primary">
+            <ion-label>{{ operation.name }}</ion-label>
+          </ion-chip>
+        </div>
+        <ion-list>
+          <ion-item *ngFor="let operation of selectedMedicalRecord?.operations">
+            <ion-label>
+              <h3>{{ operation.name }}</h3>
+              <p>{{ operation.description }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+      <ng-template #noOperations>
+        <div class="no-data-message">
+          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+          <p>No se han registrado operaciones para este paciente.</p>
+        </div>
+      </ng-template>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- No Data Card -->
+  <ion-card *ngIf="!selectedMedicalRecord && !isLoading && !error">
+    <ion-card-header>
+      <ion-card-title>Sin Fichas Médicas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>No se encontraron fichas médicas para este paciente.</p>
+      <ion-button (click)="loadMedicalRecords()" fill="outline">
+        Recargar
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+  
+</ion-content>

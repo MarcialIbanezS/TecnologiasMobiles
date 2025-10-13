@@ -5,20 +5,13 @@ import { AppComponent } from './app/app.component';
 
 import { provideIonicAngular } from '@ionic/angular/standalone';
 
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { provideFirestore, getFirestore, enableIndexedDbPersistence } from '@angular/fire/firestore';
-import { environment } from './environments/environment';
+console.log('Application starting with mock authentication...');
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     provideIonicAngular(),
-
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideFirestore(() => {
-      const db = getFirestore();
-      try { enableIndexedDbPersistence(db); } catch { /* ignora si hay múltiples pestañas */ }
-      return db;
-    }),
   ],
-}).catch(err => console.error(err));
+}).catch(err => {
+  console.error('Application bootstrap error:', err);
+});

@@ -1,0 +1,86 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Busqueda básica</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="fondo">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">ListadoPacientes</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-breadcrumbs>
+    <ion-breadcrumb 
+      *ngFor="let breadcrumb of breadcrumbs; let last = last"
+      [class.active]="last"
+      (click)="onBreadcrumbClick(breadcrumb)">
+      {{ breadcrumb.label }}
+    </ion-breadcrumb>
+  </ion-breadcrumbs>
+
+  <div class="searchbar">
+    <ion-searchbar
+      color="medium"
+      placeholder="Buscar paciente"
+      (ionInput)="onBuscar($event)">
+    </ion-searchbar>
+  </div>
+
+  <!-- Pull to refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="onRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Desliza para actualizar"
+      refreshingSpinner="crescent"
+      refreshingText="Actualizando...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div class="scroll">
+    <!-- Loading spinner -->
+    <div *ngIf="isLoading" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando pacientes...</p>
+    </div>
+
+    <!-- Patient list -->
+    <ion-list *ngIf="!isLoading">
+      <ion-item 
+        *ngFor="let item of filteredPacientes; let index = index" 
+        (click)="verPaciente(item)"
+        button>
+        <ion-avatar slot="start">
+          <img [src]="'https://picsum.photos/80/80?random=' + item.id" alt="avatar" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ item.nombre }} {{ item.apellidopaterno }} {{ item.apellidomaterno }}</h2>
+          <p>{{ item.rut }}</p>
+          <p *ngIf="item.genero" class="patient-info">{{ item.genero }}</p>
+          <p *ngIf="item.fechanacimiento" class="patient-info">Nacimiento: {{ item.fechanacimiento | date:'dd/MM/yyyy' }}</p>
+        </ion-label>
+      </ion-item>
+      
+      <!-- No results message -->
+      <ion-item *ngIf="filteredPacientes.length === 0 && !isLoading">
+        <ion-label>
+          <h2 *ngIf="searchTerm">No se encontraron pacientes</h2>
+          <h2 *ngIf="!searchTerm && pacientes.length === 0">No hay pacientes registrados</h2>
+          <h2 *ngIf="!searchTerm && pacientes.length > 0">No hay resultados</h2>
+          <p *ngIf="searchTerm">No hay resultados para "{{ searchTerm }}"</p>
+          <p *ngIf="!searchTerm && pacientes.length === 0">Aún no se han registrado pacientes en el sistema</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <!-- Toast for error messages -->
+  <ion-toast
+    [isOpen]="showToast"
+    [message]="toastMessage"
+    [color]="toastColor"
+    [duration]="3000"
+    (didDismiss)="onToastDismiss()">
+  </ion-toast>
+</ion-content>

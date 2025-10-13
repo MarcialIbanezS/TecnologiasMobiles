@@ -1,23 +1,89 @@
 
 .fondo {
-  --background: #9be3ff url('/assets/imagen_login.png') no-repeat center bottom / cover;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  min-height: 100vh;
+}
+
+ion-card {
+  color: rgb(0, 0, 0);
+  background-color: white;
+  margin: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  // Remove fixed positioning for responsive design
+}
+
+ion-button {
+  --color: rgb(0, 0, 0);
+  --background-color: rgb(255, 255, 255);
+  --background: white;
+  --padding-top: 10px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  padding: 16px;
+  justify-content: center;
+}
+
+.loading-container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: center; 
+  padding: 40px;
+  text-align: center;
 }
-Ion-card{
-    color: rgb(0, 0, 0);
-    background-color: white;
-    width: 600px;       // ancho fijo
-    height: 600px;      // alto fijo
-    left: 380px;
+
+.loading-container p {
+  margin-top: 16px;
+  color: var(--ion-color-medium);
 }
-Ion-button {
-    --color: rgb(0, 0, 0);
-    --background-color: rgb(255, 255, 255);
-    --background: white;
-    --padding-top: 10px;
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+ion-item {
+  --border-color: transparent;
+  margin-bottom: 4px;
+}
+
+ion-chip {
+  margin: 2px;
+}
+
+.no-data-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--ion-color-medium);
+  
+  ion-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.7;
+  }
+  
+  p {
+    margin: 0;
+    font-style: italic;
+    line-height: 1.4;
+  }
 }
 
 // Breadcrumb styling

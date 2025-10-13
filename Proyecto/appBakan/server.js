@@ -26,6 +26,7 @@ app.use('/api/patients', require('./backend/routes/patients'));
 app.use('/api/clients', require('./backend/routes/clients'));
 app.use('/api/professionals', require('./backend/routes/professionals'));
 app.use('/api/consultations', require('./backend/routes/consultations'));
+app.use('/api/medical-records', require('./backend/routes/medical-records'));
 app.use('/api/test', require('./backend/routes/test'));
 
 // Health check endpoint
@@ -48,7 +49,8 @@ app.get('/', (req, res) => {
       '/api/patients',
       '/api/clients',
       '/api/professionals',
-      '/api/consultations'
+      '/api/consultations',
+      '/api/medical-records'
     ]
   });
 });

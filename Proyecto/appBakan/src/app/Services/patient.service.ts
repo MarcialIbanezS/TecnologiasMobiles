@@ -1,52 +1,72 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { AuthService } from './auth.service';
 
-// Modelo de paciente
 export interface Patient {
-  idpaciente: string;       // ID de Firestore (string)
-  nombrePaciente: string;
+  idpaciente: number;
+  nombre: string;         // maps to nombrePaciente in DB
   rut: string;
-  sexo: string;
-  fechaNacimiento: string;
-  direccion: string;
+  fechanacimiento?: string; // maps to fechaNacimiento in DB
+  genero?: string;        // maps to sexo in DB
+  direccion?: string;
+}
+
+export interface PatientDetail {
+  idpaciente: number;
+  nombre: string;         // maps to nombrePaciente in DB
+  rut: string;
+  fechanacimiento?: string; // maps to fechaNacimiento in DB
+  genero?: string;        // maps to sexo in DB
+  direccion?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-  private collectionName = 'paciente';
+  private apiUrl = `${environment.apiUrl}/patients`;
 
-  constructor(private firestore: Firestore) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
-  // 🔹 Obtener todos los pacientes
-  getPatients(): Observable<Patient[]> {
-    const patientsRef = collection(this.firestore, this.collectionName);
-    return collectionData(patientsRef, { idField: 'idpaciente' }) as Observable<Patient[]>;
+  getPatients(): Observable<{ success: boolean; patients: Patient[] }> {
+    return this.http.get<{ success: boolean; patients: Patient[] }>(
+      this.apiUrl,
+      this.authService.getHttpOptions()
+    );
   }
 
-  // 🔹 Obtener paciente por ID
-  getPatientById(id: string): Observable<Patient | undefined> {
-    const patientDoc = doc(this.firestore, `${this.collectionName}/${id}`);
-    return docData(patientDoc, { idField: 'idpaciente' }) as Observable<Patient | undefined>;
+  getPatient(id: number): Observable<{ success: boolean; patient: PatientDetail }> {
+    return this.http.get<{ success: boolean; patient: PatientDetail }>(
+      `${this.apiUrl}/${id}`,
+      this.authService.getHttpOptions()
+    );
   }
 
-  // 🔹 Agregar paciente nuevo
-  async addPatient(patient: Omit<Patient, 'idpaciente'>): Promise<void> {
-    const patientsRef = collection(this.firestore, this.collectionName);
-    await addDoc(patientsRef, patient);
+  createPatient(patient: Partial<Patient>): Observable<any> {
+    return this.http.post(
+      this.apiUrl,
+      patient,
+      this.authService.getHttpOptions()
+    );
   }
 
-  // 🔹 Actualizar paciente existente
-  async updatePatient(id: string, data: Partial<Patient>): Promise<void> {
-    const patientDoc = doc(this.firestore, `${this.collectionName}/${id}`);
-    await updateDoc(patientDoc, data);
+  updatePatient(id: number, patient: Partial<Patient>): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/${id}`,
+      patient,
+      this.authService.getHttpOptions()
+    );
   }
 
-  // 🔹 Eliminar paciente
-  async deletePatient(id: string): Promise<void> {
-    const patientDoc = doc(this.firestore, `${this.collectionName}/${id}`);
-    await deleteDoc(patientDoc);
+  deletePatient(id: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/${id}`,
+      this.authService.getHttpOptions()
+    );
   }
 }

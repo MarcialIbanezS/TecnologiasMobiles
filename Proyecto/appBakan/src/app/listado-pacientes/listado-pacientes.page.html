@@ -38,25 +38,20 @@
     <!-- Patient list -->
     <ion-list *ngIf="!isLoading">
       <ion-item 
-        *ngFor="let paciente of filteredPacientes"
-        (click)="verPaciente(paciente)"
+        *ngFor="let item of filteredPacientes; let index = index" 
+        (click)="verPaciente(item)"
         button>
         <ion-avatar slot="start">
-          <img [src]="'https://picsum.photos/80/80?random=' + paciente['idpaciente']" alt="avatar" />
+          <img [src]="'https://picsum.photos/80/80?random=' + item.idpaciente" alt="avatar" />
         </ion-avatar>
         <ion-label>
-          <h2>{{ paciente['nombrePaciente'] }}</h2>
-          <p>{{ paciente['rut'] }}</p>
-          <p *ngIf="paciente['sexo']" class="patient-info">Sexo: {{ paciente['sexo'] }}</p>
-          <p *ngIf="paciente['fechaNacimiento']" class="patient-info">
-            Nacimiento: {{ paciente['fechaNacimiento'] | date:'dd/MM/yyyy' }}
-          </p>
-          <p *ngIf="paciente['direccion']" class="patient-info">
-            Dirección: {{ paciente['direccion'] }}
-          </p>
+          <h2>{{ item.nombre }}</h2>
+          <p>{{ item.rut }}</p>
+          <p *ngIf="item.genero" class="patient-info">{{ item.genero }}</p>
+          <p *ngIf="item.fechanacimiento" class="patient-info">Nacimiento: {{ item.fechanacimiento | date:'dd/MM/yyyy' }}</p>
         </ion-label>
       </ion-item>
-
+      
       <!-- No results message -->
       <ion-item *ngIf="filteredPacientes.length === 0 && !isLoading">
         <ion-label>

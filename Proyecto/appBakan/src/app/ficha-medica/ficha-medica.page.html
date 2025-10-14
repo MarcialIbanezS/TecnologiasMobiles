@@ -61,9 +61,9 @@
     <ion-card-header>
       <ion-card-title>
         <ion-icon name="person-circle-outline"></ion-icon>
-        {{ selectedMedicalRecord?.nombrePaciente }}
+        {{ selectedMedicalRecord.nombrePaciente }}
       </ion-card-title>
-      <ion-card-subtitle>{{ selectedMedicalRecord?.rut }}</ion-card-subtitle>
+      <ion-card-subtitle>{{ selectedMedicalRecord.rut }}</ion-card-subtitle>
     </ion-card-header>
 
     <ion-card-content>
@@ -72,9 +72,9 @@
           <ion-icon name="calendar-outline" slot="start"></ion-icon>
           <ion-label>
             <h3>Fecha de Nacimiento</h3>
-            <p>{{ formatDate(selectedMedicalRecord?.fechaNacimiento || '') }} 
+            <p>{{ formatDate(selectedMedicalRecord.fechaNacimiento || '') }} 
                <span *ngIf="selectedMedicalRecord?.fechaNacimiento">
-                 ({{ calculateAge(selectedMedicalRecord?.fechaNacimiento || '') }} años)
+                 ({{ calculateAge(selectedMedicalRecord.fechaNacimiento || '') }} años)
                </span>
             </p>
           </ion-label>
@@ -83,14 +83,14 @@
         <ion-item>
           <ion-label>
             <h3>Sexo</h3>
-            <p>{{ selectedMedicalRecord?.sexo }}</p>
+            <p>{{ selectedMedicalRecord.sexo }}</p>
           </ion-label>
         </ion-item>
 
         <ion-item *ngIf="selectedMedicalRecord?.direccion">
           <ion-label>
             <h3>Dirección</h3>
-            <p>{{ selectedMedicalRecord?.direccion }}</p>
+            <p>{{ selectedMedicalRecord.direccion }}</p>
           </ion-label>
         </ion-item>
 
@@ -98,21 +98,21 @@
           <ion-icon name="medical-outline" slot="start"></ion-icon>
           <ion-label>
             <h3>Fecha de Ingreso</h3>
-            <p>{{ formatDate(selectedMedicalRecord?.fechaingreso || '') }}</p>
+            <p>{{ formatDate(selectedMedicalRecord.fechaingreso || '') }}</p>
           </ion-label>
         </ion-item>
 
         <ion-item *ngIf="selectedMedicalRecord?.tipoServicio">
           <ion-label>
             <h3>Tipo de Servicio</h3>
-            <p>{{ selectedMedicalRecord?.tipoServicio }}</p>
+            <p>{{ selectedMedicalRecord.tipoServicio }}</p>
           </ion-label>
         </ion-item>
 
         <ion-item *ngIf="selectedMedicalRecord?.nombreProfesional">
           <ion-label>
             <h3>Profesional Tratante</h3>
-            <p>{{ selectedMedicalRecord?.nombreProfesional }}</p>
+            <p>{{ selectedMedicalRecord.nombreProfesional }}</p>
           </ion-label>
         </ion-item>
       </ion-list>

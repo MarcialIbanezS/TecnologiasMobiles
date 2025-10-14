@@ -1,0 +1,10 @@
+^C:\USERS\LENOVO\DESKTOP\PROYECTOS\TECNOLOGIASMOBILES\FLUTTER_APP2\BUILD\WINDOWS\X64\CMAKEFILES\EAF79B7E1EBF7F46060A13A3042F2B98\INSTALL_FORCE.RULE
+setlocal
+cd .
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

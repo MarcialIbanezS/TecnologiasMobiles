@@ -44,7 +44,6 @@ import { PatientService, Patient } from '../servicios/patient.service';
 export class TestPage implements OnInit {
 
   @ViewChild(IonContent) content!: IonContent;
-  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
 
   pacientes: Patient[] = [];           // Todos los pacientes desde Firestore
   filteredPacientes: Patient[] = [];   // Pacientes visibles
@@ -118,19 +117,9 @@ export class TestPage implements OnInit {
     this.showScrollTop = scrollTop > 300;
   }
 
-  // 🔹 Subir al tope y resetear paginación
+  // 🔹 Subir al tope
   scrollToTop() {
     this.content.scrollToTop(400);
-    
-    // Reset pagination to initial state
-    this.filteredPacientes = [];
-    this.paginaActual = 0;
-    this.cargarMasPacientesLocal(); // Load only the first page again
-    
-    // Re-enable infinite scroll in case it was disabled
-    if (this.infiniteScroll) {
-      this.infiniteScroll.disabled = false;
-    }
   }
 
   // 🔹 Búsqueda

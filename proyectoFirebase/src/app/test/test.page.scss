@@ -1,0 +1,66 @@
+.fondo {
+  --background: #9be3ff url('/assets/imagen_login.png') no-repeat center bottom / cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.scroll {
+  background-color: white;  
+  padding: 8px;             
+}
+
+
+.scroll ion-item {
+  --background: white;      
+  color: black;            
+  margin-bottom: 4px;       
+}
+
+.scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 10px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.client-info,
+.patient-info {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+ion-fab-button {
+  --background: #ffffff;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --color: rgb(0, 0, 0);
+}
+
+ion-fab{
+  --background:#ffffff;
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --color: rgb(0, 0, 0);
+}

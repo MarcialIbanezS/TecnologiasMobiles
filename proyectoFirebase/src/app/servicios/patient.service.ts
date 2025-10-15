@@ -1,3 +1,9 @@
+/*
+FIREBASE: PATIENT SERVICE
+Service to manage CRUD operations for patients in Firestore.
+*/
+
+
 import { Injectable } from '@angular/core';
 import { Firestore, collectionData, collection, doc, docData, addDoc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
@@ -7,7 +13,7 @@ export interface Patient {
   idpaciente: string;       // ID de Firestore (string)
   nombrePaciente: string;
   rut: string;
-  sexo: string;
+  genero: string;
   fechaNacimiento: string;
   direccion: string;
 }

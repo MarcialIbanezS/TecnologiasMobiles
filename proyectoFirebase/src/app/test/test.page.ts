@@ -11,6 +11,8 @@ import {
 import { addIcons } from 'ionicons';
 import { arrowUpOutline } from 'ionicons/icons';
 import { PatientService, Patient } from '../servicios/patient.service';
+import { NavigationService, Breadcrumb } from '../servicios/navigation.service';
+
 
 @Component({
   selector: 'app-test',
@@ -51,6 +53,8 @@ export class TestPage implements OnInit {
   isLoading = false;
   searchTerm = '';
   isSearching = false;                 // Track if we're in search mode
+  breadcrumbs: Breadcrumb[] = [];
+
 
   itemsPorPagina = 20;   // 🔹 Cuántos mostrar por bloque
   paginaActual = 0;
@@ -63,14 +67,24 @@ export class TestPage implements OnInit {
 
   constructor(
     private router: Router,
-    private patientService: PatientService
-  ) {
+    private patientService: PatientService,
+    private navigationService: NavigationService
+  ) { 
     addIcons({ arrowUpOutline }); // Registrar ícono
+    
+    // Set breadcrumbs for patients page
+    this.breadcrumbs = [
+      { label: 'Inicio', path: '/inicio' },
+      { label: 'Pacientes', path: '/listadoPacientes' }
+    ];
   }
-
+  
   ngOnInit() {
     this.loadPatients();
   }
+// Navigation
+
+  
 
   // 🔹 Cargar todos los pacientes una sola vez
   loadPatients() {
@@ -196,10 +210,19 @@ export class TestPage implements OnInit {
   }
 
   // 🔹 Navegación
-  irAHome() { this.router.navigate(['/test']); }
-  irAMartin3() { this.router.navigate(['/test']); }
+  irAHome() { this.router.navigate(['/inicio']); } 
+  irAMartin3() { this.router.navigate(['/inicio']); }
   verPaciente(paciente: Patient) {
-    this.router.navigate(['/test'], { state: { patient: paciente } });
+    console.log("Paciente seleccionado:", paciente);
+    // Navigate to patient profile with patient data
+    this.router.navigate(['/perfilPaciente'], { 
+      state: { patient: paciente } 
+    });
+  }
+  
+  // Execute breadcrumb navigation
+  onBreadcrumbClick(breadcrumb: Breadcrumb) {
+    this.router.navigate([breadcrumb.path]);
   }
 
   async eliminarPaciente(idpaciente: string) {

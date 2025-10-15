@@ -16,9 +16,15 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-breadcrumbs>
-    <ion-breadcrumb expand="block" (click)="irAHome()">Cerrar sesión</ion-breadcrumb>
-    <ion-breadcrumb (click)="irAMartin3()">Volver</ion-breadcrumb>
+    <ion-breadcrumbs>
+    <ion-breadcrumb 
+      *ngFor="let breadcrumb of breadcrumbs; let last = last"
+      [class.active]="last"
+      [style.cursor]="last ? 'default' : 'pointer'"
+      [style.opacity]="last ? '0.7' : '1'"
+      (click)="!last && onBreadcrumbClick(breadcrumb)">
+      {{ breadcrumb.label }}
+    </ion-breadcrumb>
   </ion-breadcrumbs>
 
   <div class="searchbar">
@@ -51,7 +57,7 @@
         <ion-label>
           <h2>{{ paciente['nombrePaciente'] }}</h2>
           <p>{{ paciente['rut'] }}</p>
-          <p *ngIf="paciente['sexo']" class="patient-info">Sexo: {{ paciente['sexo'] }}</p>
+          <p *ngIf="paciente['genero']" class="patient-info">Sexo: {{ paciente['genero'] }}</p>
           <p *ngIf="paciente['fechaNacimiento']" class="patient-info">
             Nacimiento: {{ paciente['fechaNacimiento'] | date:'dd/MM/yyyy' }}
           </p>

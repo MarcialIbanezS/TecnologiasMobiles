@@ -44,11 +44,13 @@ import { PatientService, Patient } from '../servicios/patient.service';
 export class TestPage implements OnInit {
 
   @ViewChild(IonContent) content!: IonContent;
+  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
 
   pacientes: Patient[] = [];           // Todos los pacientes desde Firestore
   filteredPacientes: Patient[] = [];   // Pacientes visibles
   isLoading = false;
   searchTerm = '';
+  isSearching = false;                 // Track if we're in search mode
 
   itemsPorPagina = 20;   // 🔹 Cuántos mostrar por bloque
   paginaActual = 0;
@@ -120,22 +122,65 @@ export class TestPage implements OnInit {
   // 🔹 Subir al tope
   scrollToTop() {
     this.content.scrollToTop(400);
+    this.filteredPacientes = [];
+    this.paginaActual = 0;
+    this.cargarMasPacientesLocal(); // Load only the first page again
+    
+    // Re-enable infinite scroll in case it was disabled
+    if (this.infiniteScroll) {
+      this.infiniteScroll.disabled = false;
+    }
   }
 
   // 🔹 Búsqueda
   onBuscar(event: any) {
-    this.searchTerm = event.detail.value.toLowerCase();
+    this.searchTerm = event.detail.value.toLowerCase().trim();
 
-    if (this.searchTerm.trim() === '') {
+    if (this.searchTerm === '') {
       // Sin filtro, reinicia scroll
+      this.isSearching = false;
       this.filteredPacientes = [];
       this.paginaActual = 0;
       this.cargarMasPacientesLocal();
+      
+      // Re-enable infinite scroll
+      if (this.infiniteScroll) {
+        this.infiniteScroll.disabled = false;
+      }
     } else {
-      this.filteredPacientes = this.pacientes.filter(p =>
-        p.nombrePaciente.toLowerCase().includes(this.searchTerm) ||
-        p.rut.toLowerCase().includes(this.searchTerm)
-      );
+      // Filtrar por nombre o RUT
+      this.isSearching = true;
+      this.filteredPacientes = this.pacientes.filter(p => {
+        if (!p) return false;
+        
+        const nombreMatch = p.nombrePaciente && 
+          p.nombrePaciente.toLowerCase().includes(this.searchTerm);
+        
+        // For RUT search, remove dots and hyphens for better matching
+        const rutMatch = p.rut && 
+          p.rut.toLowerCase().replace(/[.-]/g, '').includes(this.searchTerm.replace(/[.-]/g, ''));
+        
+        return nombreMatch || rutMatch;
+      });
+      
+      // Disable infinite scroll when searching
+      if (this.infiniteScroll) {
+        this.infiniteScroll.disabled = true;
+      }
+    }
+  }
+
+  // 🔹 Clear search and reset to pagination
+  clearSearch() {
+    this.searchTerm = '';
+    this.isSearching = false;
+    this.filteredPacientes = [];
+    this.paginaActual = 0;
+    this.cargarMasPacientesLocal();
+    
+    // Re-enable infinite scroll
+    if (this.infiniteScroll) {
+      this.infiniteScroll.disabled = false;
     }
   }
 

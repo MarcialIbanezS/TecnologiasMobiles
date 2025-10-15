@@ -24,8 +24,11 @@
   <div class="searchbar">
     <ion-searchbar
       color="medium"
-      placeholder="Buscar paciente"
-      (ionInput)="onBuscar($event)">
+      placeholder="Buscar por nombre o RUT"
+      [debounce]="300"
+      [value]="searchTerm"
+      (ionInput)="onBuscar($event)"
+      (ionClear)="onBuscar({detail: {value: ''}})">
     </ion-searchbar>
   </div>
 
@@ -61,14 +64,19 @@
       <!-- No results message -->
       <ion-item *ngIf="filteredPacientes.length === 0 && !isLoading">
         <ion-label>
-          <h2>No se encontraron pacientes</h2>
-          <p *ngIf="searchTerm">No hay resultados para "{{ searchTerm }}"</p>
+          <h2 *ngIf="!isSearching">No hay pacientes registrados</h2>
+          <h2 *ngIf="isSearching">No se encontraron pacientes</h2>
+          <p *ngIf="searchTerm && isSearching">No hay resultados para "{{ searchTerm }}"</p>
+          <p *ngIf="isSearching">Intenta buscar por nombre completo o RUT (con o sin puntos y guión)</p>
         </ion-label>
       </ion-item>
     </ion-list>
 
-    <!-- Infinite scroll -->
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="cargarMasPacientes($event)">
+    <!-- Infinite scroll (only show when not searching) -->
+    <ion-infinite-scroll 
+      *ngIf="!isSearching"
+      threshold="100px" 
+      (ionInfinite)="cargarMasPacientes($event)">
       <ion-infinite-scroll-content
         loadingSpinner="bubbles"
         loadingText="Cargando más pacientes...">

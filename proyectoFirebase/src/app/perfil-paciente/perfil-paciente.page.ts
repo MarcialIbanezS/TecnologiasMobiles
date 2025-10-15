@@ -24,7 +24,7 @@ interface Breadcrumb {
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, 
      RouterModule, IonBreadcrumb, IonBreadcrumbs, IonItem, IonAvatar, IonLabel,
     IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonGrid, IonRow, IonCol
-  , IonImg, IonList, IonButton, IonSpinner, IonToast]
+  ,  IonList, IonButton, IonSpinner, IonToast]
 })
 export class PerfilPacientePage implements OnInit {
 
@@ -61,11 +61,11 @@ export class PerfilPacientePage implements OnInit {
   irAFichaMedica() {
     // Navigate to medical record with patient context
     if (this.patient) {
-      this.router.navigate(['/ficha-medica'], { 
+      this.router.navigate(['/fichaMedica'], { 
         state: { patient: this.patient } 
       });
     } else {
-      this.router.navigate(['/ficha-medica']);
+      this.router.navigate(['/fichaMedica']);
     }
   }
 

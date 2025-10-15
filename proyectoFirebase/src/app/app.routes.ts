@@ -21,20 +21,17 @@ export const routes: Routes = [
        path: 'perfilPaciente', //
        loadComponent: () => import('./perfil-paciente/perfil-paciente.page').then( m => m.PerfilPacientePage)
      },
-    /* 
+    
      {
        path: 'fichaMedica',
        loadComponent: () => import('./ficha-medica/ficha-medica.page').then( m => m.FichaMedicaPage)
      },
+     /* 
      {
       path: 'login',
       loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
     },
 
-   {
-       path: 'listadoPacientes', 
-       loadComponent: () => import('./listado-pacientes/listado-pacientes.page').then( m => m.ListadoPacientesPage)
-     },
 
 */
 

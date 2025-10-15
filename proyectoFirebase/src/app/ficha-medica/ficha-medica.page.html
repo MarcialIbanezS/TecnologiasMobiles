@@ -16,7 +16,9 @@
     <ion-breadcrumb 
       *ngFor="let breadcrumb of breadcrumbs; let last = last"
       [class.active]="last"
-      (click)="onBreadcrumbClick(breadcrumb)">
+      [style.cursor]="last ? 'default' : 'pointer'"
+      [style.opacity]="last ? '0.7' : '1'"
+      (click)="!last && onBreadcrumbClick(breadcrumb)">
       {{ breadcrumb.label }}
     </ion-breadcrumb>
   </ion-breadcrumbs>

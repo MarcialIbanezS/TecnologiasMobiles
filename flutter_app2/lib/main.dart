@@ -1,19 +1,45 @@
 import 'package:flutter/material.dart';
-//import 'styles.dart' as styles;
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart'; // se genera con flutterfire configure
 import 'homepage.dart';
 import 'page1.dart';
 import 'page2.dart';
-// function to trigger build when the app is run
+import 'start_page.dart';
+import 'patient_profile.dart';
 
-void main() {
-  runApp(MaterialApp(
-    initialRoute: '/',
-    routes: {
-      '/': (context) => const HomeRoute(),
-      '/second': (context) => const SecondRoute(),
-      '/third': (context) => const ThirdRoute(),
-    },
-    debugShowCheckedModeBanner: false,
-  )); //MaterialApp
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializa Firebase antes de correr la app
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'App Tecnologías Móviles',
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const StartPage(),
+        '/home': (context) => const HomeRoute(),
+        '/second': (context) => const SecondRoute(),
+        '/third': (context) => const ThirdRoute(),
+        '/profile': (context) {
+          final pacienteId =
+              ModalRoute.of(context)!.settings.arguments as String;
+          return PatientProfilePage(pacienteId: pacienteId);
+          },
+
+      },
+    );
+  }
 }
 

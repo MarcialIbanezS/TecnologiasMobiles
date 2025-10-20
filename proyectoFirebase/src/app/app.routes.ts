@@ -25,7 +25,11 @@ export const routes: Routes = [
      {
        path: 'fichaMedica',
        loadComponent: () => import('./ficha-medica/ficha-medica.page').then( m => m.FichaMedicaPage)
-     },
+     },  {
+    path: 'perfil-usuario',
+    loadComponent: () => import('./perfil-usuario/perfil-usuario.page').then( m => m.PerfilUsuarioPage)
+  },
+
      /* 
      {
       path: 'login',

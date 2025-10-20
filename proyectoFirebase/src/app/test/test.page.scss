@@ -1,93 +1,154 @@
+/* Fondo general con imagen suave */
 .fondo {
   --background: #9be3ff url('/assets/imagen_login.png') no-repeat center bottom / cover;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: stretch;
+  min-height: 100vh;
+  padding: 1rem;
 }
 
-
+/* Contenedor principal del scroll */
 .scroll {
-  background-color: white;  
-  padding: 8px;             
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem auto;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
 }
 
-
-.scroll ion-item {
-  --background: white;      
-  color: black;            
-  margin-bottom: 4px;       
-}
-
+/* Scrollbar */
 .scroll::-webkit-scrollbar {
   width: 8px;
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  background-color: black;
+  background-color: #999;
   border-radius: 10px;
 }
 
+/* Ítems de lista */
+.scroll ion-item {
+  --background: #ffffff;
+  --color: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1);
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+ion-list {
+  color:white;
+  background-color: white;
+}
+/* Estado de carga */
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  
+
   ion-spinner {
     margin-bottom: 16px;
   }
-  
+
   p {
-    color: #666;
+    color: #555;
     font-size: 14px;
     margin: 0;
   }
 }
 
+/* Info de cliente/paciente */
 .client-info,
 .patient-info {
-  font-size: 12px;
-  color: #666;
+  font-size: 13px;
+  color: #555;
   font-style: italic;
 }
 
+/* Botones flotantes */
 ion-fab-button {
   --background: #ffffff;
-  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  --color: rgb(0, 0, 0);
+  --color: #000;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    --box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  }
 }
 
-ion-fab{
-  --background:#ffffff;
-  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  --color: rgb(0, 0, 0);
+ion-fab {
+  bottom: 5rem;
+  right: 3rem;
 }
 
-
-// Breadcrumb styling
+/* Breadcrumb mejorado */
 ion-breadcrumbs {
-  padding: 1rem;
-  background-color: var(--ion-color-light);
-  border-bottom: 1px solid var(--ion-color-medium);
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e1e1e1;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 ion-breadcrumb {
   cursor: pointer;
   transition: color 0.3s ease;
-  
+
   &:hover {
     color: var(--ion-color-primary);
   }
-  
+
   &.active {
     color: var(--ion-color-primary);
-    font-weight: bold;
+    font-weight: 600;
     cursor: default;
-    
+
     &:hover {
       color: var(--ion-color-primary);
     }
   }
+}
+
+/* Buscador (opcional, si tienes uno arriba) */
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+
+  ion-searchbar {
+    width: 100%;
+    max-width: 600px;
+    --background: #ffffff;
+    --border-radius: 12px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Mensaje cuando no hay resultados */
+.no-results {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 2rem 0;
 }

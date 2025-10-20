@@ -8,4 +8,6 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --background: linear-gradient(135deg,rgba(7,17,40,0.7) 0%,rgba(15,23,36,0.8) 100%), url('/storage/medico_paziente.jpg') center/cover no-repeat;
 }

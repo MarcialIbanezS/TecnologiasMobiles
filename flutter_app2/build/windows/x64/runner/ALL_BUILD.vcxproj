@@ -21,9 +21,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C671333F-365F-3626-B312-F01E89E4F088}</ProjectGuid>
+    <ProjectGuid>{C4DCDB61-9C19-376A-8964-01ECEE8964EE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
     <ProjectName>ALL_BUILD</ProjectName>
     <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
@@ -88,11 +88,11 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\lenovo\Desktop\PROYECTOS\TecnologiasMobiles\flutter_app2\windows\runner\CMakeLists.txt">
+    <CustomBuild Include="C:\Users\gotts\Taller3\flutter_app2\windows\runner\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/windows/runner/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/gotts/Taller3/flutter_app2/windows/runner/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/windows -BC:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/build/windows/x64 --check-stamp-file C:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/build/windows/x64/runner/CMakeFiles/generate.stamp
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/gotts/Taller3/flutter_app2/windows -BC:/Users/gotts/Taller3/flutter_app2/build/windows/x64 --check-stamp-file C:/Users/gotts/Taller3/flutter_app2/build/windows/x64/runner/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -101,11 +101,11 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\lenovo\Desktop\PROYECTOS\TecnologiasMobiles\flutter_app2\build\windows\x64\runner\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\gotts\Taller3\flutter_app2\build\windows\x64\runner\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Building Custom Rule C:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/windows/runner/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">Building Custom Rule C:/Users/gotts/Taller3/flutter_app2/windows/runner/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">setlocal
-"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/windows -BC:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/build/windows/x64 --check-stamp-file C:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/build/windows/x64/runner/CMakeFiles/generate.stamp
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/gotts/Taller3/flutter_app2/windows -BC:/Users/gotts/Taller3/flutter_app2/build/windows/x64 --check-stamp-file C:/Users/gotts/Taller3/flutter_app2/build/windows/x64/runner/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -114,11 +114,11 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\lenovo\Desktop\PROYECTOS\TecnologiasMobiles\flutter_app2\build\windows\x64\runner\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">C:\Users\gotts\Taller3\flutter_app2\build\windows\x64\runner\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Profile|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/windows/runner/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/gotts/Taller3/flutter_app2/windows/runner/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/windows -BC:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/build/windows/x64 --check-stamp-file C:/Users/lenovo/Desktop/PROYECTOS/TecnologiasMobiles/flutter_app2/build/windows/x64/runner/CMakeFiles/generate.stamp
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/gotts/Taller3/flutter_app2/windows -BC:/Users/gotts/Taller3/flutter_app2/build/windows/x64 --check-stamp-file C:/Users/gotts/Taller3/flutter_app2/build/windows/x64/runner/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -127,21 +127,22 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\lenovo\Desktop\PROYECTOS\TecnologiasMobiles\flutter_app2\build\windows\x64\runner\CMakeFiles\generate.stamp</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\gotts\Taller3\flutter_app2\build\windows\x64\runner\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="C:\Users\lenovo\Desktop\PROYECTOS\TecnologiasMobiles\flutter_app2\build\windows\x64\ZERO_CHECK.vcxproj">
-      <Project>{79BA3D4C-A996-3E0A-8B15-54ABF625A0E3}</Project>
+    <ProjectReference Include="C:\Users\gotts\Taller3\flutter_app2\build\windows\x64\ZERO_CHECK.vcxproj">
+      <Project>{6B066E6F-65E7-3C11-944A-B4D5FEEE1C42}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\lenovo\Desktop\PROYECTOS\TecnologiasMobiles\flutter_app2\build\windows\x64\runner\flutter_app2.vcxproj">
-      <Project>{E8BCA789-DA08-3B37-8D09-D19B72426B6D}</Project>
+    <ProjectReference Include="C:\Users\gotts\Taller3\flutter_app2\build\windows\x64\runner\flutter_app2.vcxproj">
+      <Project>{F335C4D4-F2B1-372C-A263-0D393FE54091}</Project>
       <Name>flutter_app2</Name>
     </ProjectReference>
   </ItemGroup>

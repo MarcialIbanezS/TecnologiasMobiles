@@ -13,6 +13,7 @@ class DatabaseService {
     required String fechaNacimiento,
     required String sexo,
     required String direccion,
+    required String telefono,
   }) async {
     final pacienteRef = await _db.collection('pacientes').add({
       'nombre': nombre,
@@ -21,6 +22,7 @@ class DatabaseService {
       'sexo': sexo,
       'direccion': direccion,
       'creado': FieldValue.serverTimestamp(),
+      'telefono': telefono,
     });
     print('✅ Paciente creado con ID: ${pacienteRef.id}');
     return pacienteRef;

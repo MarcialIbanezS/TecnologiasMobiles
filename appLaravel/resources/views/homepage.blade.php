@@ -1,190 +1,16 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome — Triple M.A.</title>
-    <style>
-        :root {
-            --bg: #0f1724;
-            --card: #0b1220;
-            --accent: #4f46e5;
-            --muted: #9aa4b2;
-            --text-primary: #e6eef8;
-            --shadow: rgba(2, 6, 23, 0.6);
-        }
+@extends('layouts.app')
 
-        * {
-            box-sizing: border-box;
-        }
+@section('title', 'Inicio - Triple M.A.')
 
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #071128 0%, #1a202c 25%, var(--bg) 50%, #0f172a 100%);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 980px;
-            width: 100%;
-            padding: 0;
-        }
-
-        .card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            padding: 48px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px var(--shadow);
-            backdrop-filter: blur(10px);
-            text-align: center;
-        }
-
-        .hero-content {
-            margin-bottom: 32px;
-        }
-
-        h1 {
-            margin: 0 0 16px 0;
-            font-size: 2.5rem;
-            line-height: 1.1;
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff, #e6eef8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .lead {
-            margin: 0 0 32px 0;
-            color: var(--muted);
-            font-size: 1.125rem;
-            line-height: 1.6;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 32px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: white;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(90deg, var(--accent), #7c3aed);
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
-        }
-
-        .btn-ghost {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #cfe6ff;
-        }
-
-        .btn-ghost:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .image-container {
-            margin: 32px 0;
-        }
-
-        .hero-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease;
-        }
-
-        .hero-image:hover {
-            transform: scale(1.02);
-        }
-
-        footer {
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            color: var(--muted);
-            font-size: 0.9rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .card {
-                padding: 32px 24px;
-                margin: 10px;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .lead {
-                font-size: 1rem;
-            }
-
-            .buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 280px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .card {
-                padding: 24px 20px;
-            }
-
-            h1 {
-                font-size: 1.75rem;
-            }
-        }
-    </style>
-</head>
-<body>
+@section('page-content')
+<div style="padding-top: 30rem;">
     <div class="container">
         <div class="card">
             <div class="hero-content">
                 <h1>Triple M.A.</h1>
+                <div class="image-container">
+                <img src="{{ asset('images/medico_paziente.jpg') }}" alt="Medico Paziente" class="hero-image">
+            </div>
                 <p class="lead">Homepage del proyecto Wohoo!! Bienvenido a nuestra plataforma de tecnologías móviles.</p>
             </div>
 
@@ -193,15 +19,8 @@
                 <a class="btn btn-ghost" href="/dashboard">Dashboard</a>
             </div>
 
-            <div class="image-container">
-                <img src="{{ asset('images/medico_paziente.jpg') }}" alt="Medico Paziente" class="hero-image">
-            </div>
-
-            <footer>
-                <p>TRIPLE M.A. &copy; <small>October 2025</small></p>
-            </footer>
+            
         </div>
     </div>
-</body>
-</html>
-
+</div>
+@endsection

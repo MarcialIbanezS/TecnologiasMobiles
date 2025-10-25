@@ -3,7 +3,7 @@
 @section('title', 'Dashboard - Triple M.A.')
 
 @section('page-content')
-<div style="padding: 6rem 0 2rem 0; margin-top: 30rem;">
+<div style="padding: 6rem 0 2rem 0; margin-top: 2rem;">
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
         <div class="card" style="background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.04); padding: 3rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(2,6,23,0.6); margin-bottom: 2rem;">
             <div class="hero-content">

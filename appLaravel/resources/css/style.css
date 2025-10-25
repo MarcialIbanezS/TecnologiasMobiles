@@ -1,10 +1,15 @@
 :root {
-            --bg: #0f1724;
+            --bg: #caf9eb;
+            --bg2: #3eb4b4;
+            --bg_button: linear-gradient(90deg, var(--accent), #08ad6e);
             --card: #0b1220;
-            --accent: #4f46e5;
-            --muted: #9aa4b2;
+            --accent: #11c2cb;
+            --muted: #97f5df;
             --text-primary: #e6eef8;
-            --shadow: rgba(2, 6, 23, 0.6);
+            --text-button: #abf7dd;
+
+            
+            /*--shadow: rgba(2, 6, 23, 0.6); */
         }
 
         * {
@@ -18,7 +23,8 @@
         }
 
         body {
-            background: linear-gradient(135deg, #071128 0%, #1a202c 25%, var(--bg) 50%, #0f172a 100%);
+            background: #ffffff;
+            
             color: var(--text-primary);
             display: flex;
             align-items: center;
@@ -88,7 +94,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(90deg, var(--accent), #7c3aed);
+            background: linear-gradient(90deg, var(--accent), #127e5c);
             box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
         }
 
@@ -108,20 +114,30 @@
             border-color: rgba(255, 255, 255, 0.2);
         }
 
+        /* Make hero image span the full viewport width while keeping centered content inside */
         .image-container {
             margin: 32px 0;
+            position: relative;
+            width: 100vw; /* full viewport width */
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         .hero-image {
-            max-width: 100%;
+            display: block;
+            width: 100%;
             height: auto;
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease;
-        }
-
-        .hero-image:hover {
-            transform: scale(1.02);
+            object-fit: cover;
+            /* Keep image static/non-interactive as requested */
+            transition: none;
+            transform: none;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
         }
 
         footer {

@@ -1,4 +1,5 @@
-        <nav class="nav-container">
+<div class="header-content">
+       <nav class="nav-container"> 
             <a href="/" class="logo">
                 <span>M.A.</span>
                 <span>Triple M.A.</span>
@@ -22,4 +23,4 @@
                 <span></span>
             </button>
         </nav>
-    
+    </div>

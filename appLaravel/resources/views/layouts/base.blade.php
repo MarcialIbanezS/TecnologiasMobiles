@@ -15,12 +15,17 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     @yield('styles')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 <body>
-    <header class="header" id="header">
-        @include('header')
-    </header>
+    @auth
+        @include('layouts.header')
+    @else
+        <header class="header" id="header">
+            @include('layouts.header')
+        </header>
+    @endauth
 
     <script>
         // Mobile menu toggle
@@ -28,16 +33,18 @@
             const navMenu = document.getElementById('navMenu');
             const mobileToggle = document.getElementById('mobileToggle');
             
-            navMenu.classList.toggle('active');
-            mobileToggle.classList.toggle('active');
+            if (navMenu && mobileToggle) {
+                navMenu.classList.toggle('active');
+                mobileToggle.classList.toggle('active');
+            }
         }
         
         // Header scroll effect
         window.addEventListener('scroll', function() {
             const header = document.getElementById('header');
-            if (window.scrollY > 50) {
+            if (header && window.scrollY > 50) {
                 header.classList.add('scrolled');
-            } else {
+            } else if (header) {
                 header.classList.remove('scrolled');
             }
         });
@@ -47,7 +54,7 @@
             const navMenu = document.getElementById('navMenu');
             const mobileToggle = document.getElementById('mobileToggle');
             
-            if (!event.target.closest('.nav-container') && navMenu.classList.contains('active')) {
+            if (navMenu && mobileToggle && !event.target.closest('.nav-container') && navMenu.classList.contains('active')) {
                 navMenu.classList.remove('active');
                 mobileToggle.classList.remove('active');
             }
@@ -58,7 +65,7 @@
             const navMenu = document.getElementById('navMenu');
             const mobileToggle = document.getElementById('mobileToggle');
             
-            if (window.innerWidth > 768) {
+            if (navMenu && mobileToggle && window.innerWidth > 768) {
                 navMenu.classList.remove('active');
                 mobileToggle.classList.remove('active');
             }
@@ -68,12 +75,16 @@
     <!-- Page Content -->
     <main class="page-content">
         @yield('page-content')
+        @yield('content')
+        {{ $slot ?? '' }}
     </main>
 
     <!-- Footer -->
-    <footer class="site-footer">
-        @include('footer')
-    </footer>
+    @guest
+        <footer class="site-footer">
+            @include('layouts.footer')
+        </footer>
+    @endguest
 
     <!-- Scripts -->
     @yield('scripts')

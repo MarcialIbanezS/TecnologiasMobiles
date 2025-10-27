@@ -5,10 +5,10 @@
 @section('page-content')
 <div style="padding: 6rem 0 2rem 0; margin-top: 2rem;">
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
-        <div class="card" style="background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.04); padding: 3rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(2,6,23,0.6); margin-bottom: 2rem;">
+        <div class="card" >
             <div class="hero-content">
                 <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-primary);">Dashboard</h1>
-                <p class="lead" style="font-size: 1.125rem; color: var(--muted); margin-bottom: 2rem; max-width: none;">Bienvenido al panel de control de Triple M.A. Aquí puedes gestionar todos los aspectos de tu aplicación médica.</p>
+                <p class="lead" style="font-size: 1.125rem; color: var(--text-primary); margin-bottom: 2rem; max-width: none;">Bienvenido al panel de control de Triple M.A. Aquí puedes gestionar todos los aspectos de tu aplicación médica.</p>
             </div>
 
             <!-- Dashboard Stats -->
@@ -16,27 +16,27 @@
                 <div class="stat-card">
                     <div class="stat-icon">👥</div>
                     <div class="stat-content">
-                        <h3>Usuarios</h3>
+                        <h3>Comuna</h3>
                         <p class="stat-number">1,234</p>
-                        <p class="stat-label">Total registrados</p>
+                        <p class="stat-label">Total pacientes activos</p>
                     </div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-icon">📊</div>
                     <div class="stat-content">
-                        <h3>Proyectos</h3>
+                        <h3>Ingresos</h3>
                         <p class="stat-number">56</p>
-                        <p class="stat-label">Proyectos activos</p>
+                        <p class="stat-label">Ingresos Anuales</p>
                     </div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-icon">📈</div>
                     <div class="stat-content">
-                        <h3>Reportes</h3>
-                        <p class="stat-number">23</p>
-                        <p class="stat-label">Generados hoy</p>
+                        <h3>Antecedentes</h3>
+                        <p class="stat-number">Hepatitis B</p>
+                        <p class="stat-label">Mas Común</p>
                     </div>
                 </div>
                 
@@ -60,35 +60,100 @@
                 </div>
             </div>
 
-            <!-- Recent Activity -->
-            <div class="recent-activity">
-                <h2>Actividad Reciente</h2>
-                <div class="activity-list">
-                    <div class="activity-item">
-                        <div class="activity-icon">👤</div>
-                        <div class="activity-content">
-                            <p><strong>Nuevo usuario registrado</strong></p>
-                            <p class="activity-time">Hace 5 minutos</p>
+            <!-- Ingresos por Comuna Chart -->
+            <div class="chart-section">
+                <h2>Ingresos por Comuna</h2>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <p class="chart-subtitle">Distribución de ingresos médicos por comuna (Último trimestre)</p>
+                    </div>
+                    
+                    <div class="bar-chart">
+                        <div class="chart-bars">
+                            <div class="bar-group">
+                                <div class="bar" data-value="850" style="height: 85%;">
+                                    <span class="bar-value">850K</span>
+                                </div>
+                                <span class="bar-label">Las Condes</span>
+                            </div>
+                            
+                            <div class="bar-group">
+                                <div class="bar" data-value="720" style="height: 72%;">
+                                    <span class="bar-value">720K</span>
+                                </div>
+                                <span class="bar-label">Providencia</span>
+                            </div>
+                            
+                            <div class="bar-group">
+                                <div class="bar" data-value="650" style="height: 65%;">
+                                    <span class="bar-value">650K</span>
+                                </div>
+                                <span class="bar-label">Vitacura</span>
+                            </div>
+                            
+                            <div class="bar-group">
+                                <div class="bar" data-value="580" style="height: 58%;">
+                                    <span class="bar-value">580K</span>
+                                </div>
+                                <span class="bar-label">Ñuñoa</span>
+                            </div>
+                            
+                            <div class="bar-group">
+                                <div class="bar" data-value="520" style="height: 52%;">
+                                    <span class="bar-value">520K</span>
+                                </div>
+                                <span class="bar-label">Santiago</span>
+                            </div>
+                            
+                            <div class="bar-group">
+                                <div class="bar" data-value="480" style="height: 48%;">
+                                    <span class="bar-value">480K</span>
+                                </div>
+                                <span class="bar-label">Maipú</span>
+                            </div>
+                            
+                            <div class="bar-group">
+                                <div class="bar" data-value="420" style="height: 42%;">
+                                    <span class="bar-value">420K</span>
+                                </div>
+                                <span class="bar-label">La Florida</span>
+                            </div>
+                            
+                            <div class="bar-group">
+                                <div class="bar" data-value="380" style="height: 38%;">
+                                    <span class="bar-value">380K</span>
+                                </div>
+                                <span class="bar-label">Puente Alto</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Y-axis labels -->
+                        <div class="chart-y-axis">
+                            <span class="y-label">1M</span>
+                            <span class="y-label">800K</span>
+                            <span class="y-label">600K</span>
+                            <span class="y-label">400K</span>
+                            <span class="y-label">200K</span>
+                            <span class="y-label">0</span>
                         </div>
                     </div>
                     
-                    <div class="activity-item">
-                        <div class="activity-icon">📋</div>
-                        <div class="activity-content">
-                            <p><strong>Reporte mensual generado</strong></p>
-                            <p class="activity-time">Hace 1 hora</p>
+                    <!-- Chart Legend -->
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color"></div>
+                            <span>Ingresos Totales</span>
                         </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon">🔧</div>
-                        <div class="activity-content">
-                            <p><strong>Sistema actualizado</strong></p>
-                            <p class="activity-time">Hace 2 horas</p>
+                        <div class="chart-summary">
+                            <span class="summary-text">Total: 4.62M | Promedio: 577K</span>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Recent Activity -->
+
+            
         </div>
     </div>
 </div>
@@ -153,6 +218,167 @@
         margin: 0 0 1.5rem 0;
         font-size: 1.5rem;
         font-weight: 600;
+    }
+
+    /* Chart Section Styles */
+    .chart-section {
+        margin: 3rem 0;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .chart-section h2 {
+        color: var(--text-primary);
+        margin: 0 0 0.5rem 0;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    .chart-header {
+        margin-bottom: 2rem;
+    }
+
+    .chart-subtitle {
+        color: var(--muted);
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .chart-container {
+        position: relative;
+    }
+
+    .bar-chart {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        height: 320px;
+        padding: 20px 60px 60px 60px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .chart-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 1.5rem;
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    .bar-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+    }
+
+    .bar {
+        width: 100%;
+        max-width: 60px;
+        background: linear-gradient(180deg, var(--accent), #08ad6e);
+        border-radius: 4px 4px 0 0;
+        transition: all 0.3s ease;
+        position: relative;
+        cursor: pointer;
+        min-height: 10px;
+        box-shadow: 0 4px 15px rgba(17, 194, 203, 0.3);
+    }
+
+    .bar:hover {
+        background: linear-gradient(180deg, #13d4de, #0ac471);
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(17, 194, 203, 0.4);
+    }
+
+    .bar-value {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: var(--text-primary);
+        font-size: 0.8rem;
+        font-weight: 600;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .bar:hover .bar-value {
+        opacity: 1;
+    }
+
+    .bar-label {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 0.8rem;
+        text-align: center;
+        transform: rotate(-45deg);
+        transform-origin: center;
+        white-space: nowrap;
+        min-width: 80px;
+    }
+
+    .chart-y-axis {
+        position: absolute;
+        left: 10px;
+        top: 20px;
+        bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .y-label {
+        color: var(--muted);
+        font-size: 0.75rem;
+        padding-right: 10px;
+    }
+
+    .chart-legend {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .legend-color {
+        width: 16px;
+        height: 16px;
+        background: linear-gradient(90deg, var(--accent), #08ad6e);
+        border-radius: 3px;
+    }
+
+    .legend-item span {
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
+
+    .chart-summary {
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .summary-text {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .activity-list {
@@ -243,6 +469,59 @@
         
         .quick-actions, .recent-activity {
             margin: 2rem 0;
+        }
+        
+        /* Mobile chart styles */
+        .chart-section {
+            margin: 2rem 0;
+            padding: 1.5rem 1rem;
+        }
+        
+        .chart-section h2 {
+            font-size: 1.5rem;
+        }
+        
+        .bar-chart {
+            height: 280px;
+            padding: 15px 40px 80px 40px;
+        }
+        
+        .chart-bars {
+            gap: 0.8rem;
+        }
+        
+        .bar {
+            max-width: 40px;
+        }
+        
+        .bar-label {
+            font-size: 0.7rem;
+            min-width: 60px;
+        }
+        
+        .chart-y-axis {
+            left: 5px;
+        }
+        
+        .y-label {
+            font-size: 0.7rem;
+            padding-right: 5px;
+        }
+        
+        .chart-legend {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        
+        .chart-summary {
+            align-self: stretch;
+            text-align: center;
+        }
+        
+        .summary-text {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
         }
     }
 </style>

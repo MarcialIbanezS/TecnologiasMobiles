@@ -67,7 +67,7 @@
 
     <!-- Page Content -->
     <main class="page-content">
-        @yield('content')
+        @yield('page-content')
     </main>
 
     <!-- Footer -->

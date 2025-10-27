@@ -14,6 +14,8 @@
 /auth.json
 /node_modules
 /node_modules/*
+/config/firebase.php
+
 
 /public/build
 /public/hot
@@ -24,3 +26,4 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+firebase_credentials.json

@@ -20,7 +20,9 @@
 </head>
 <body>
     @auth
-        @include('layouts.header')
+        <header class="header" id="header">
+            @include('layouts.header')
+        </header>
     @else
         <header class="header" id="header">
             @include('layouts.header')

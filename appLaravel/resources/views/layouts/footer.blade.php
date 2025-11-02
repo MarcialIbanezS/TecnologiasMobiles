@@ -30,6 +30,7 @@
     <div class="footer-bottom">
         <div class="footer-container">
             <p>&copy; {{ date('Y') }} Triple M.A. - Tecnologías Móviles. Todos los derechos reservados.</p>
+            <p>Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})</p>
         </div>
     </div>
 </div>

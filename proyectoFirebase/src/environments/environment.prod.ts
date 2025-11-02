@@ -1,5 +1,7 @@
 export const environment = {
   production: true,
+  // Backend API URL (override in production if needed)
+  apiUrl: 'https://api.example.com',
   firebase: {
     apiKey: "AIzaSyBko6PFIC3QOZ3CXtsyN-4vrFJR2ooAeas",
     authDomain: "appmoviles-b5003.firebaseapp.com",

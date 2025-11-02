@@ -129,12 +129,12 @@ class _PatientsPageState extends State<PatientsPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           final ref = await db.crearPaciente(
-            nombre: 'Nuevo Paciente ${DateFormat("HH:mm:ss").format(DateTime.now())}',
-            rut: '99999999-9',
-            fechaNacimiento: '2000-01-01',
-            sexo: 'Femenino',
-            direccion: 'Dirección genérica',
-          );
+              nombre: 'Nuevo Paciente ${DateFormat("HH:mm:ss").format(DateTime.now())}',
+              rut: '99999999-9',
+              fechaNacimiento: '2000-01-01',
+              sexo: 'Femenino',
+              direccion: 'Dirección genérica',
+            );
           await db.crearFichaMedica(
             pacienteId: ref.id,
             fechaIngreso: DateFormat("yyyy-MM-dd").format(DateTime.now()),

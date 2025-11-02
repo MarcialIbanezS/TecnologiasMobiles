@@ -104,11 +104,38 @@
                     Fichas Médicas Registradas
                 </h2>
                 <div class="table-stats">
-                    <span class="stats-badge">
+                    <span class="stats-badge" id="total-count">
                         Total: {{ count($fichasArray ?? []) }} fichas
+                    </span>
+                    <span class="stats-badge" id="filtered-count" style="display: none; background: rgba(255, 193, 7, 0.1); color: #ffc107;">
+                        Mostrando: 0 fichas
                     </span>
                 </div>
             </div>
+
+            <!-- Search Box -->
+            @if(!empty($fichasArray))
+            <div class="search-container">
+                <div class="search-box">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Buscar por ID de Ficha Médica..."
+                        autocomplete="off"
+                    >
+                    <button id="clearSearch" class="clear-btn" style="display: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+            @endif
 
             @if(empty($fichasArray))
                 <div class="empty-state">
@@ -123,12 +150,12 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>ID Ficha Médica</th>
-                                <th>Fecha de Ingreso</th>
-                                <th>ID Paciente</th>
-                                <th>ID Operación</th>
-                                <th>ID Crónico</th>
-                                <th>ID Alergia</th>
+                                <th>ID Ficha</th>
+                                <th>Fecha Ingreso</th>
+                                <th>Paciente</th>
+                                <th>Operación</th>
+                                <th>Enfermedad Crónica</th>
+                                <th>Alergia</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -139,12 +166,33 @@
                                     <td class="cell-name">
                                         <div class="patient-info">
                                             <div class="patient-avatar">👤</div>
-                                            <span>{{ $ficha['idpaciente'] ?? 'Sin paciente' }}</span>
+                                            <div>
+                                                <span style="font-weight: 500;">{{ $ficha['paciente_nombre'] ?? 'Sin paciente' }}</span>
+                                                <small style="display: block; opacity: 0.7; font-size: 0.8rem;">ID: {{ $ficha['idpaciente'] ?? 'N/A' }}</small>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td class="cell-diagnosis">{{ $ficha['idoperacion'] ?? 'N/A' }}</td>
-                                    <td class="cell-diagnosis">{{ $ficha['idcronico'] ?? 'N/A' }}</td>
-                                    <td class="cell-diagnosis">{{ $ficha['idalergia'] ?? 'N/A' }}</td>
+                                    <td class="cell-diagnosis">
+                                        <div>{{ $ficha['operacion_nombre'] ?? 'N/A' }}</div>
+                                        @if($ficha['idoperacion'] ?? false)
+                                            <small style="opacity: 0.6;">ID: {{ $ficha['idoperacion'] }}</small>
+                                        @endif
+                                    </td>
+                                    <td class="cell-diagnosis">
+                                        <div>{{ $ficha['cronico_nombre'] ?? 'N/A' }}</div>
+                                        @if($ficha['idcronico'] ?? false)
+                                            <small style="opacity: 0.6;">ID: {{ $ficha['idcronico'] }}</small>
+                                        @endif
+                                    </td>
+                                    <td class="cell-diagnosis">
+                                        <div>{{ $ficha['alergia_nombre'] ?? 'N/A' }}</div>
+                                        @if($ficha['alergia_descripcion'] && $ficha['alergia_descripcion'] != 'N/A')
+                                            <small style="opacity: 0.7; font-style: italic;">{{ $ficha['alergia_descripcion'] }}</small>
+                                        @endif
+                                        @if($ficha['idalergia'] ?? false)
+                                            <small style="opacity: 0.6; display: block;">ID: {{ $ficha['idalergia'] }}</small>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -326,6 +374,95 @@
         font-weight: 500;
     }
 
+    /* Search Container */
+    .search-container {
+        padding: 1.5rem 2.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .search-box {
+        position: relative;
+        max-width: 500px;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        color: var(--muted);
+        pointer-events: none;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.875rem 3rem 0.875rem 3rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 0 3px rgba(17, 194, 203, 0.1);
+    }
+
+    .search-input::placeholder {
+        color: var(--muted);
+        opacity: 0.6;
+    }
+
+    .clear-btn {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(239, 68, 68, 0.1);
+        border: none;
+        padding: 0.4rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .clear-btn svg {
+        width: 16px;
+        height: 16px;
+        color: #f87171;
+    }
+
+    .clear-btn:hover {
+        background: rgba(239, 68, 68, 0.2);
+    }
+
+    .search-results {
+        margin-top: 0.75rem;
+        font-size: 0.9rem;
+        color: var(--muted);
+    }
+
+    .table-row.hidden {
+        display: none;
+    }
+
+    .highlight {
+        background: rgba(255, 193, 7, 0.2);
+        padding: 0.1rem 0.3rem;
+        border-radius: 3px;
+        font-weight: 600;
+        color: #ffc107;
+    }
+
     /* Empty State */
     .empty-state {
         text-align: center;
@@ -428,6 +565,23 @@
         white-space: nowrap;
     }
 
+    .cell-rut {
+        font-family: monospace;
+        font-size: 0.9rem;
+        color: var(--accent);
+    }
+
+    .cell-diagnosis small {
+        display: block;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .cell-name > div > small {
+        color: var(--muted);
+        font-weight: 400;
+    }
+
     /* Mobile Responsive */
     @media (max-width: 768px) {
         .page-title {
@@ -448,6 +602,20 @@
             align-items: flex-start;
         }
 
+        .table-stats {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-container {
+            padding: 1rem 1.5rem;
+        }
+
+        .search-box {
+            max-width: 100%;
+        }
+
         .data-table {
             font-size: 0.8rem;
         }
@@ -464,4 +632,91 @@
         }
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearSearch');
+    const searchResults = document.getElementById('searchResults');
+    const tableRows = document.querySelectorAll('.table-row');
+    const totalCount = document.getElementById('total-count');
+    const filteredCount = document.getElementById('filtered-count');
+    const totalFichas = {{ count($fichasArray ?? []) }};
+
+    if (!searchInput) return;
+
+    // Search functionality
+    searchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase().trim();
+        
+        // Show/hide clear button
+        clearBtn.style.display = searchTerm ? 'flex' : 'none';
+
+        if (searchTerm === '') {
+            // Reset: show all rows
+            tableRows.forEach(row => {
+                row.classList.remove('hidden');
+                // Remove highlights
+                const cells = row.querySelectorAll('.cell-id');
+                cells.forEach(cell => {
+                    cell.innerHTML = cell.textContent;
+                });
+            });
+            
+            searchResults.innerHTML = '';
+            totalCount.style.display = 'inline-block';
+            filteredCount.style.display = 'none';
+            return;
+        }
+
+        let matchCount = 0;
+
+        tableRows.forEach(row => {
+            const idCell = row.querySelector('.cell-id');
+            const fichaId = idCell.textContent.toLowerCase();
+
+            if (fichaId.includes(searchTerm)) {
+                row.classList.remove('hidden');
+                matchCount++;
+                
+                // Highlight matching text
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                idCell.innerHTML = idCell.textContent.replace(regex, '<span class="highlight">$1</span>');
+            } else {
+                row.classList.add('hidden');
+                // Remove highlights
+                idCell.innerHTML = idCell.textContent;
+            }
+        });
+
+        // Update results message
+        if (matchCount === 0) {
+            searchResults.innerHTML = '<span style="color: #f87171;">⚠️ No se encontraron fichas con ese ID</span>';
+        } else if (matchCount === 1) {
+            searchResults.innerHTML = '<span style="color: #4ade80;">✓ Se encontró 1 ficha</span>';
+        } else {
+            searchResults.innerHTML = `<span style="color: #4ade80;">✓ Se encontraron ${matchCount} fichas</span>`;
+        }
+
+        // Update counter badges
+        totalCount.style.display = 'none';
+        filteredCount.style.display = 'inline-block';
+        filteredCount.textContent = `Mostrando: ${matchCount} de ${totalFichas} fichas`;
+    });
+
+    // Clear search
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+        searchInput.focus();
+    });
+
+    // Allow Enter key to maintain search
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    });
+});
+</script>
 @endsection

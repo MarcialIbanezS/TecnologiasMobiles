@@ -59,4 +59,15 @@
       0 => 'Termwind\\Laravel\\TermwindServiceProvider',
     ),
   ),
+  'roddy/firestore-eloquent' => 
+  array (
+    'aliases' => 
+    array (
+      'FAuth' => 'Roddy\\FirestoreEloquent\\Auth\\FAuth',
+    ),
+    'providers' => 
+    array (
+      0 => 'Roddy\\FirestoreEloquent\\Providers\\FModelProvider',
+    ),
+  ),
 );

@@ -53,23 +53,33 @@
                 @csrf
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="nombre" class="form-label">Nombre del Paciente</label>
-                        <input type="text" id="nombre" name="nombre" class="form-input" placeholder="Ingrese el nombre completo" required>
+                        <label for="idfichamedica" class="form-label">ID Ficha Médica</label>
+                        <input type="text" id="idfichamedica" name="idfichamedica" class="form-input" placeholder="Ingrese el ID de la ficha" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="edad" class="form-label">Edad</label>
-                        <input type="number" id="edad" name="edad" class="form-input" placeholder="Edad en años" min="0" max="120" required>
+                        <label for="fechaingreso" class="form-label">Fecha de Ingreso</label>
+                        <input type="date" id="fechaingreso" name="fechaingreso" class="form-input" value="{{ date('Y-m-d') }}" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="diagnostico" class="form-label">Diagnóstico</label>
-                        <input type="text" id="diagnostico" name="diagnostico" class="form-input" placeholder="Diagnóstico médico" required>
+                        <label for="idpaciente" class="form-label">ID Paciente</label>
+                        <input type="text" id="idpaciente" name="idpaciente" class="form-input" placeholder="Ingrese el ID del paciente" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="fecha_ingreso" class="form-label">Fecha de Ingreso</label>
-                        <input type="date" id="fecha_ingreso" name="fecha_ingreso" class="form-input" value="{{ date('Y-m-d') }}" required>
+                        <label for="idoperacion" class="form-label">ID Operación</label>
+                        <input type="text" id="idoperacion" name="idoperacion" class="form-input" placeholder="ID de operación (opcional)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idcronico" class="form-label">ID Crónico</label>
+                        <input type="text" id="idcronico" name="idcronico" class="form-input" placeholder="ID de enfermedad crónica (opcional)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="idalergia" class="form-label">ID Alergia</label>
+                        <input type="text" id="idalergia" name="idalergia" class="form-input" placeholder="ID de alergia (opcional)">
                     </div>
                 </div>
 
@@ -113,30 +123,28 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>ID Firebase</th>
-                                <th>Nombre del Paciente</th>
-                                <th>Edad</th>
-                                <th>Diagnóstico</th>
+                                <th>ID Ficha Médica</th>
                                 <th>Fecha de Ingreso</th>
-                                <th>Fecha de Registro</th>
+                                <th>ID Paciente</th>
+                                <th>ID Operación</th>
+                                <th>ID Crónico</th>
+                                <th>ID Alergia</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($fichasArray as $ficha)
                                 <tr class="table-row">
-                                    <td class="cell-id">{{ $ficha['id'] ?? 'N/A' }}</td>
+                                    <td class="cell-id">{{ $ficha['idfichamedica'] ?? 'N/A' }}</td>
+                                    <td class="cell-date">{{ $ficha['fechaingreso'] ?? 'N/A' }}</td>
                                     <td class="cell-name">
                                         <div class="patient-info">
                                             <div class="patient-avatar">👤</div>
-                                            <span>{{ $ficha['nombre'] ?? 'Sin nombre' }}</span>
+                                            <span>{{ $ficha['idpaciente'] ?? 'Sin paciente' }}</span>
                                         </div>
                                     </td>
-                                    <td class="cell-age">
-                                        <span class="age-badge">{{ $ficha['edad'] ?? 'N/A' }} años</span>
-                                    </td>
-                                    <td class="cell-diagnosis">{{ $ficha['diagnostico'] ?? 'Sin diagnóstico' }}</td>
-                                    <td class="cell-date">{{ $ficha['fecha_ingreso'] ?? 'N/A' }}</td>
-                                    <td class="cell-created">{{ $ficha['created_at'] ?? 'N/A' }}</td>
+                                    <td class="cell-diagnosis">{{ $ficha['idoperacion'] ?? 'N/A' }}</td>
+                                    <td class="cell-diagnosis">{{ $ficha['idcronico'] ?? 'N/A' }}</td>
+                                    <td class="cell-diagnosis">{{ $ficha['idalergia'] ?? 'N/A' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

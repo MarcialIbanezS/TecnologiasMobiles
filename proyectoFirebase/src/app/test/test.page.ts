@@ -12,7 +12,7 @@ import { addIcons } from 'ionicons';
 import { arrowUpOutline } from 'ionicons/icons';
 import { PatientService, Patient } from '../servicios/patient.service';
 import { NavigationService, Breadcrumb } from '../servicios/navigation.service';
-
+import { Subject, debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-test',
@@ -48,54 +48,64 @@ export class TestPage implements OnInit {
   @ViewChild(IonContent) content!: IonContent;
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
 
-  pacientes: Patient[] = [];           // Todos los pacientes desde Firestore
-  filteredPacientes: Patient[] = [];   // Pacientes visibles
+  pacientes: (Patient & { nombrePacienteLower?: string; rutClean?: string })[] = [];
+  filteredPacientes: Patient[] = [];
   isLoading = false;
   searchTerm = '';
-  isSearching = false;                 // Track if we're in search mode
+  isSearching = false;
   breadcrumbs: Breadcrumb[] = [];
 
-
-  itemsPorPagina = 20;   // 🔹 Cuántos mostrar por bloque
+  itemsPorPagina = 20;
   paginaActual = 0;
-  showScrollTop = false; // 🔹 Mostrar botón de subir
+  showScrollTop = false;
 
   // Toast
   showToast = false;
   toastMessage = '';
   toastColor: 'success' | 'danger' = 'danger';
 
+  // 🔹 Subject para debounce
+  private searchSubject = new Subject<string>();
+
   constructor(
     private router: Router,
     private patientService: PatientService,
     private navigationService: NavigationService
   ) { 
-    addIcons({ arrowUpOutline }); // Registrar ícono
-    
-    // Set breadcrumbs for patients page
+    addIcons({ arrowUpOutline });
+
     this.breadcrumbs = [
       { label: 'Inicio', path: '/inicio' },
       { label: 'Pacientes', path: '/listadoPacientes' }
     ];
   }
-  
+
   ngOnInit() {
     this.loadPatients();
+
+    // 🔹 Configurar debounceTime para la búsqueda
+    this.searchSubject.pipe(
+      debounceTime(400)
+    ).subscribe(term => {
+      this.realizarBusqueda(term);
+    });
   }
-// Navigation
 
-  
-
-  // 🔹 Cargar todos los pacientes una sola vez
+  // 🔹 Cargar pacientes una sola vez
   loadPatients() {
     this.isLoading = true;
     this.patientService.getPatients().subscribe({
       next: (patients) => {
         this.isLoading = false;
-        this.pacientes = patients;
+        // Preprocesar datos para acelerar las búsquedas
+        this.pacientes = patients.map(p => ({
+          ...p,
+          nombrePacienteLower: p.nombrePaciente?.toLowerCase() || '',
+          rutClean: p.rut?.toLowerCase().replace(/[.-]/g, '') || ''
+        }));
         this.filteredPacientes = [];
         this.paginaActual = 0;
-        this.cargarMasPacientesLocal(); // Cargar primeros n
+        this.cargarMasPacientesLocal();
       },
       error: (error) => {
         this.isLoading = false;
@@ -105,10 +115,8 @@ export class TestPage implements OnInit {
     });
   }
 
-  // 🔹 Cargar porciones locales (scroll)
   cargarMasPacientes(event?: any) {
     this.cargarMasPacientesLocal();
-
     if (event) {
       setTimeout(() => {
         event.target.complete();
@@ -127,78 +135,61 @@ export class TestPage implements OnInit {
     this.paginaActual++;
   }
 
-  // 🔹 Scroll para mostrar el botón "Subir"
   onScroll(event: any) {
     const scrollTop = event.detail.scrollTop;
     this.showScrollTop = scrollTop > 300;
   }
 
-  // 🔹 Subir al tope
   scrollToTop() {
     this.content.scrollToTop(400);
     this.filteredPacientes = [];
     this.paginaActual = 0;
-    this.cargarMasPacientesLocal(); // Load only the first page again
-    
-    // Re-enable infinite scroll in case it was disabled
-    if (this.infiniteScroll) {
-      this.infiniteScroll.disabled = false;
-    }
+    this.cargarMasPacientesLocal();
+    if (this.infiniteScroll) this.infiniteScroll.disabled = false;
   }
 
-  // 🔹 Búsqueda
+  // 🔹 Nueva función de búsqueda con debounce
   onBuscar(event: any) {
-    this.searchTerm = event.detail.value.toLowerCase().trim();
+    const term = event.detail.value.toLowerCase().trim();
+    this.searchSubject.next(term); // dispara el debounce
+  }
 
-    if (this.searchTerm === '') {
-      // Sin filtro, reinicia scroll
+  private realizarBusqueda(term: string) {
+    this.searchTerm = term;
+
+    if (term === '') {
       this.isSearching = false;
       this.filteredPacientes = [];
       this.paginaActual = 0;
       this.cargarMasPacientesLocal();
-      
-      // Re-enable infinite scroll
-      if (this.infiniteScroll) {
-        this.infiniteScroll.disabled = false;
-      }
-    } else {
-      // Filtrar por nombre o RUT
-      this.isSearching = true;
-      this.filteredPacientes = this.pacientes.filter(p => {
-        if (!p) return false;
-        
-        const nombreMatch = p.nombrePaciente && 
-          p.nombrePaciente.toLowerCase().includes(this.searchTerm);
-        
-        // For RUT search, remove dots and hyphens for better matching
-        const rutMatch = p.rut && 
-          p.rut.toLowerCase().replace(/[.-]/g, '').includes(this.searchTerm.replace(/[.-]/g, ''));
-        
-        return nombreMatch || rutMatch;
-      });
-      
-      // Disable infinite scroll when searching
-      if (this.infiniteScroll) {
-        this.infiniteScroll.disabled = true;
-      }
+      if (this.infiniteScroll) this.infiniteScroll.disabled = false;
+      return;
     }
+
+    this.isSearching = true;
+    const termNormalized = term.replace(/[.-]/g, '');
+
+    const resultados = this.pacientes.filter(p => {
+  const nombre = p.nombrePacienteLower ?? '';
+  const rut = p.rutClean ?? '';
+  return nombre.includes(term) || rut.includes(termNormalized);
+  });
+
+    // 🔹 Mostrar solo primeros 300 resultados por rendimiento
+    this.filteredPacientes = resultados.slice(0, 300);
+
+    if (this.infiniteScroll) this.infiniteScroll.disabled = true;
   }
 
-  // 🔹 Clear search and reset to pagination
   clearSearch() {
     this.searchTerm = '';
     this.isSearching = false;
     this.filteredPacientes = [];
     this.paginaActual = 0;
     this.cargarMasPacientesLocal();
-    
-    // Re-enable infinite scroll
-    if (this.infiniteScroll) {
-      this.infiniteScroll.disabled = false;
-    }
+    if (this.infiniteScroll) this.infiniteScroll.disabled = false;
   }
 
-  // 🔹 Toasts
   showToastMessage(message: string, color: 'success' | 'danger') {
     this.toastMessage = message;
     this.toastColor = color;
@@ -209,18 +200,16 @@ export class TestPage implements OnInit {
     this.showToast = false;
   }
 
-  // 🔹 Navegación
   irAHome() { this.router.navigate(['/inicio']); } 
   irAMartin3() { this.router.navigate(['/inicio']); }
+
   verPaciente(paciente: Patient) {
     console.log("Paciente seleccionado:", paciente);
-    // Navigate to patient profile with patient data
     this.router.navigate(['/perfilPaciente'], { 
       state: { patient: paciente } 
     });
   }
-  
-  // Execute breadcrumb navigation
+
   onBreadcrumbClick(breadcrumb: Breadcrumb) {
     this.router.navigate([breadcrumb.path]);
   }

@@ -6,6 +6,8 @@ import { getAnalytics } from "firebase/analytics";//Agregar
 
 export const environment = {
   production: false,
+  // Backend API URL (optional) — ajusta si usas un backend local o remoto
+  apiUrl: 'http://localhost:3000/api',
   firebase: {
     apiKey: "AIzaSyBko6PFIC3QOZ3CXtsyN-4vrFJR2ooAeas",
     authDomain: "appmoviles-b5003.firebaseapp.com",

@@ -57,8 +57,8 @@ export interface DetailedMedicalRecord extends MedicalRecord {
 })
 export class MedicalRecordService {
   private collectionName = 'fichamedica';
-  private allergiesCollectionName = 'alergias';
-  private chronicConditionsCollectionName = 'condicionesCronicas';
+  private allergiesCollectionName = 'alergia';
+  private chronicConditionsCollectionName = 'cronico';
   private operationsCollectionName = 'operaciones';
   
   private selectedMedicalRecordSubject = new BehaviorSubject<DetailedMedicalRecord | null>(null);
@@ -68,9 +68,31 @@ export class MedicalRecordService {
 
   // 🔹 Obtener todas las fichas médicas de un paciente
   getMedicalRecordsByPatient(patientId: string): Observable<MedicalRecord[]> {
+    console.log('Service - Consultando fichas médicas:', {
+      collection: this.collectionName,
+      patientId,
+      query: `where('idpaciente', '==', '${patientId}')`
+    });
+
     const medicalRecordsRef = collection(this.firestore, this.collectionName);
     const queryRef = query(medicalRecordsRef, where('idpaciente', '==', patientId));
-    return collectionData(queryRef, { idField: 'idfichamedica' }) as Observable<MedicalRecord[]>;
+    
+    // Use inject(Firestore) to get the Firestore instance within the context
+    return new Observable<MedicalRecord[]>(subscriber => {
+      const unsubscribe = collectionData(queryRef, { idField: 'idfichamedica' }).subscribe(data => {
+        console.log('Service - Resultados crudos de Firestore:', {
+          patientId,
+          recordsCount: data.length,
+          records: data
+        });
+        subscriber.next(data as MedicalRecord[]);
+      }, error => {
+        console.error('Error al obtener fichas médicas:', error);
+        subscriber.error(error);
+      });
+      
+      return () => unsubscribe.unsubscribe();
+    });
   }
 
   // 🔹 Obtener ficha médica por ID
@@ -82,16 +104,27 @@ export class MedicalRecordService {
   // 🔹 Obtener detalles completos de ficha médica (con alergias, condiciones crónicas y operaciones)
   async getMedicalRecordDetails(recordId: string): Promise<DetailedMedicalRecord | null> {
     try {
+      console.log('Obteniendo detalles de ficha médica:', recordId);
+      
       // Get main medical record
       const recordDoc = doc(this.firestore, `${this.collectionName}/${recordId}`);
       const recordData = await new Promise<MedicalRecord | undefined>((resolve) => {
-        const unsubscribe = docData(recordDoc, { idField: 'idfichamedica' }).subscribe((data) => {
-          unsubscribe.unsubscribe();
-          resolve(data as MedicalRecord | undefined);
-        });
+        const subscription = docData(recordDoc, { idField: 'idfichamedica' })
+          .subscribe({
+            next: (data) => {
+              console.log('Datos básicos de la ficha:', data);
+              resolve(data as MedicalRecord | undefined);
+            },
+            error: (error) => {
+              console.error('Error al obtener ficha médica:', error);
+              resolve(undefined);
+            },
+            complete: () => subscription.unsubscribe()
+          });
       });
       
       if (!recordData) {
+        console.warn('No se encontró la ficha médica:', recordId);
         return null;
       }
 
@@ -138,10 +171,17 @@ export class MedicalRecordService {
     const queryRef = query(allergiesRef, where('idfichamedica', '==', recordId));
     
     return new Promise<Allergy[]>((resolve) => {
-      const unsubscribe = collectionData(queryRef, { idField: 'idalergia' }).subscribe((data) => {
-        unsubscribe.unsubscribe();
-        resolve(data as Allergy[]);
-      });
+      const subscription = collectionData(queryRef, { idField: 'idalergia' })
+        .subscribe({
+          next: (data) => {
+            resolve(data as Allergy[]);
+          },
+          error: (error) => {
+            console.error('Error al obtener alergias:', error);
+            resolve([]);
+          },
+          complete: () => subscription.unsubscribe()
+        });
     });
   }
 
@@ -151,10 +191,17 @@ export class MedicalRecordService {
     const queryRef = query(chronicRef, where('idfichamedica', '==', recordId));
     
     return new Promise<ChronicCondition[]>((resolve) => {
-      const unsubscribe = collectionData(queryRef, { idField: 'idcronico' }).subscribe((data) => {
-        unsubscribe.unsubscribe();
-        resolve(data as ChronicCondition[]);
-      });
+      const subscription = collectionData(queryRef, { idField: 'idcronico' })
+        .subscribe({
+          next: (data) => {
+            resolve(data as ChronicCondition[]);
+          },
+          error: (error) => {
+            console.error('Error al obtener condiciones crónicas:', error);
+            resolve([]);
+          },
+          complete: () => subscription.unsubscribe()
+        });
     });
   }
 
@@ -164,10 +211,17 @@ export class MedicalRecordService {
     const queryRef = query(operationsRef, where('idfichamedica', '==', recordId));
     
     return new Promise<Operation[]>((resolve) => {
-      const unsubscribe = collectionData(queryRef, { idField: 'idoperacion' }).subscribe((data) => {
-        unsubscribe.unsubscribe();
-        resolve(data as Operation[]);
-      });
+      const subscription = collectionData(queryRef, { idField: 'idoperacion' })
+        .subscribe({
+          next: (data) => {
+            resolve(data as Operation[]);
+          },
+          error: (error) => {
+            console.error('Error al obtener operaciones:', error);
+            resolve([]);
+          },
+          complete: () => subscription.unsubscribe()
+        });
     });
   }
 

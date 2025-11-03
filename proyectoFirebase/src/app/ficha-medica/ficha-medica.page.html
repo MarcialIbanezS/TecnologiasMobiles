@@ -42,6 +42,25 @@
     </ion-button>
   </div>
 
+  <!-- Records list: permite seleccionar entre varias fichas del paciente -->
+  <ion-card *ngIf="medicalRecords && medicalRecords.length > 0 && !isLoading">
+    <ion-card-header>
+      <ion-card-title>Fichas disponibles ({{ medicalRecords.length }})</ion-card-title>
+      <ion-card-subtitle>Selecciona una ficha para ver su detalle</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item button *ngFor="let rec of medicalRecords" (click)="loadMedicalRecordDetails(rec.idfichamedica)" [class.selected]="rec.idfichamedica === selectedMedicalRecord?.idfichamedica">
+          <ion-label>
+            <h3>{{ rec.nombrePaciente || 'Ficha ' + rec.idfichamedica }}</h3>
+            <p>{{ formatDate(rec.fechaingreso) }} • {{ rec.tipoServicio || '—' }}</p>
+          </ion-label>
+          <ion-note slot="end" color="medium">{{ rec.idfichamedica }}</ion-note>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Loading Spinner -->
   <div *ngIf="isLoading" class="loading-container">
     <ion-spinner color="primary"></ion-spinner>

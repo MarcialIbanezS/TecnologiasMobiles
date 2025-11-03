@@ -29,9 +29,8 @@
 
   <div class="searchbar">
     <ion-searchbar
-      color="medium"
+      color="dark"
       placeholder="Buscar por nombre o RUT"
-      [debounce]="300"
       [value]="searchTerm"
       (ionInput)="onBuscar($event)"
       (ionClear)="onBuscar({detail: {value: ''}})">

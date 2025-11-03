@@ -1,2 +1,4 @@
 Taller3.rar
 *.zip
+/appLaravel/node_modules/*
+/appLaravel/node_modules

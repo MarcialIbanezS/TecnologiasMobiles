@@ -1,0 +1,60 @@
+.perfil-fondo {
+  /* Fondo con imagen */
+  --background: #ffffff url('/assets/imagen_login.png') no-repeat center bottom / cover;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/* Cards con fondo blanco y texto negro */
+ion-card {
+  background-color: rgba(255, 255, 255, 0.95); /* fondo blanco semiopaco para que se vea la imagen de fondo */
+  color: #000000; /* texto negro */
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+}
+
+/* Avatar */
+ion-avatar {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0.5rem;
+}
+
+/* Títulos dentro de cards */
+ion-card-title {
+  color: #000000;
+  font-weight: bold;
+}
+
+/* Subtítulos */
+ion-card-subtitle {
+  color: #333333;
+  
+}
+
+/* List items */
+ion-item {
+  --background: white; /* para que no tapen la imagen de fondo */
+  color: #000000;
+  background-color: white;
+}
+
+ion-note {
+  color: #000000;
+  
+}
+
+/* Mensaje divertido */
+ion-card[color="light"] {
+  background-color: rgba(255, 255, 255, 0.85);
+  color: #000000;
+}

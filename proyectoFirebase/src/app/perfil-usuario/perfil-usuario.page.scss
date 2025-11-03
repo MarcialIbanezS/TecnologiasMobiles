@@ -43,9 +43,9 @@ ion-card-subtitle {
 
 /* List items */
 ion-item {
-  --background: white; /* para que no tapen la imagen de fondo */
-  color: #000000;
-  background-color: white;
+  --background: transparent; /* para que no tapen la imagen de fondo */
+  --color: #000000;
+  --background-color: transparent;
 }
 
 ion-note {
@@ -57,4 +57,9 @@ ion-note {
 ion-card[color="light"] {
   background-color: rgba(255, 255, 255, 0.85);
   color: #000000;
+}
+
+ion-list {
+  color: #000000;
+  background-color: white;
 }

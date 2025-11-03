@@ -19,16 +19,45 @@ class DatabaseService {
   }
 
   // 🔹 Crear listas base (para inicializar datos de prueba)
-  Future<void> crearListasBase() async {
-    await _db.collection('paciente').add({
-      'nombrePaciente': 'Paciente de Prueba',
-      'rut': '11111111-1',
-      'genero': 'Masculino',
-      'fechaNacimiento': '1990-01-01',
-      'direccion': 'Santiago Centro'
-    });
-    print("🧾 Paciente de prueba creado correctamente.");
+  /// 🔹 Crear listas base de pacientes de ejemplo (para pruebas locales)
+Future<void> crearListasBase() async {
+  final pacientesEjemplo = [
+    {
+      'idpaciente': 'P05639',
+      'nomberPaciente': 'Matías',
+      'apellidoPaciente': 'Flores',
+      'rut': '73047497-7',
+      'sexo': 'Femenino',
+      'direccion': 'Camino del Río 22, Pueblo Nuevo',
+      'fechaNacimiento': '1965-05-03'
+    },
+    {
+      'idpaciente': 'P09785',
+      'nomberPaciente': 'Ana',
+      'apellidoPaciente': 'Hernández',
+      'rut': '72498311-5',
+      'sexo': 'Masculino',
+      'direccion': 'Calle Falsa 123, Springfield',
+      'fechaNacimiento': '2009-02-23'
+    },
+    {
+      'idpaciente': 'P06452',
+      'nomberPaciente': 'Diego',
+      'apellidoPaciente': 'Vega',
+      'rut': '39921439-7',
+      'sexo': 'Masculino',
+      'direccion': 'Pasaje Los Álamos 10, Villa Verde',
+      'fechaNacimiento': '1976-08-29'
+    },
+  ];
+
+  for (var paciente in pacientesEjemplo) {
+    await _db.collection('paciente').add(paciente);
   }
+
+  print("✅ Se crearon ${pacientesEjemplo.length} pacientes de ejemplo en Firebase.");
+}
+
 
   // 🔹 Listar todos los pacientes (equivalente a listarPacientes)
   Future<List<Map<String, dynamic>>> listarPacientes() async {
@@ -62,25 +91,58 @@ class DatabaseService {
   }
 
   // 🔹 Crear un nuevo paciente
-  Future<DocumentReference> crearPaciente({
-    required String nombre,
-    required String rut,
-    required String fechaNacimiento,
-    required String sexo,
-    required String direccion,
-    String? telefono,
-  }) async {
-    final ref = await _db.collection('paciente').add({
-      'nombrePaciente': nombre,
-      'rut': rut,
-      'genero': sexo,
-      'fechaNacimiento': fechaNacimiento,
-      'direccion': direccion,
-      'telefono': telefono ?? '',
+  Future<void> crearListasBaseConFichas() async {
+  final pacientesEjemplo = [
+    {
+      'idpaciente': 'P05639',
+      'nomberPaciente': 'Matías',
+      'apellidoPaciente': 'Flores',
+      'rut': '22222222-7',
+      'sexo': 'Femenino',
+      'direccion': 'Camino del Río 22, Pueblo Nuevo',
+      'fechaNacimiento': '1965-05-03'
+    },
+    {
+      'idpaciente': 'P09785',
+      'nomberPaciente': 'Ana',
+      'apellidoPaciente': 'Hernández',
+      'rut': '72498311-5',
+      'sexo': 'Masculino',
+      'direccion': 'Calle Falsa 123, Springfield',
+      'fechaNacimiento': '2009-02-23'
+    },
+    {
+      'idpaciente': 'P06452',
+      'nomberPaciente': 'Diego',
+      'apellidoPaciente': 'Vega',
+      'rut': '39921439-7',
+      'sexo': 'Masculino',
+      'direccion': 'Pasaje Los Álamos 10, Villa Verde',
+      'fechaNacimiento': '1976-08-29'
+    },
+  ];
+
+  for (var paciente in pacientesEjemplo) {
+    // 🔹 Crear paciente
+    final docRef = await _db.collection('paciente').add(paciente);
+
+    // 🔹 Crear ficha médica asociada
+    await _db.collection('fichamedica').add({
+      'idpaciente': docRef.id,
+      'fechaingreso': '2025-10-01',
+      'idconsulta': 'Consulta General',
+      'nombreProfesional': 'Dr. Matías Sandoval',
+      'diagnosticos': ['Chequeo general'],
+      'alergias': ['Ninguna'],
+      'cronicos': [],
+      'medicamentos': [],
+      'operaciones': [],
     });
-    print("✅ Paciente creado con ID: ${ref.id}");
-    return ref;
+
+    print("✅ Paciente '${paciente['nomberPaciente']}' creado con ficha médica.");
   }
+}
+
 
   // 🔹 Crear una ficha médica dentro del paciente
   Future<void> crearFichaMedica({

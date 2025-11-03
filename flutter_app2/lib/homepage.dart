@@ -32,31 +32,19 @@ class HomeRoute extends StatelessWidget {
             const SizedBox(height: 20),
 
             ElevatedButton.icon(
-              icon: const Icon(Icons.person_add),
-              label: const Text('Agregar paciente de prueba'),
+              icon: const Icon(Icons.playlist_add),
+              label: const Text('Cargar pacientes de ejemplo'),
               onPressed: () async {
-                final ref = await db.crearPaciente(
-                  nombre: 'santiago gei',
-                  rut: '11111678-9',
-                  fechaNacimiento: '2004-03-15',
-                  sexo: 'Masculon',
-                  direccion: 'Av. Libertador 1234, Santiago',
-                  telefono:'+56987654321',
-                );
-
-                await db.crearFichaMedica(
-                  pacienteId: ref.id,
-                  fechaIngreso: '2025-09-20',
-                  consulta: 'Consulta Externa',
-                  profesional: 'Dr. matias sandoval',
-                  diagnosticos: ['Gripe comun'],
-                  alergias: ['Penicilina'],
-                  cronicos: ['Diabetes Mellitus Tipo 2'],
-                  medicamentos: ['Paracetamol 500mg'],
-                  operaciones: [],
+                await db.crearListasBaseConFichas();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('✅ Pacientes de ejemplo creados con fichas médicas'),
+                    duration: Duration(seconds: 3),
+                  ),
                 );
               },
             ),
+
             const SizedBox(height: 20),
 
             ElevatedButton.icon(

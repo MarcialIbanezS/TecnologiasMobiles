@@ -91,3 +91,12 @@ ion-breadcrumb {
 ion-card:last-child {
   margin-bottom: 3rem;
 }
+
+
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff; // opcional, para que resalte sobre el fondo
+}

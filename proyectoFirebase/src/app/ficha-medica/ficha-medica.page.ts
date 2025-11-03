@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle,
   IonCardTitle, IonButton, IonSpinner, IonList, IonItem, IonLabel, IonIcon, IonNote,
-  IonChip, IonCol, IonRow, IonGrid, IonSegment, IonSegmentButton
+  IonChip, IonCol, IonRow, IonGrid, IonSegment, IonSegmentButton, IonButtons
 } from '@ionic/angular/standalone';
 import { IonBreadcrumb, IonBreadcrumbs } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
@@ -27,7 +27,8 @@ interface Breadcrumb {
     IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,
     IonBreadcrumb, IonBreadcrumbs, RouterModule, IonCard, IonCardContent, IonCardHeader,
     IonCardSubtitle, IonCardTitle, IonButton, IonSpinner, IonChip, IonList, IonItem,
-    IonLabel,  IonIcon, IonNote, IonCol, IonRow, IonGrid, IonSegment, IonSegmentButton
+    IonLabel,  IonIcon, IonNote, IonCol, IonRow, IonGrid, IonSegment, IonSegmentButton,
+    IonButtons
   ]
 })
 export class FichaMedicaPage implements OnInit {
@@ -79,6 +80,9 @@ export class FichaMedicaPage implements OnInit {
   irAListadoPacientes() {
     this.router.navigate(['/listadoPacientes']);
   }
+  goToProfile() {
+  this.router.navigate(['/perfil-usuario']);
+}
 
   irAPerfilPaciente() {
     if (this.selectedPatient) {

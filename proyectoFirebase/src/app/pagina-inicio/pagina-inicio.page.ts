@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader,
-  IonCardSubtitle, IonCardTitle, IonGrid, IonCol, IonRow, IonButton
+  IonCardSubtitle, IonCardTitle, IonGrid, IonCol, IonRow, IonButton, IonIcon, IonButtons
   
 } from '@ionic/angular/standalone';
 import {IonBreadcrumb, IonBreadcrumbs} from  '@ionic/angular/standalone';
@@ -18,7 +18,7 @@ import { NavigationService, Breadcrumb } from '../servicios/navigation.service';
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule
     , IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, 
-    IonGrid, IonCol, IonRow, IonButton, IonBreadcrumb, IonBreadcrumbs, RouterModule]})
+    IonGrid, IonCol, IonRow,IonIcon, IonButton, IonButtons, IonBreadcrumb, IonBreadcrumbs, RouterModule]})
     
 export class PaginaInicioPage implements OnInit {
 
@@ -63,7 +63,9 @@ export class PaginaInicioPage implements OnInit {
   irAFichaMedica() {
     this.router.navigate(['/fichaMedica']);       
   }
-
+  goToProfile() {
+  this.router.navigate(['/perfil-usuario']);
+}
   ngOnInit() {
     // Build breadcrumbs for patient menu/inicio page
     this.breadcrumbs = [

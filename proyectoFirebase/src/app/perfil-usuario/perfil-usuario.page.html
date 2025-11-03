@@ -1,6 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Perfil de Usuario</ion-title>
+    <ion-buttons slot="end">
+    <ion-button (click)="goToProfile()" fill="clear">
+    <img src="/assets/avatar.jpg" alt="Perfil" class="profile-avatar"/>
+  </ion-button>
+  </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -10,6 +15,18 @@
       <ion-title size="large">Perfil de Usuario</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <!-- Breadcrumbs -->
+  <ion-breadcrumbs>
+    <ion-breadcrumb 
+      *ngFor="let breadcrumb of breadcrumbs; let last = last"
+      [class.active]="last"
+      [style.cursor]="last ? 'default' : 'pointer'"
+      [style.opacity]="last ? '0.7' : '1'"
+      (click)="!last && onBreadcrumbClick(breadcrumb)">
+      {{ breadcrumb.label }}
+    </ion-breadcrumb>
+  </ion-breadcrumbs>
 
   <!-- Perfil principal -->
   <ion-card>

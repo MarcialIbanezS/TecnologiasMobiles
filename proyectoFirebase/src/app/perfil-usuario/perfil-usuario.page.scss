@@ -61,5 +61,45 @@ ion-card[color="light"] {
 
 ion-list {
   color: #000000;
-  background-color: white;
+  background-color: transparent;
+}
+
+
+ion-breadcrumbs {
+  padding: 0.75rem 1rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.05);
+}
+
+ion-breadcrumb {
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--ion-color-primary);
+  }
+
+  &.active {
+    color: var(--ion-color-primary);
+    font-weight: 600;
+    cursor: default;
+
+    &:hover {
+      color: var(--ion-color-primary);
+    }
+  }
+}
+ion-card:last-child {
+  margin-bottom: 3rem;
+}
+
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff; // opcional, para que resalte sobre el fondo
 }

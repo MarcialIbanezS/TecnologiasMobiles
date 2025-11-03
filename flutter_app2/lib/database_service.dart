@@ -1,165 +1,131 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'patients.dart';
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  // 🔹 Prueba de conexión a Firestore
+  Future<void> testFirestore() async {
+    try {
+      final snapshot = await _db.collection('paciente').limit(1).get();
+      if (snapshot.docs.isNotEmpty) {
+        print("✅ Conectado correctamente a Firestore");
+      } else {
+        print("⚠️ Conexión exitosa, pero colección vacía.");
+      }
+    } catch (e) {
+      print("❌ Error conectando a Firestore: $e");
+    }
+  }
 
+  // 🔹 Crear listas base (para inicializar datos de prueba)
+  Future<void> crearListasBase() async {
+    await _db.collection('paciente').add({
+      'nombrePaciente': 'Paciente de Prueba',
+      'rut': '11111111-1',
+      'genero': 'Masculino',
+      'fechaNacimiento': '1990-01-01',
+      'direccion': 'Santiago Centro'
+    });
+    print("🧾 Paciente de prueba creado correctamente.");
+  }
+
+  // 🔹 Listar todos los pacientes (equivalente a listarPacientes)
+  Future<List<Map<String, dynamic>>> listarPacientes() async {
+    final snapshot = await _db.collection('paciente').get();
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      data['id'] = doc.id;
+
+      // 🔹 Normalizar nombres de campo
+      // "nomberPaciente" -> "nombrePaciente"
+      data['nombrePaciente'] = data['nomberPaciente'] ?? data['nombrePaciente'] ?? '';
+      data['apellidoPaciente'] = data['apellidoPaciente'] ?? '';
+      data['sexo'] = data['sexo'] ?? data['genero'] ?? '';
+      data['idpaciente'] = data['idpaciente'] ?? '';
+
+      // 🔹 Crear un campo combinado para mostrar el nombre completo
+      data['nombreCompleto'] = '${data['nombrePaciente']} ${data['apellidoPaciente']}'.trim();
+
+      return data;
+    }).toList();
+
+  }
+
+  // 🔹 Obtener lista de pacientes como modelos (si prefieres objetos Paciente)
+  Future<List<Paciente>> getPacientes() async {
+    final snapshot = await _db.collection('paciente').get();
+    return snapshot.docs
+        .map((doc) => Paciente.fromFirestore(doc.data(), doc.id))
+        .toList();
+  }
+
+  // 🔹 Crear un nuevo paciente
   Future<DocumentReference> crearPaciente({
     required String nombre,
     required String rut,
     required String fechaNacimiento,
     required String sexo,
     required String direccion,
-    required String telefono,
+    String? telefono,
   }) async {
-    final pacienteRef = await _db.collection('pacientes').add({
-      'nombre': nombre,
+    final ref = await _db.collection('paciente').add({
+      'nombrePaciente': nombre,
       'rut': rut,
+      'genero': sexo,
       'fechaNacimiento': fechaNacimiento,
-      'sexo': sexo,
       'direccion': direccion,
-      'creado': FieldValue.serverTimestamp(),
-      'telefono': telefono,
+      'telefono': telefono ?? '',
     });
-    print(' Paciente creado con ID: ${pacienteRef.id}');
-    return pacienteRef;
+    print("✅ Paciente creado con ID: ${ref.id}");
+    return ref;
   }
 
-  // Crear ficha médica dentro de un paciente
+  // 🔹 Crear una ficha médica dentro del paciente
   Future<void> crearFichaMedica({
     required String pacienteId,
     required String fechaIngreso,
     required String consulta,
     required String profesional,
-    List<String>? diagnosticos,
-    List<String>? alergias,
-    List<String>? cronicos,
-    List<String>? medicamentos,
-    List<String>? operaciones,
+    required List<String> diagnosticos,
+    required List<String> alergias,
+    required List<String> cronicos,
+    required List<String> medicamentos,
+    required List<String> operaciones,
   }) async {
-    final pacienteRef = _db.collection('pacientes').doc(pacienteId);
-    await pacienteRef.collection('fichasMedicas').add({
+    final fichasRef =
+        _db.collection('paciente').doc(pacienteId).collection('fichas');
+
+    await fichasRef.add({
       'fechaIngreso': fechaIngreso,
       'consulta': consulta,
       'profesional': profesional,
-      'diagnosticos': diagnosticos ?? [],
-      'alergias': alergias ?? [],
-      'cronicos': cronicos ?? [],
-      'medicamentos': medicamentos ?? [],
-      'operaciones': operaciones ?? [],
-      'creado': FieldValue.serverTimestamp(),
+      'diagnosticos': diagnosticos,
+      'alergias': alergias,
+      'cronicos': cronicos,
+      'medicamentos': medicamentos,
+      'operaciones': operaciones,
     });
-    print('Ficha médica agregada a paciente $pacienteId');
+
+    print("📋 Ficha médica creada para paciente $pacienteId");
   }
 
-  // Crear colecciones maestras (listas base)
-  Future<void> crearListasBase() async {
-    final listas = {
-      'alergias': [
-        'Penicilina',
-        'Polen',
-        'Frutos secos',
-        'Lactosa',
-        'Gluten'
-      ],
-      'cronicos': [
-        'Diabetes Mellitus Tipo 2',
-        'Hipertensión Arterial',
-        'Asma Bronquial',
-        'Artritis Reumatoide',
-        'Enfermedad Renal Crónica'
-      ],
-      'diagnosticos': [
-        'Infección respiratoria aguda',
-        'Gastroenteritis viral',
-        'Fractura de radio distal',
-        'Migraña común',
-        'Hipertensión arterial esencial'
-      ],
-      'medicamentos': [
-        'Amoxicilina 500mg',
-        'Ibuprofeno 400mg',
-        'Paracetamol 500mg',
-        'Enalapril 10mg',
-        'Metformina 850mg',
-        'Eutirox 50mg'
-      ],
-      'operaciones': [
-        'Apendicectomía laparoscópica',
-        'Colecistectomía',
-        'Herniorrafia inguinal',
-        'Artroscopia de rodilla',
-        'Cesárea'
-      ],
-      'servicios': [
-        'Consulta Externa',
-        'Urgencias',
-        'Hospitalización',
-        'Cirugía Ambulatoria',
-        'Laboratorio Clínico'
-      ],
-      'profesionales': [
-        'Dr. Carlos Mendoza - Medicina General',
-        'Dra. Patricia Rojas - Cardiología',
-        'Dr. Miguel Sánchez - Traumatología',
-        'Dra. Isabel Vargas - Neurología',
-        'Dr. Fernando López - Medicina General'
-      ],
-    };
-
-    for (final entry in listas.entries) {
-      final collection = _db.collection(entry.key);
-      for (final item in entry.value) {
-        await collection.add({'nombre': item});
-      }
-      print('✅ Colección ${entry.key} creada correctamente');
-    }
-  }
-
-  
-  Future<List<Map<String, dynamic>>> listarPacientes() async {
-    final snapshot = await _db.collection('pacientes').get();
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return {'id': doc.id, ...data};
-    }).toList();
-  }
-
-  //  Obtener fichas médicas de un paciente
-  Future<List<Map<String, dynamic>>> obtenerFichasDePaciente(String pacienteId) async {
-    final snapshot = await _db
-        .collection('pacientes')
-        .doc(pacienteId)
-        .collection('fichasMedicas')
-        .orderBy('fechaIngreso', descending: true)
-        .get();
+  // 🔹 Obtener fichas médicas de un paciente
+  Future<List<Map<String, dynamic>>> obtenerFichasDePaciente(String id) async {
+    final snapshot =
+        await _db.collection('paciente').doc(id).collection('fichas').get();
 
     return snapshot.docs.map((doc) {
       final data = doc.data();
-      return {'id': doc.id, ...data};
+      data['id'] = doc.id;
+      return data;
     }).toList();
   }
 
-  //  Eliminar paciente
-  Future<void> eliminarPaciente(String pacienteId) async {
-    final pacienteRef = _db.collection('pacientes').doc(pacienteId);
-    final fichas = await pacienteRef.collection('fichasMedicas').get();
-
-    for (var ficha in fichas.docs) {
-      await ficha.reference.delete();
-    }
-    await pacienteRef.delete();
-    print('🗑️ Paciente $pacienteId eliminado correctamente');
-  }
-
-  //Prueba
-  Future<void> testFirestore() async {
-    await _db.collection('pruebas').add({
-      'mensaje': 'Hola desde Flutter 🔥',
-      'fecha': DateTime.now(),
-    });
-    print(' Conexión Firestore funcionando');
+  // 🔹 Eliminar paciente
+  Future<void> eliminarPaciente(String id) async {
+    await _db.collection('paciente').doc(id).delete();
+    print("🗑️ Paciente eliminado: $id");
   }
 }

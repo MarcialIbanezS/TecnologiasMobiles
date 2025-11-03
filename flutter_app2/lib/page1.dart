@@ -34,7 +34,7 @@ class _SecondRouteState extends State<SecondRoute> {
     setState(() {
       filtro = texto.toLowerCase();
       filtrados = pacientes.where((p) {
-        final nombre = (p['nombre'] ?? '').toLowerCase();
+        final nombre = (p['nombreCompleto'] ?? '').toLowerCase();
         final rut = (p['rut'] ?? '').toLowerCase();
         return nombre.contains(filtro) || rut.contains(filtro);
       }).toList();
@@ -93,6 +93,7 @@ class _SecondRouteState extends State<SecondRoute> {
                                 fontWeight: FontWeight.w500),
                           ),
                         )
+                        
                       : ListView.builder(
                           itemCount: filtrados.length,
                           itemBuilder: (context, index) {
@@ -112,13 +113,13 @@ class _SecondRouteState extends State<SecondRoute> {
                                       color: Colors.teal),
                                 ),
                                 title: Text(
-                                  p['nombre'] ?? 'Sin nombre',
+                                  p['nombreCompleto'] ?? 'Sin nombre',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 subtitle: Text(
-                                  'RUT: ${p['rut'] ?? '-'} | ${p['sexo'] ?? '-'}',
+                                  'RUT: ${p['rut']}\nSexo: ${p['sexo']}\nFecha Nac: ${p['fechaNacimiento']}',
                                 ),
                                 trailing: const Icon(
                                   Icons.arrow_forward_ios_rounded,

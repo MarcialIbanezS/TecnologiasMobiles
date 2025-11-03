@@ -41,13 +41,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA8HoDHt64Ext9nUHsJeotMiJ5P3yNIqzU',
-    appId: '1:1056544919141:web:293c7f6eb1c0d38768c08c',
-    messagingSenderId: '1056544919141',
-    projectId: 'fichamedica-app',
-    authDomain: 'fichamedica-app.firebaseapp.com',
-    storageBucket: 'fichamedica-app.firebasestorage.app',
-    measurementId: 'G-YSDJ1G9GCN',
+    apiKey: "AIzaSyBko6PFIC3QOZ3CXtsyN-4vrFJR2ooAeas",
+    authDomain: "appmoviles-b5003.firebaseapp.com",
+    projectId: "appmoviles-b5003",
+    storageBucket: "appmoviles-b5003.firebasestorage.app",
+    messagingSenderId: "264276022373",
+    appId: "1:264276022373:web:66db567fd6ee7d225b628c",
+    measurementId: "G-RXGREWNXX8"
   );
 
   static const FirebaseOptions android = FirebaseOptions(

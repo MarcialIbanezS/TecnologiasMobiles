@@ -75,7 +75,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
             ),
             const SizedBox(height: 20),
             Text(
-              p['nombre'] ?? 'Sin nombre',
+              p['nombreCompleto'] ?? 'Sin nombre',
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

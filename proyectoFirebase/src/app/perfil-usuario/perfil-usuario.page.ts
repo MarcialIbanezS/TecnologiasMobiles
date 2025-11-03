@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar,
   IonCard, IonCardContent, IonCardHeader, IonCardSubtitle,
-  IonCardTitle, IonButton, IonNote, IonLabel, IonItem, IonList, IonIcon, IonAvatar, IonBreadcrumb, IonBreadcrumbs,
+  IonCardTitle, IonButton, IonNote, IonLabel, IonItem, IonList, IonAvatar, IonBreadcrumb, IonBreadcrumbs,
   IonButtons
  } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
@@ -20,7 +20,7 @@ interface Breadcrumb {
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,
     IonCard, IonCardContent, IonCardHeader, IonCardSubtitle,IonBreadcrumb, IonBreadcrumbs,
-  IonCardTitle, IonButton, IonNote, IonLabel, IonItem, IonList, IonIcon, IonAvatar, RouterModule,
+  IonCardTitle, IonButton, IonNote, IonLabel, IonItem, IonList, IonAvatar, RouterModule,
   IonButtons
   ]
 })

@@ -21,6 +21,10 @@ ion-card {
   margin-bottom: 1rem;
 }
 
+ion-card-title{
+  color:#000000;
+}
+
 /* Espaciado interno de los ion-label para que se vea más limpio */
 ion-item ion-label h3 {
   margin-bottom: 0.25rem;
@@ -29,7 +33,7 @@ ion-item ion-label h3 {
 
 ion-item ion-label p {
   margin: 0;
-  color: #555;
+  color: #000000;
   font-size: 0.9rem;
 }
 
@@ -55,7 +59,7 @@ ion-breadcrumbs {
   border-bottom: 1px solid #ffffff;
   border-radius: 8px;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 ion-breadcrumb {

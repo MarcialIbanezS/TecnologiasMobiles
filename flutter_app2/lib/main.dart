@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // se genera con flutterfire configure
+import 'firebase_options.dart'; 
 import 'homepage.dart';
 import 'page1.dart';
 import 'page2.dart';
@@ -10,7 +10,7 @@ import 'patient_profile.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Inicializa Firebase antes de correr la app
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

@@ -1,12 +1,11 @@
-// lib/database_service.dart
-// 🔥 Servicio de conexión con Firebase Firestore
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // ✅ Crear paciente
+
   Future<DocumentReference> crearPaciente({
     required String nombre,
     required String rut,
@@ -24,11 +23,11 @@ class DatabaseService {
       'creado': FieldValue.serverTimestamp(),
       'telefono': telefono,
     });
-    print('✅ Paciente creado con ID: ${pacienteRef.id}');
+    print(' Paciente creado con ID: ${pacienteRef.id}');
     return pacienteRef;
   }
 
-  // ✅ Crear ficha médica dentro de un paciente
+  // Crear ficha médica dentro de un paciente
   Future<void> crearFichaMedica({
     required String pacienteId,
     required String fechaIngreso,
@@ -52,10 +51,10 @@ class DatabaseService {
       'operaciones': operaciones ?? [],
       'creado': FieldValue.serverTimestamp(),
     });
-    print('✅ Ficha médica agregada a paciente $pacienteId');
+    print('Ficha médica agregada a paciente $pacienteId');
   }
 
-  // ✅ Crear colecciones maestras (listas base)
+  // Crear colecciones maestras (listas base)
   Future<void> crearListasBase() async {
     final listas = {
       'alergias': [
@@ -119,7 +118,7 @@ class DatabaseService {
     }
   }
 
-  // ✅ Listar todos los pacientes
+  
   Future<List<Map<String, dynamic>>> listarPacientes() async {
     final snapshot = await _db.collection('pacientes').get();
     return snapshot.docs.map((doc) {
@@ -128,7 +127,7 @@ class DatabaseService {
     }).toList();
   }
 
-  // ✅ Obtener fichas médicas de un paciente
+  //  Obtener fichas médicas de un paciente
   Future<List<Map<String, dynamic>>> obtenerFichasDePaciente(String pacienteId) async {
     final snapshot = await _db
         .collection('pacientes')
@@ -143,7 +142,7 @@ class DatabaseService {
     }).toList();
   }
 
-  // ✅ Eliminar paciente (y sus fichas)
+  //  Eliminar paciente
   Future<void> eliminarPaciente(String pacienteId) async {
     final pacienteRef = _db.collection('pacientes').doc(pacienteId);
     final fichas = await pacienteRef.collection('fichasMedicas').get();
@@ -155,12 +154,12 @@ class DatabaseService {
     print('🗑️ Paciente $pacienteId eliminado correctamente');
   }
 
-  // ✅ Prueba de conexión
+  //Prueba
   Future<void> testFirestore() async {
     await _db.collection('pruebas').add({
       'mensaje': 'Hola desde Flutter 🔥',
       'fecha': DateTime.now(),
     });
-    print('✅ Conexión Firestore funcionando');
+    print(' Conexión Firestore funcionando');
   }
 }

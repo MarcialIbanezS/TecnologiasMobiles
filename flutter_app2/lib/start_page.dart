@@ -9,7 +9,6 @@ class StartPage extends StatelessWidget {
       backgroundColor: const Color(0xFFF9FAFB),
       body: Stack(
         children: [
-          // Fondo superior con degradado
           Container(
             height: 280,
             decoration: const BoxDecoration(
@@ -31,7 +30,7 @@ class StartPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Imagen de logo o avatar
+                  // logo
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -54,7 +53,7 @@ class StartPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 50),
 
-                  // Título de bienvenida
+
                   const Text(
                     "Bienvenido a Doble M.A.",
                     textAlign: TextAlign.center,
@@ -76,7 +75,7 @@ class StartPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 60),
 
-                  // Botón Buscar Paciente
+
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(
@@ -100,7 +99,7 @@ class StartPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 25),
 
-                  // Botón Huella Dactilar
+                  // Huella Dactilar
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton.icon(

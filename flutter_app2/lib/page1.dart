@@ -60,7 +60,7 @@ class _SecondRouteState extends State<SecondRoute> {
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                // 🔍 Barra de búsqueda
+                // busqueda
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -81,7 +81,7 @@ class _SecondRouteState extends State<SecondRoute> {
                   ),
                 ),
 
-                // 📋 Lista de pacientes
+                // Lista de pacientes
                 Expanded(
                   child: filtrados.isEmpty
                       ? const Center(

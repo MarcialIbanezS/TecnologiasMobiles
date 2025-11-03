@@ -1,18 +1,101 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>perfil-usuario</ion-title>
+    <ion-title>Perfil de Usuario</ion-title>
+    <ion-buttons slot="end">
+    <ion-button (click)="goToProfile()" fill="clear">
+    <img src="/assets/avatar.jpg" alt="Perfil" class="profile-avatar"/>
+  </ion-button>
+  </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="perfil-fondo">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">perfil-usuario</ion-title>
+      <ion-title size="large">Perfil de Usuario</ion-title>
     </ion-toolbar>
   </ion-header>
 
+  <!-- Breadcrumbs -->
+  <ion-breadcrumbs>
+    <ion-breadcrumb 
+      *ngFor="let breadcrumb of breadcrumbs; let last = last"
+      [class.active]="last"
+      [style.cursor]="last ? 'default' : 'pointer'"
+      [style.opacity]="last ? '0.7' : '1'"
+      (click)="!last && onBreadcrumbClick(breadcrumb)">
+      {{ breadcrumb.label }}
+    </ion-breadcrumb>
+  </ion-breadcrumbs>
 
-<p>Hola profe imagine que tengo un perfil para el usuario aca y es todo choro y todo bacan ay si ay si</p>
+  <!-- Perfil principal -->
+  <ion-card>
+    <ion-card-header>
+      <ion-avatar>
+        <img src="/assets/avatar.jpg" alt="Avatar Usuario">
+      </ion-avatar>
+      <ion-card-title>Juan Pérez</ion-card-title>
+      <ion-card-subtitle>Administrador</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Bienvenido al perfil de usuario. Aquí puedes ver tu información personal y de acceso.</p>
+    </ion-card-content>
+  </ion-card>
 
+  <!-- Información personal -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Información Personal</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Nombre completo</ion-label>
+          <ion-note slot="end">Juan Pérez</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>Correo</ion-label>
+          <ion-note slot="end">juan.perez@email.com</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>Teléfono</ion-label>
+          <ion-note slot="end">+56 9 1234 5678</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>Rol</ion-label>
+          <ion-note slot="end">Administrador</ion-note>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 
+  <!-- Actividad reciente (dummy) -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Actividad Reciente</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Inició sesión</ion-label>
+          <ion-note slot="end">Hoy 09:00</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>Actualizó ficha médica</ion-label>
+          <ion-note slot="end">Ayer 15:45</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label>Descargó reporte</ion-label>
+          <ion-note slot="end">Hace 2 días</ion-note>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Mensaje divertido dummy -->
+  <ion-card color="light">
+    <ion-card-content>
+      <p>Hola profe, imagine que este perfil es todo choro y bacán 😎</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

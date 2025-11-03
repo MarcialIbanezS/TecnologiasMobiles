@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonBreadcrumb, IonBreadcrumbs
   , IonItem, IonAvatar, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle,
-IonGrid, IonRow, IonCol, IonImg, IonList, IonButton, IonSpinner, IonToast} 
+IonGrid, IonRow, IonCol, IonImg, IonList, IonButton, IonSpinner, IonToast, IonButtons} 
 from '@ionic/angular/standalone';
 import {Router} from '@angular/router';
 import {RouterModule} from '@angular/router';
@@ -24,7 +24,7 @@ interface Breadcrumb {
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, 
      RouterModule, IonBreadcrumb, IonBreadcrumbs, IonItem, IonAvatar, IonLabel,
     IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCardSubtitle, IonGrid, IonRow, IonCol
-  ,  IonList, IonButton, IonSpinner, IonToast]
+  ,  IonList, IonButton, IonSpinner, IonToast, IonButtons]
 })
 export class PerfilPacientePage implements OnInit {
 
@@ -58,6 +58,9 @@ export class PerfilPacientePage implements OnInit {
   irAInicio() {
     this.router.navigate(['/inicio']);       
   }
+  goToProfile() {
+  this.router.navigate(['/perfil-usuario']);
+}
   irAFichaMedica() {
     // Navigate to medical record with patient context
     if (this.patient) {

@@ -5,7 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonSearchbar, IonList, IonItem,
   IonAvatar, IonLabel, IonSpinner, IonToast, IonBreadcrumb, IonBreadcrumbs,
-  IonInfiniteScroll, IonInfiniteScrollContent, IonFab, IonFabButton, IonIcon
+  IonInfiniteScroll, IonInfiniteScrollContent, IonFab, IonFabButton, IonIcon, IonButtons, IonButton
 } from '@ionic/angular/standalone';
 
 import { addIcons } from 'ionicons';
@@ -22,7 +22,9 @@ import { Subject, debounceTime } from 'rxjs';
   imports: [
     CommonModule,      
     FormsModule,       
-    RouterModule,      
+    RouterModule,
+    IonButtons,
+    IonButton,      
     IonContent,
     IonHeader,
     IonTitle,
@@ -202,6 +204,7 @@ export class TestPage implements OnInit {
 
   irAHome() { this.router.navigate(['/inicio']); } 
   irAMartin3() { this.router.navigate(['/inicio']); }
+  goToProfile() {this.router.navigate(['/perfil-usuario']); }
 
   verPaciente(paciente: Patient) {
     console.log("Paciente seleccionado:", paciente);

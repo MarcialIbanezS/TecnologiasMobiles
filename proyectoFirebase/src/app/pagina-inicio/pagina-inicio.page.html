@@ -1,6 +1,11 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="false">
   <ion-toolbar>
     <ion-title>PaginaInicio</ion-title>
+    <ion-buttons slot="end">
+    <ion-button (click)="goToProfile()" fill="clear">
+    <img src="/assets/avatar.jpg" alt="Perfil" class="profile-avatar"/>
+  </ion-button>
+  </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -15,26 +20,14 @@
   <ion-breadcrumb 
     *ngFor="let breadcrumb of breadcrumbs; let last = last"
     [class.active]="last"
-    (click)="onBreadcrumbClick(breadcrumb)">
+    [style.cursor]="last ? 'default' : 'pointer'"
+    [style.opacity]="last ? '0.7' : '1'"
+    (click)="!last && onBreadcrumbClick(breadcrumb)">
     {{ breadcrumb.label }}
   </ion-breadcrumb>
+
 </ion-breadcrumbs>
 
-<!-- Patient info display if available -->
- <!--
-<div *ngIf="selectedPatient" class="selected-patient">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Paciente Seleccionado</ion-card-title>
-      <ion-card-subtitle>{{ selectedPatient.nombre }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <p><strong>RUT:</strong> {{ selectedPatient.rut }}</p>
-      <p *ngIf="selectedPatient.genero"><strong>Género:</strong> {{ selectedPatient.genero }}</p>
-    </ion-card-content>
-  </ion-card>
-</div>
--->
 <ion-grid>
   <ion-row  class="ion-justify-content-center">
     <ion-col></ion-col>

@@ -9,7 +9,8 @@
   justify-content: flex-start;
   align-items: stretch;
   min-height: 100vh;
-  padding: 1rem;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
 }
 
 /* Opcional: sombra y suavizado para los cards sobre el fondo */
@@ -44,5 +45,37 @@ ion-chip {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
+  margin-top: 0.1rem;
+}
+
+
+ion-breadcrumbs {
+  padding: 0.75rem 1rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(255, 0, 0, 0.05);
+}
+
+ion-breadcrumb {
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--ion-color-primary);
+  }
+
+  &.active {
+    color: var(--ion-color-primary);
+    font-weight: 600;
+    cursor: default;
+
+    &:hover {
+      color: var(--ion-color-primary);
+    }
+  }
+}
+ion-card:last-child {
+  margin-bottom: 3rem;
 }

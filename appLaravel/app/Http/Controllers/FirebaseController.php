@@ -176,12 +176,182 @@ class FirebaseController extends Controller
             ]);
             
             $error = 'Runtime Error: ' . $e->getMessage();
-            $error .= "\n\nThis error occurred while trying to fetch data from Firestore.";
+            $error .= "\n\n\nThis error occurred while trying to fetch data from Firestore.";
             $error .= "\nPlease check your Firebase console and ensure Firestore is enabled.";
             $error .= "\nAlso verify that your service account credentials have the correct permissions.";
             $fichasArray = [];
             
             return view('contact', compact('fichasArray', 'error'));
+        }
+    }
+
+    public function searchFichaMedica(Request $request)
+    {
+        \Log::info('=== searchFichaMedica method called ===', [
+            'search_id' => $request->input('search_id')
+        ]);
+        
+        try {
+            $searchId = $request->input('search_id');
+            
+            if (empty($searchId)) {
+                return redirect()->back()->with('error', 'Por favor ingrese un ID de ficha médica para buscar');
+            }
+            
+            // Search for the ficha by idfichamedica field
+            // Roddy where() expects: ['field', 'operator', 'value'] or [['field', 'operator', 'value'], ...]
+            \Log::info('Searching for ficha with idfichamedica', ['id' => $searchId, 'type' => gettype($searchId)]);
+            
+            // Try both string and integer versions since Firestore might store as either
+            $fichaResult = FichaMedica::where(['idfichamedica', '=', $searchId])->get();
+            
+            // If not found as string, try as integer
+            if (empty($fichaResult) || (is_array($fichaResult) && count($fichaResult) === 0)) {
+                \Log::info('Not found as string, trying as integer');
+                $fichaResult = FichaMedica::where(['idfichamedica', '=', (int)$searchId])->get();
+            }
+            
+            // Roddy returns an array, not a collection
+            if (empty($fichaResult) || (is_array($fichaResult) && count($fichaResult) === 0)) {
+                \Log::info('No ficha found with the given ID');
+                return redirect()->back()->with('error', 'No se encontró ninguna ficha médica con el ID: ' . $searchId);
+            }
+            
+            $ficha = is_array($fichaResult) ? (object)$fichaResult[0] : $fichaResult->first();
+            \Log::info('Ficha found', ['ficha_keys' => is_object($ficha) ? array_keys((array)$ficha) : 'not_object']);
+            \Log::info('Ficha found', ['ficha_data' => $ficha]);
+            
+            // Fetch related data for this single ficha
+            $operacion = null;
+            $cronico = null;
+            $alergia = null;
+            $paciente = null;
+            
+            // Fetch operacion
+            if ($ficha->idoperacion) {
+                $operacionResult = Operacion::where(['idoperacion', '=', $ficha->idoperacion])->get();
+                if (empty($operacionResult) && is_numeric($ficha->idoperacion)) {
+                    $operacionResult = Operacion::where(['idoperacion', '=', (int)$ficha->idoperacion])->get();
+                }
+                if (!empty($operacionResult) && is_array($operacionResult) && count($operacionResult) > 0) {
+                    $operacion = is_array($operacionResult[0]) ? (object)$operacionResult[0] : $operacionResult[0];
+                }
+            }
+            
+            // Fetch cronico
+            if ($ficha->idcronico) {
+                $cronicoResult = Cronico::where(['idcronico', '=', $ficha->idcronico])->get();
+                if (empty($cronicoResult) && is_numeric($ficha->idcronico)) {
+                    $cronicoResult = Cronico::where(['idcronico', '=', (int)$ficha->idcronico])->get();
+                }
+                if (!empty($cronicoResult) && is_array($cronicoResult) && count($cronicoResult) > 0) {
+                    $cronico = is_array($cronicoResult[0]) ? (object)$cronicoResult[0] : $cronicoResult[0];
+                }
+            }
+            
+            // Fetch alergia
+            if ($ficha->idalergia) {
+                $alergiaResult = Alergia::where(['idalergia', '=', $ficha->idalergia])->get();
+                if (empty($alergiaResult) && is_numeric($ficha->idalergia)) {
+                    $alergiaResult = Alergia::where(['idalergia', '=', (int)$ficha->idalergia])->get();
+                }
+                if (!empty($alergiaResult) && is_array($alergiaResult) && count($alergiaResult) > 0) {
+                    $alergia = is_array($alergiaResult[0]) ? (object)$alergiaResult[0] : $alergiaResult[0];
+                }
+            }
+            
+            // Fetch paciente by document ID
+            if ($ficha->idpaciente) {
+                try {
+                    $paciente = Paciente::find($ficha->idpaciente);
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to fetch paciente', ['error' => $e->getMessage()]);
+                }
+            }
+            
+            // Extract data using reflection for consistency
+            $operacionData = null;
+            $cronicoData = null;
+            $alergiaData = null;
+            $pacienteData = null;
+            
+            if ($operacion) {
+                try {
+                    $reflection = new \ReflectionClass($operacion);
+                    $dataProperty = $reflection->getProperty('data');
+                    $dataProperty->setAccessible(true);
+                    $operacionData = $dataProperty->getValue($operacion);
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to extract operacion data', ['error' => $e->getMessage()]);
+                }
+            }
+            
+            if ($cronico) {
+                try {
+                    $reflection = new \ReflectionClass($cronico);
+                    $dataProperty = $reflection->getProperty('data');
+                    $dataProperty->setAccessible(true);
+                    $cronicoData = $dataProperty->getValue($cronico);
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to extract cronico data', ['error' => $e->getMessage()]);
+                }
+            }
+            
+            if ($alergia) {
+                try {
+                    $reflection = new \ReflectionClass($alergia);
+                    $dataProperty = $reflection->getProperty('data');
+                    $dataProperty->setAccessible(true);
+                    $alergiaData = $dataProperty->getValue($alergia);
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to extract alergia data', ['error' => $e->getMessage()]);
+                }
+            }
+            
+            if ($paciente) {
+                try {
+                    $reflection = new \ReflectionClass($paciente);
+                    $dataProperty = $reflection->getProperty('data');
+                    $dataProperty->setAccessible(true);
+                    $pacienteData = $dataProperty->getValue($paciente);
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to extract paciente data', ['error' => $e->getMessage()]);
+                }
+            }
+            
+            // Build the result array
+            $fichasArray = [[
+                'id' => $ficha->idfichamedica ?? null,
+                'idfichamedica' => $ficha->idfichamedica ?? '',
+                'fechaingreso' => $ficha->fechaingreso ?? '',
+                
+                // IDs (for reference)
+                'idpaciente' => $ficha->idpaciente ?? '',
+                'idoperacion' => $ficha->idoperacion ?? '',
+                'idcronico' => $ficha->idcronico ?? '',
+                'idalergia' => $ficha->idalergia ?? '',
+                
+                // Names from related collections
+                'paciente_nombre' => $pacienteData ? ($pacienteData['nomberPaciente'] ?? 'N/A') : 'N/A',
+                'paciente_rut' => $pacienteData ? ($pacienteData['rut'] ?? 'N/A') : 'N/A',
+                'operacion_nombre' => $operacionData ? ($operacionData['operacion'] ?? 'N/A') : 'N/A',
+                'cronico_nombre' => $cronicoData ? ($cronicoData['enfermedadcronica'] ?? 'N/A') : 'N/A',
+                'alergia_nombre' => $alergiaData ? ($alergiaData['nombrealergia'] ?? 'N/A') : 'N/A',
+                'alergia_descripcion' => $alergiaData ? ($alergiaData['descripcionAlergia'] ?? 'N/A') : 'N/A'
+            ]];
+            
+            \Log::info('Search completed successfully', ['found' => 1]);
+            return view('contact', compact('fichasArray'))->with('success', 'Ficha médica encontrada: ID ' . $searchId);
+            
+        } catch (\Exception $e) {
+            \Log::error('Exception in searchFichaMedica', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->back()->with('error', 'Error al buscar ficha médica: ' . $e->getMessage());
         }
     }
 

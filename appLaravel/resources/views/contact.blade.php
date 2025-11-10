@@ -29,13 +29,7 @@
                 </svg>
                 <div>
                     <div><strong>Error:</strong> {{ session('error') ?? $error }}</div>
-                    <div style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
-                        <strong>Debug Info:</strong><br>
-                        - Credentials file expected at: {{ base_path(env('FIREBASE_CREDENTIALS')) }}<br>
-                        - File exists: {{ file_exists(base_path(env('FIREBASE_CREDENTIALS'))) ? 'YES' : 'NO' }}<br>
-                        - Database URL: {{ env('FIREBASE_DATABASE_URL') }}<br>
-                        - Firebase Project: {{ env('FIREBASE_PROJECT') }}
-                    </div>
+                    
                 </div>
             </div>
         @endif
@@ -94,6 +88,49 @@
             </form>
         </div>
 
+        <!-- Search Specific Ficha Form -->
+        <div class="form-card" style="background: linear-gradient(135deg, rgba(17, 194, 203, 0.05), rgba(17, 194, 203, 0.02));">
+            <h2 class="form-title">
+                <svg class="form-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Buscar Ficha Médica Específica
+            </h2>
+            <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                Busca una ficha médica directamente desde la base de datos. Útil cuando hay más de 100 fichas registradas.
+            </p>
+            
+            <form method="POST" action="{{ route('contact.search') }}" class="ficha-form">
+                @csrf
+                <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                    <div class="form-group" style="flex: 1; max-width: 500px;">
+                        <label for="search_id" class="form-label">ID de Ficha Médica</label>
+                        <input 
+                            type="text" 
+                            id="search_id" 
+                            name="search_id" 
+                            class="form-input" 
+                            placeholder="Ej: 3299, 3300, etc." 
+                            required
+                            autocomplete="off"
+                        >
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+                        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        Buscar Ficha
+                    </button>
+                    <a href="{{ route('contact') }}" class="btn btn-secondary" style="white-space: nowrap;">
+                        <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                        </svg>
+                        Limpiar Búsqueda
+                    </a>
+                </div>
+            </form>
+        </div>
+
         <!-- Data Table -->
         <div class="table-card">
             <div class="table-header">
@@ -107,43 +144,16 @@
                     <span class="stats-badge" id="total-count">
                         Total: {{ count($fichasArray ?? []) }} fichas
                     </span>
-                    <span class="stats-badge" id="filtered-count" style="display: none; background: rgba(255, 193, 7, 0.1); color: #ffc107;">
-                        Mostrando: 0 fichas
-                    </span>
                 </div>
             </div>
-
-            <!-- Search Box -->
-            @if(!empty($fichasArray))
-            <div class="search-container">
-                <div class="search-box">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input 
-                        type="text" 
-                        id="searchInput" 
-                        class="search-input" 
-                        placeholder="Buscar por ID de Ficha Médica..."
-                        autocomplete="off"
-                    >
-                    <button id="clearSearch" class="clear-btn" style="display: none;">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-                <div id="searchResults" class="search-results"></div>
-            </div>
-            @endif
 
             @if(empty($fichasArray))
                 <div class="empty-state">
                     <svg class="empty-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <h3>No hay fichas médicas</h3>
-                    <p>Aún no se han registrado fichas médicas en la base de datos.</p>
+                    <h3>No se encontraron fichas médicas</h3>
+                    <p>Aún no se han registrado fichas médicas en la base de datos, o hubo un error de conexión.</p>
                 </div>
             @else
                 <div class="table-container">
@@ -332,6 +342,27 @@
         margin-right: 0.5rem;
     }
 
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.875rem 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        font-weight: 500;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+    }
+
     /* Table Card */
     .table-card {
         background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
@@ -372,95 +403,6 @@
         border-radius: 20px;
         font-size: 0.9rem;
         font-weight: 500;
-    }
-
-    /* Search Container */
-    .search-container {
-        padding: 1.5rem 2.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .search-box {
-        position: relative;
-        max-width: 500px;
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
-        color: var(--muted);
-        pointer-events: none;
-    }
-
-    .search-input {
-        width: 100%;
-        padding: 0.875rem 3rem 0.875rem 3rem;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        color: var(--text-primary);
-        font-size: 0.95rem;
-        transition: all 0.3s ease;
-    }
-
-    .search-input:focus {
-        outline: none;
-        border-color: var(--accent);
-        background: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 0 0 3px rgba(17, 194, 203, 0.1);
-    }
-
-    .search-input::placeholder {
-        color: var(--muted);
-        opacity: 0.6;
-    }
-
-    .clear-btn {
-        position: absolute;
-        right: 0.75rem;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(239, 68, 68, 0.1);
-        border: none;
-        padding: 0.4rem;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .clear-btn svg {
-        width: 16px;
-        height: 16px;
-        color: #f87171;
-    }
-
-    .clear-btn:hover {
-        background: rgba(239, 68, 68, 0.2);
-    }
-
-    .search-results {
-        margin-top: 0.75rem;
-        font-size: 0.9rem;
-        color: var(--muted);
-    }
-
-    .table-row.hidden {
-        display: none;
-    }
-
-    .highlight {
-        background: rgba(255, 193, 7, 0.2);
-        padding: 0.1rem 0.3rem;
-        border-radius: 3px;
-        font-weight: 600;
-        color: #ffc107;
     }
 
     /* Empty State */
@@ -632,91 +574,4 @@
         }
     }
 </style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const clearBtn = document.getElementById('clearSearch');
-    const searchResults = document.getElementById('searchResults');
-    const tableRows = document.querySelectorAll('.table-row');
-    const totalCount = document.getElementById('total-count');
-    const filteredCount = document.getElementById('filtered-count');
-    const totalFichas = {{ count($fichasArray ?? []) }};
-
-    if (!searchInput) return;
-
-    // Search functionality
-    searchInput.addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase().trim();
-        
-        // Show/hide clear button
-        clearBtn.style.display = searchTerm ? 'flex' : 'none';
-
-        if (searchTerm === '') {
-            // Reset: show all rows
-            tableRows.forEach(row => {
-                row.classList.remove('hidden');
-                // Remove highlights
-                const cells = row.querySelectorAll('.cell-id');
-                cells.forEach(cell => {
-                    cell.innerHTML = cell.textContent;
-                });
-            });
-            
-            searchResults.innerHTML = '';
-            totalCount.style.display = 'inline-block';
-            filteredCount.style.display = 'none';
-            return;
-        }
-
-        let matchCount = 0;
-
-        tableRows.forEach(row => {
-            const idCell = row.querySelector('.cell-id');
-            const fichaId = idCell.textContent.toLowerCase();
-
-            if (fichaId.includes(searchTerm)) {
-                row.classList.remove('hidden');
-                matchCount++;
-                
-                // Highlight matching text
-                const regex = new RegExp(`(${searchTerm})`, 'gi');
-                idCell.innerHTML = idCell.textContent.replace(regex, '<span class="highlight">$1</span>');
-            } else {
-                row.classList.add('hidden');
-                // Remove highlights
-                idCell.innerHTML = idCell.textContent;
-            }
-        });
-
-        // Update results message
-        if (matchCount === 0) {
-            searchResults.innerHTML = '<span style="color: #f87171;">⚠️ No se encontraron fichas con ese ID</span>';
-        } else if (matchCount === 1) {
-            searchResults.innerHTML = '<span style="color: #4ade80;">✓ Se encontró 1 ficha</span>';
-        } else {
-            searchResults.innerHTML = `<span style="color: #4ade80;">✓ Se encontraron ${matchCount} fichas</span>`;
-        }
-
-        // Update counter badges
-        totalCount.style.display = 'none';
-        filteredCount.style.display = 'inline-block';
-        filteredCount.textContent = `Mostrando: ${matchCount} de ${totalFichas} fichas`;
-    });
-
-    // Clear search
-    clearBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        searchInput.dispatchEvent(new Event('input'));
-        searchInput.focus();
-    });
-
-    // Allow Enter key to maintain search
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-        }
-    });
-});
-</script>
 @endsection

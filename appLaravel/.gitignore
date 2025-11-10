@@ -16,6 +16,7 @@
 /node_modules/*
 /config/firebase.php
 
+*.env
 
 /public/build
 /public/hot
@@ -29,3 +30,6 @@ Thumbs.db
 firebase_credentials.json
 serviceAccountKey.json
 firebase_keys.json
+laravel_keys.json
+/laravel_keys.json
+/firebase_keys.json

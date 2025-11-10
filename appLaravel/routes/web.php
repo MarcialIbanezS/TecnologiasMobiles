@@ -24,8 +24,14 @@ Route::get('/about', function () {
     return view('about');
 })->name('about');
 
-Route::get('/contact', [FirebaseController::class, 'getFichasMedicas'])->name('contact');
-Route::post('/contact', [FirebaseController::class, 'createFichaMedica'])->name('contact.store');
+Route::get('/contact', [FirebaseController::class, 
+'getFichasMedicas'])->middleware(['auth', 'verified'])->name('contact');
+
+Route::post('/contact', [FirebaseController::class, 
+'createFichaMedica'])->middleware(['auth', 'verified'])->name('contact.store');
+
+Route::post('/contact/search', [FirebaseController::class, 
+'searchFichaMedica'])->middleware(['auth', 'verified'])->name('contact.search');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

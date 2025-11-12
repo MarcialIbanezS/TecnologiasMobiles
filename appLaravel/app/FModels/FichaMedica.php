@@ -27,8 +27,9 @@ class FichaMedica extends FModel
     * The required property takes care of defining which fields
     * should be required and cannot be empty when inserting data only.
     * Required property should ba an array. e.g ['id', 'name']
+    * Note: idfichamedica removed as it will be auto-generated
     */
-    protected $required = ['idfichamedica','fechaingreso','idpaciente'];
+    protected $required = ['fechaingreso','idpaciente'];
 
     /**
     * The default property is use to set a default value for

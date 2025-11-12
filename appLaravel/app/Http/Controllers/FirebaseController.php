@@ -13,6 +13,141 @@ use App\FModels\Cronico;
 class FirebaseController extends Controller
 {
 
+    public function getDashboard()
+    {
+        set_time_limit(20);
+        
+        try {
+            \Log::info('Fetching dashboard data');
+            
+            // Fetch all collections
+            $fichasMedicas = FichaMedica::all();
+            $pacientes = Paciente::all();
+            $operaciones = Operacion::all();
+            $cronicos = Cronico::all();
+            $alergias = Alergia::all();
+            
+            // Statistics
+            $totalPacientes = is_countable($pacientes) ? count($pacientes) : 0;
+            $totalFichas = is_countable($fichasMedicas) ? count($fichasMedicas) : 0;
+            
+            // Count fichas from current year
+            $currentYear = date('Y');
+            $fichasThisYear = 0;
+            if (is_array($fichasMedicas) || is_object($fichasMedicas)) {
+                foreach ($fichasMedicas as $ficha) {
+                    $fechaIngreso = is_object($ficha) ? ($ficha->fechaingreso ?? '') : ($ficha['fechaingreso'] ?? '');
+                    if (strpos($fechaIngreso, $currentYear) === 0) {
+                        $fichasThisYear++;
+                    }
+                }
+            }
+            
+            // Find most common chronic condition
+            $cronicoCount = [];
+            if (is_array($fichasMedicas) || is_object($fichasMedicas)) {
+                foreach ($fichasMedicas as $ficha) {
+                    $idCronico = is_object($ficha) ? ($ficha->idcronico ?? null) : ($ficha['idcronico'] ?? null);
+                    if ($idCronico) {
+                        $cronicoCount[$idCronico] = ($cronicoCount[$idCronico] ?? 0) + 1;
+                    }
+                }
+            }
+            
+            $mostCommonCronicoId = null;
+            $mostCommonCronicoName = 'N/A';
+            if (!empty($cronicoCount)) {
+                arsort($cronicoCount);
+                $mostCommonCronicoId = array_key_first($cronicoCount);
+                
+                // Find the name
+                if (is_array($cronicos) || is_object($cronicos)) {
+                    foreach ($cronicos as $cronico) {
+                        try {
+                            $reflection = new \ReflectionClass($cronico);
+                            $dataProperty = $reflection->getProperty('data');
+                            $dataProperty->setAccessible(true);
+                            $data = $dataProperty->getValue($cronico);
+                            if (($data['idcronico'] ?? null) == $mostCommonCronicoId) {
+                                $mostCommonCronicoName = $data['enfermedadcronica'] ?? 'N/A';
+                                break;
+                            }
+                        } catch (\Exception $e) {}
+                    }
+                }
+            }
+            
+            // Count fichas by alergia
+            $alergiaStats = [];
+            
+            if (is_array($fichasMedicas) || is_object($fichasMedicas)) {
+                foreach ($fichasMedicas as $ficha) {
+                    $idAlergia = is_object($ficha) ? ($ficha->idalergia ?? null) : ($ficha['idalergia'] ?? null);
+                    if ($idAlergia) {
+                        $alergiaStats[$idAlergia] = ($alergiaStats[$idAlergia] ?? 0) + 1;
+                    }
+                }
+            }
+            
+            // Map alergia IDs to names
+            $alergiaChartData = [];
+            if (is_array($alergias) || is_object($alergias)) {
+                foreach ($alergias as $alergia) {
+                    try {
+                        $reflection = new \ReflectionClass($alergia);
+                        $dataProperty = $reflection->getProperty('data');
+                        $dataProperty->setAccessible(true);
+                        $data = $dataProperty->getValue($alergia);
+                        $idAlergia = $data['idalergia'] ?? null;
+                        $nombreAlergia = $data['nombrealergia'] ?? 'Desconocida';
+                        
+                        if ($idAlergia && isset($alergiaStats[$idAlergia])) {
+                            $alergiaChartData[$nombreAlergia] = $alergiaStats[$idAlergia];
+                        }
+                    } catch (\Exception $e) {
+                        \Log::warning('Failed to process alergia for chart', ['error' => $e->getMessage()]);
+                    }
+                }
+            }
+            
+            // Sort by count descending and take top 8
+            arsort($alergiaChartData);
+            $alergiaChartData = array_slice($alergiaChartData, 0, 8, true);
+            
+            \Log::info('Dashboard data prepared', [
+                'total_pacientes' => $totalPacientes,
+                'total_fichas' => $totalFichas,
+                'fichas_this_year' => $fichasThisYear,
+                'alergia_chart_items' => count($alergiaChartData)
+            ]);
+            
+            return view('dashboard', [
+                'totalPacientes' => $totalPacientes,
+                'fichasThisYear' => $fichasThisYear,
+                'mostCommonCronico' => $mostCommonCronicoName,
+                'totalFichas' => $totalFichas,
+                'alergiaChartData' => $alergiaChartData
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Exception in getDashboard', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+            
+            // Return view with default values
+            return view('dashboard', [
+                'totalPacientes' => 0,
+                'fichasThisYear' => 0,
+                'mostCommonCronico' => 'N/A',
+                'totalFichas' => 0,
+                'alergiaChartData' => [],
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
     public function getFichasMedicas()
     {
         // Increase execution time for this method due to multiple Firestore queries
@@ -35,11 +170,18 @@ class FirebaseController extends Controller
             $operacionesRaw = Operacion::all();
             $cronicosRaw = Cronico::all();
             $alergiasRaw = Alergia::all();
+            $pacientesRaw = Paciente::all();
             
             // Create lookup arrays for operacion, cronico, alergia (using numeric IDs)
             $operaciones = [];
             $cronicos = [];
             $alergias = [];
+            
+            // Also create option arrays for dropdowns
+            $operacionOptions = [];
+            $cronicoOptions = [];
+            $alergiaOptions = [];
+            $pacienteOptions = [];
             
             foreach ($operacionesRaw as $op) {
                 // Try accessing via reflection to get the data property
@@ -51,6 +193,7 @@ class FirebaseController extends Controller
                     $docId = $data['idoperacion'] ?? null;
                     if ($docId) {
                         $operaciones[$docId] = $op;
+                        $operacionOptions[$docId] = $data['operacion'] ?? 'Sin nombre';
                     }
                 } catch (\Exception $e) {
                     \Log::warning('Failed to process operacion', ['error' => $e->getMessage()]);
@@ -66,6 +209,7 @@ class FirebaseController extends Controller
                     $docId = $data['idcronico'] ?? null;
                     if ($docId) {
                         $cronicos[$docId] = $cr;
+                        $cronicoOptions[$docId] = $data['enfermedadcronica'] ?? 'Sin nombre';
                     }
                 } catch (\Exception $e) {
                     \Log::warning('Failed to process cronico', ['error' => $e->getMessage()]);
@@ -81,16 +225,37 @@ class FirebaseController extends Controller
                     $docId = $data['idalergia'] ?? null;
                     if ($docId) {
                         $alergias[$docId] = $al;
+                        $alergiaOptions[$docId] = $data['nombrealergia'] ?? 'Sin nombre';
                     }
                 } catch (\Exception $e) {
                     \Log::warning('Failed to process alergia', ['error' => $e->getMessage()]);
                 }
             }
             
+            foreach ($pacientesRaw as $pac) {
+                try {
+                    $reflection = new \ReflectionClass($pac);
+                    $dataProperty = $reflection->getProperty('data');
+                    $dataProperty->setAccessible(true);
+                    $data = $dataProperty->getValue($pac);
+                    $idPaciente = $data['idpaciente'] ?? null;
+                    $nombrePaciente = $data['nomberPaciente'] ?? 'Sin nombre';
+                    if ($idPaciente) {
+                        $pacienteOptions[$idPaciente] = $nombrePaciente;
+                    }
+                } catch (\Exception $e) {
+                    \Log::warning('Failed to process paciente', ['error' => $e->getMessage()]);
+                }
+            }
+            
             \Log::info('Related collections loaded', [
                 'operaciones' => count($operaciones),
                 'cronicos' => count($cronicos),
-                'alergias' => count($alergias)
+                'alergias' => count($alergias),
+                'operacion_options' => count($operacionOptions),
+                'cronico_options' => count($cronicoOptions),
+                'alergia_options' => count($alergiaOptions),
+                'paciente_options' => count($pacienteOptions)
             ]);
             
             // Convert to array format for easier handling in view
@@ -164,7 +329,7 @@ class FirebaseController extends Controller
             }
             
             \Log::info('Returning view with fichasArray', ['count' => count($fichasArray)]);
-            return view('contact', compact('fichasArray'));
+            return view('contact', compact('fichasArray', 'operacionOptions', 'cronicoOptions', 'alergiaOptions', 'pacienteOptions'));
             
         } catch (\Exception $e) {
             // Handle errors gracefully
@@ -181,7 +346,12 @@ class FirebaseController extends Controller
             $error .= "\nAlso verify that your service account credentials have the correct permissions.";
             $fichasArray = [];
             
-            return view('contact', compact('fichasArray', 'error'));
+            return view('contact', compact('fichasArray', 'error'), [
+                'operacionOptions' => [],
+                'cronicoOptions' => [],
+                'alergiaOptions' => [],
+                'pacienteOptions' => []
+            ]);
         }
     }
 
@@ -362,9 +532,8 @@ class FirebaseController extends Controller
         ]);
         
         try {
-            // Validate the request based on FichaMedica model required fields
+            // Validate the request (removed idfichamedica as it will be auto-generated)
             $validated = $request->validate([
-                'idfichamedica' => 'required|string|max:255',
                 'fechaingreso' => 'required|date',
                 'idpaciente' => 'required|string|max:255',
                 'idoperacion' => 'nullable|string|max:255',
@@ -374,17 +543,21 @@ class FirebaseController extends Controller
             
             \Log::info('Request validated successfully', ['validated_data' => $validated]);
             
-            // Create new FichaMedica using the Roddy Firestore model
-            $fichaMedica = new FichaMedica();
-            $fichaMedica->idfichamedica = $request->input('idfichamedica');
-            $fichaMedica->fechaingreso = $request->input('fechaingreso');
-            $fichaMedica->idpaciente = $request->input('idpaciente');
-            $fichaMedica->idoperacion = $request->input('idoperacion');
-            $fichaMedica->idcronico = $request->input('idcronico');
-            $fichaMedica->idalergia = $request->input('idalergia');
+            // Generate a random unique ID for the ficha medica
+            $randomId = 'FICHA_' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
             
-            \Log::info('Saving ficha medica to Firestore');
-            $fichaMedica->save();
+            \Log::info('Generated random ID for ficha medica', ['generated_id' => $randomId]);
+            
+            // Create new FichaMedica using the Roddy Firestore model
+            \Log::info('Creating ficha medica in Firestore');
+            $fichaMedica = FichaMedica::create([
+                'idfichamedica' => $randomId, // Use auto-generated ID
+                'fechaingreso' => $request->input('fechaingreso'),
+                'idpaciente' => $request->input('idpaciente'),
+                'idoperacion' => $request->input('idoperacion'),
+                'idcronico' => $request->input('idcronico'),
+                'idalergia' => $request->input('idalergia')
+            ]);
             
             \Log::info('Ficha medica saved successfully', [
                 'idfichamedica' => $fichaMedica->idfichamedica ?? 'unknown'

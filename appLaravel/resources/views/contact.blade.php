@@ -47,33 +47,48 @@
                 @csrf
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="idfichamedica" class="form-label">ID Ficha Médica</label>
-                        <input type="text" id="idfichamedica" name="idfichamedica" class="form-input" placeholder="Ingrese el ID de la ficha" required>
-                    </div>
-
-                    <div class="form-group">
                         <label for="fechaingreso" class="form-label">Fecha de Ingreso</label>
                         <input type="date" id="fechaingreso" name="fechaingreso" class="form-input" value="{{ date('Y-m-d') }}" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="idpaciente" class="form-label">ID Paciente</label>
-                        <input type="text" id="idpaciente" name="idpaciente" class="form-input" placeholder="Ingrese el ID del paciente" required>
+                        <label for="idpaciente" class="form-label">Paciente</label>
+                        <select id="idpaciente" name="idpaciente" class="form-input" required>
+                            <option value="">Seleccione un paciente</option>
+                            @foreach($pacienteOptions ?? [] as $id => $nombre)
+                                <option value="{{ $id }}">{{ $nombre }} (ID: {{ $id }})</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="idoperacion" class="form-label">ID Operación</label>
-                        <input type="text" id="idoperacion" name="idoperacion" class="form-input" placeholder="ID de operación (opcional)">
+                        <label for="idoperacion" class="form-label">Operación</label>
+                        <select id="idoperacion" name="idoperacion" class="form-input">
+                            <option value="">Sin operación</option>
+                            @foreach($operacionOptions ?? [] as $id => $nombre)
+                                <option value="{{ $id }}">{{ $nombre }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="idcronico" class="form-label">ID Crónico</label>
-                        <input type="text" id="idcronico" name="idcronico" class="form-input" placeholder="ID de enfermedad crónica (opcional)">
+                        <label for="idcronico" class="form-label">Enfermedad Crónica</label>
+                        <select id="idcronico" name="idcronico" class="form-input">
+                            <option value="">Sin enfermedad crónica</option>
+                            @foreach($cronicoOptions ?? [] as $id => $nombre)
+                                <option value="{{ $id }}">{{ $nombre }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="idalergia" class="form-label">ID Alergia</label>
-                        <input type="text" id="idalergia" name="idalergia" class="form-input" placeholder="ID de alergia (opcional)">
+                        <label for="idalergia" class="form-label">Alergia</label>
+                        <select id="idalergia" name="idalergia" class="form-input">
+                            <option value="">Sin alergia</option>
+                            @foreach($alergiaOptions ?? [] as $id => $nombre)
+                                <option value="{{ $id }}">{{ $nombre }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 

@@ -11,41 +11,47 @@
                 <p class="lead" style="font-size: 1.125rem; color: var(--text-primary); margin-bottom: 2rem; max-width: none;">Bienvenido al panel de control de Triple M.A. Aquí puedes gestionar todos los aspectos de tu aplicación médica.</p>
             </div>
 
+            @if(isset($error))
+            <div class="alert alert-error" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+                <strong>Error:</strong> {{ $error }}
+            </div>
+            @endif
+
             <!-- Dashboard Stats -->
             <div class="dashboard-stats">
                 <div class="stat-card">
                     <div class="stat-icon">👥</div>
                     <div class="stat-content">
-                        <h3>Comuna</h3>
-                        <p class="stat-number">1,234</p>
-                        <p class="stat-label">Total pacientes activos</p>
+                        <h3>Pacientes</h3>
+                        <p class="stat-number">{{ number_format($totalPacientes ?? 0) }}</p>
+                        <p class="stat-label">Total pacientes registrados</p>
                     </div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-icon">📊</div>
                     <div class="stat-content">
-                        <h3>Ingresos</h3>
-                        <p class="stat-number">56</p>
-                        <p class="stat-label">Ingresos Anuales</p>
+                        <h3>Fichas</h3>
+                        <p class="stat-number">{{ number_format($fichasThisYear ?? 0) }}</p>
+                        <p class="stat-label">Fichas creadas este año</p>
                     </div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-icon">📈</div>
                     <div class="stat-content">
-                        <h3>Antecedentes</h3>
-                        <p class="stat-number">Hepatitis B</p>
-                        <p class="stat-label">Mas Común</p>
+                        <h3>Condición Común</h3>
+                        <p class="stat-number" style="font-size: 1.2rem;">{{ $mostCommonCronico ?? 'N/A' }}</p>
+                        <p class="stat-label">Más frecuente</p>
                     </div>
                 </div>
                 
                 <div class="stat-card">
                     <div class="stat-icon">🏥</div>
                     <div class="stat-content">
-                        <h3>Consultas</h3>
-                        <p class="stat-number">89</p>
-                        <p class="stat-label">Esta semana</p>
+                        <h3>Total Fichas</h3>
+                        <p class="stat-number">{{ number_format($totalFichas ?? 0) }}</p>
+                        <p class="stat-label">Todas las fichas médicas</p>
                     </div>
                 </div>
             </div>
@@ -54,86 +60,47 @@
             <div class="quick-actions">
                 <h2>Acciones Rápidas</h2>
                 <div class="buttons">
-                    <a class="btn btn-primary" href="/patients">Ver Pacientes</a>
-                    <a class="btn btn-ghost" href="/reports">Generar Reporte</a>
-                    <a class="btn btn-ghost" href="/settings">Configuración</a>
+                    <a class="btn btn-primary" href="{{ route('contact') }}">Ver Fichas Médicas</a>
+                    <a class="btn btn-ghost" href="{{ route('contact') }}">Buscar Ficha</a>
+                    <a class="btn btn-ghost" href="{{ route('dashboard') }}">Actualizar Dashboard</a>
                 </div>
             </div>
 
             <!-- Ingresos por Comuna Chart -->
             <div class="chart-section">
-                <h2>Ingresos por Comuna</h2>
+                <h2>Distribución de Fichas por Alergia</h2>
                 <div class="chart-container">
                     <div class="chart-header">
-                        <p class="chart-subtitle">Distribución de ingresos médicos por comuna (Último trimestre)</p>
+                        <p class="chart-subtitle">Fichas médicas clasificadas por tipo de alergia</p>
                     </div>
                     
+                    @php
+                        $alergiaChartData = $alergiaChartData ?? [];
+                        $maxValue = !empty($alergiaChartData) ? max($alergiaChartData) : 1;
+                        $totalAlergias = array_sum($alergiaChartData);
+                        $avgAlergias = $totalAlergias > 0 && count($alergiaChartData) > 0 ? round($totalAlergias / count($alergiaChartData)) : 0;
+                    @endphp
+                    
+                    @if(!empty($alergiaChartData))
                     <div class="bar-chart">
                         <div class="chart-bars">
+                            @foreach($alergiaChartData as $alergia => $count)
                             <div class="bar-group">
-                                <div class="bar" data-value="850" style="height: 85%;">
-                                    <span class="bar-value">850K</span>
+                                <div class="bar" data-value="{{ $count }}" style="height: {{ $maxValue > 0 ? ($count / $maxValue * 100) : 0 }}%;">
+                                    <span class="bar-value">{{ $count }}</span>
                                 </div>
-                                <span class="bar-label">Las Condes</span>
+                                <span class="bar-label">{{ $alergia }}</span>
                             </div>
-                            
-                            <div class="bar-group">
-                                <div class="bar" data-value="720" style="height: 72%;">
-                                    <span class="bar-value">720K</span>
-                                </div>
-                                <span class="bar-label">Providencia</span>
-                            </div>
-                            
-                            <div class="bar-group">
-                                <div class="bar" data-value="650" style="height: 65%;">
-                                    <span class="bar-value">650K</span>
-                                </div>
-                                <span class="bar-label">Vitacura</span>
-                            </div>
-                            
-                            <div class="bar-group">
-                                <div class="bar" data-value="580" style="height: 58%;">
-                                    <span class="bar-value">580K</span>
-                                </div>
-                                <span class="bar-label">Ñuñoa</span>
-                            </div>
-                            
-                            <div class="bar-group">
-                                <div class="bar" data-value="520" style="height: 52%;">
-                                    <span class="bar-value">520K</span>
-                                </div>
-                                <span class="bar-label">Santiago</span>
-                            </div>
-                            
-                            <div class="bar-group">
-                                <div class="bar" data-value="480" style="height: 48%;">
-                                    <span class="bar-value">480K</span>
-                                </div>
-                                <span class="bar-label">Maipú</span>
-                            </div>
-                            
-                            <div class="bar-group">
-                                <div class="bar" data-value="420" style="height: 42%;">
-                                    <span class="bar-value">420K</span>
-                                </div>
-                                <span class="bar-label">La Florida</span>
-                            </div>
-                            
-                            <div class="bar-group">
-                                <div class="bar" data-value="380" style="height: 38%;">
-                                    <span class="bar-value">380K</span>
-                                </div>
-                                <span class="bar-label">Puente Alto</span>
-                            </div>
+                            @endforeach
                         </div>
                         
                         <!-- Chart Y-axis labels -->
                         <div class="chart-y-axis">
-                            <span class="y-label">1M</span>
-                            <span class="y-label">800K</span>
-                            <span class="y-label">600K</span>
-                            <span class="y-label">400K</span>
-                            <span class="y-label">200K</span>
+                            <span class="y-label">{{ $maxValue }}</span>
+                            <span class="y-label">{{ round($maxValue * 0.8) }}</span>
+                            <span class="y-label">{{ round($maxValue * 0.6) }}</span>
+                            <span class="y-label">{{ round($maxValue * 0.4) }}</span>
+                            <span class="y-label">{{ round($maxValue * 0.2) }}</span>
                             <span class="y-label">0</span>
                         </div>
                     </div>
@@ -142,12 +109,17 @@
                     <div class="chart-legend">
                         <div class="legend-item">
                             <div class="legend-color"></div>
-                            <span>Ingresos Totales</span>
+                            <span>Fichas con Alergias</span>
                         </div>
                         <div class="chart-summary">
-                            <span class="summary-text">Total: 4.62M | Promedio: 577K</span>
+                            <span class="summary-text">Total: {{ number_format($totalAlergias) }} | Promedio: {{ number_format($avgAlergias) }}</span>
                         </div>
                     </div>
+                    @else
+                    <div class="empty-chart">
+                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de alergias disponibles</p>
+                    </div>
+                    @endif
                 </div>
             </div>
 

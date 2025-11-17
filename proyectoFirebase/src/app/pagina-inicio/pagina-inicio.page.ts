@@ -44,15 +44,10 @@ export class PaginaInicioPage implements OnInit {
   irAMartin0() {
     this.router.navigate(['/pagina2']);       
   }
-  irAPerfilPaciente() {
-    // Pass patient data to patient profile if available
-    if (this.selectedPatient) {
-      this.router.navigate(['/perfilPaciente'], { 
-        state: { patient: this.selectedPatient } 
-      });
-    } else {
-      this.router.navigate(['/perfilPaciente']);
-    }
+  irAFingerprint() {
+    
+    this.router.navigate(['/fingerprint']);
+  
   }
   irAListadoPacientes() {
     this.router.navigate(['/listadoPacientes']);       

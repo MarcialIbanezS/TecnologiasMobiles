@@ -1,0 +1,129 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Ficha Médica</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear">
+        <img src="/assets/avatar.jpg" alt="Perfil" class="profile-avatar"/>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="fondo">
+
+  <!-- Breadcrumbs estáticos -->
+  <ion-breadcrumbs class="breadcrumbs">
+    <ion-breadcrumb>Inicio</ion-breadcrumb>
+    <ion-breadcrumb>Paciente</ion-breadcrumb>
+    <ion-breadcrumb class="active">Ficha Médica</ion-breadcrumb>
+  </ion-breadcrumbs>
+
+  <!-- Botones acción -->
+  <div class="action-buttons">
+    <ion-button fill="solid" color="primary">
+      <ion-icon name="download-outline" slot="start"></ion-icon> Descargar
+    </ion-button>
+
+    <ion-button fill="outline" color="secondary">
+      <ion-icon name="refresh-outline" slot="start"></ion-icon> Actualizar
+    </ion-button>
+  </div>
+
+  <!-- Segment con fichas dummy -->
+  <ion-segment value="1">
+    <ion-segment-button value="1">
+      01-01-2024
+    </ion-segment-button>
+   
+  </ion-segment>
+
+  <!-- Dashboard principal con datos estáticos -->
+  <div class="dashboard-container">
+    
+    <!-- Información General -->
+    <ion-card class="dashboard-card general-info">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="person-circle-outline"></ion-icon> Juan Pérez Dummy
+        </ion-card-title>
+        <ion-card-subtitle>11.111.111-1</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <ion-icon name="location-outline"></ion-icon>
+              <strong>Dirección:</strong> Calle Falsa 123
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col size="12" size-md="6">
+              <ion-icon name="medical-outline"></ion-icon>
+              <strong>Fecha de Ingreso:</strong> 01-01-2024
+            </ion-col>
+            <ion-col size="12" size-md="6">
+              <ion-icon name="briefcase-outline"></ion-icon>
+              <strong>Servicio:</strong> Kinesiología Dummy
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col size="12">
+              <ion-icon name="person-outline"></ion-icon>
+              <strong>Profesional Tratante:</strong> Dra. Dummy Tester
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Alergias (dummy) -->
+    <ion-card class="dashboard-card allergies">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="warning-outline"></ion-icon> Alergias
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-chip color="warning">
+          <ion-label>Alergia Dummy</ion-label>
+        </ion-chip>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Condiciones Crónicas (dummy) -->
+    <ion-card class="dashboard-card chronic">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="medkit-outline"></ion-icon> Condiciones Crónicas
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-chip color="medium">
+          <ion-label>Condición Crónica Dummy</ion-label>
+        </ion-chip>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Operaciones (dummy) -->
+    <ion-card class="dashboard-card operations">
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon name="bandage-outline"></ion-icon> Operaciones
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-chip color="primary">
+          <ion-label>Operación Dummy</ion-label>
+        </ion-chip>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+</ion-content>

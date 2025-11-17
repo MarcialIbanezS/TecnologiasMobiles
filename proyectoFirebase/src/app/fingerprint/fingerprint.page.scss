@@ -1,0 +1,94 @@
+.scanner-container, .qr-container, .waiting-container {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.fingerprint {
+  width: 150px;
+  height: 150px;
+  background: url('/assets/fingerprint.png') center/contain no-repeat;
+  margin: 0 auto;
+  filter: brightness(0.7);
+  animation: pulse 2s infinite;
+  transition: 0.3s;
+}
+
+.fingerprint:active {
+  transform: scale(0.95);
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.scanner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.scanner-frame {
+  position: relative;
+  width: 200px;
+  height: 280px;
+  border: 3px solid #4ade80; // verde neon
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 20px #4ade80aa;
+}
+
+.fingerprint-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  img {
+    width: 120px;
+    opacity: 0.4;
+  }
+}
+
+/* Línea de escaneo */
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #4ade80;
+  box-shadow: 0 0 12px #4ade80;
+  animation: scanMove 2s linear infinite;
+}
+
+/* Texto */
+.scan-text {
+  margin-top: 20px;
+  color: #4ade80;
+  font-size: 1.1rem;
+  animation: blink 1.5s infinite;
+}
+
+/* Animación de la línea bajando */
+@keyframes scanMove {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+/* Parpadeo del texto */
+@keyframes blink {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}

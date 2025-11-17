@@ -25,10 +25,19 @@ export const routes: Routes = [
      {
        path: 'fichaMedica',
        loadComponent: () => import('./ficha-medica/ficha-medica.page').then( m => m.FichaMedicaPage)
-     },  {
+     },
+  {
     path: 'perfil-usuario',
     loadComponent: () => import('./perfil-usuario/perfil-usuario.page').then( m => m.PerfilUsuarioPage)
+  },  {
+    path: 'fingerprint',
+    loadComponent: () => import('./fingerprint/fingerprint.page').then( m => m.FingerprintPage)
   },
+  {
+    path: 'ficha-dummy',
+    loadComponent: () => import('./ficha-dummy/ficha-dummy.page').then( m => m.FichaDummyPage)
+  },
+
 
      /* 
      {

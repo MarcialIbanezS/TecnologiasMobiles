@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Verificación Biométrica</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Estado: Escáner -->
+  <div *ngIf="state === 'scanner'" class="scanner-container">
+    <div class="scanner-frame" (click)="startFakeScan()">
+      <div class="fingerprint-placeholder">
+        <img src="assets/fingerprint.png" alt="fingerprint"/>
+      </div>
+      <div class="scan-line"></div>
+    </div>
+
+    <div class="scan-text">Toca para escanear tu huella...</div>
+  </div>
+
+  <!-- Estado: Mostrando QR -->
+  <div *ngIf="state === 'qr'" class="qr-container">
+    <qrcode [qrdata]="qrUrl" [width]="200" errorCorrectionLevel="M"></qrcode>
+    <p>Escanea este código desde tu celular para validar tu acceso</p>
+  </div>
+
+  <!-- Estado: Esperando aprobación -->
+  <div *ngIf="state === 'waiting'" class="waiting-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Esperando confirmación...</p>
+  </div>
+
+</ion-content>

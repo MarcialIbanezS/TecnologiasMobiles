@@ -38,4 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/webpay', function () {
+    return view('webpay');
+});
+
 require __DIR__.'/auth.php';

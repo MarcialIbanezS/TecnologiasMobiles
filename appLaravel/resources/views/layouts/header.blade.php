@@ -12,11 +12,14 @@
                 <li><a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a></li>
                 <li><a href="/about" class="nav-link {{ request()->is('about') ? 'active' : '' }}">Acerca de</a></li>
                 <li><a href="/contact" class="nav-link {{ request()->is('contact') ? 'active' : '' }}">Contacto</a></li>
+                <li><a href="/webpay" class="nav-link {{ request()->is('webpay') ? 'active' : '' }}">PAGOS</a></li>
+
             @else
                 <!-- Guest Navigation -->
                 <li><a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Inicio</a></li>
                 <li><a href="/about" class="nav-link {{ request()->is('about') ? 'active' : '' }}">Acerca de</a></li>
                 <li><a href="/contact" class="nav-link {{ request()->is('contact') ? 'active' : '' }}">Contacto</a></li>
+                <li><a href="/webpay" class="nav-link {{ request()->is('webpay') ? 'active' : '' }}">PAGOS</a></li>
             @endauth
         </ul>
         

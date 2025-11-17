@@ -23,23 +23,21 @@ export class FingerprintPage {
   constructor(private router: Router) {}
 
   startFakeScan() {
-    // Cambia al estado de QR
+
     this.state = 'qr';
 
-    // Generar un QR falso o real, como lo estés manejando
+    
     this.qrUrl = 'https://tu-url-firebase-o-lo-que-sea';
 
-    // Aquí tú decides cuándo pasar a waiting.  
-    // Si quieres que sea automático después de mostrar el QR:
     setTimeout(() => {
       this.moveToWaiting();
-    }, 2000); // 2 segundos mostrando el QR, ajusta si quieres
+    }, 2000); 
   }
 
   moveToWaiting() {
     this.state = 'waiting';
 
-    // Aquí hacemos la espera de 5 segundos antes de redirigir
+
     setTimeout(() => {
       this.goToDummyPage();
     }, 5000);

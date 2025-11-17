@@ -92,3 +92,12 @@
     opacity: 1;
   }
 }
+
+
+.fondo {
+  --background: #9be3ff url('/assets/imagen_login.png') no-repeat center bottom / cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

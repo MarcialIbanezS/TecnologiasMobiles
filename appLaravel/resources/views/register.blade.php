@@ -3,9 +3,10 @@
 @section('title', 'Registrarse - Triple M.A.')
 
 @section('page-content')
+
 <div style="padding: 6rem 0 2rem 0; margin-top: 2rem;">
     <div class="container" style="max-width: 500px; margin: 0 auto; padding: 0 1.5rem;">
-        <div class="card" style="background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.04); padding: 3rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(2,6,23,0.6);">
+        <div class="card">
             
             <!-- Header -->
             <div class="form-header">
@@ -126,6 +127,27 @@
                     </button>
                 </div>
 
+                <!-- OR Divider -->
+                <div class="divider">
+                    <span class="divider-text">o</span>
+                </div>
+
+                <!-- Google Sign-In Button -->
+                <div class="form-group">
+                    <div id="g-signin2" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">
+                        <!-- Google button will be rendered here -->
+                    </div>
+                    <button type="button" id="google-signin-btn" class="btn btn-google btn-full" onclick="signInWithGoogle()">
+                        <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Registrarse con Google
+                    </button>
+                </div>
+
                 <!-- Login Link -->
                 <div class="form-footer">
                     <p class="login-link">
@@ -142,6 +164,11 @@
 
 @section('styles')
 <style>
+    /* Override base styles for register page - use consistent color scheme */
+    body {
+        background: linear-gradient(135deg, var(--bg) 0%, var(--bg2) 100%) !important;
+    }
+
     .register-form {
         width: 100%;
     }
@@ -161,10 +188,10 @@
     .form-input {
         width: 100%;
         padding: 0.875rem 1rem;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 8px;
-        color: var(--text-primary);
+        color: #333;
         font-size: 0.95rem;
         transition: all 0.3s ease;
         box-sizing: border-box;
@@ -235,8 +262,8 @@
     .checkmark {
         width: 18px;
         height: 18px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 4px;
         position: relative;
         flex-shrink: 0;
@@ -275,6 +302,19 @@
         text-decoration: underline;
     }
 
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+    }
+
     .btn-full {
         width: 100%;
         padding: 1rem;
@@ -283,17 +323,80 @@
         margin-top: 0.5rem;
     }
 
+    .btn-primary {
+        background: linear-gradient(90deg, var(--accent), #127e5c);
+        color: white;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+    }
+
     .form-footer {
         text-align: center;
         margin-top: 2rem;
         padding-top: 1.5rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .login-link {
         color: var(--muted);
         margin: 0;
         font-size: 0.9rem;
+    }
+
+    /* Google Sign-In Styles */
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0;
+        text-align: center;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .divider-text {
+        padding: 0 1rem;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        background: var(--bg);
+    }
+
+    .btn-google {
+        background: #fff;
+        color: #757575;
+        border: 1px solid #dadce0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-google:hover {
+        background: #f8f9fa;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        transform: translateY(-1px);
+        color: #3c4043;
+    }
+
+    .google-icon {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+
+    .g-signin2 {
+        display: none; /* Hide the default Google button, use custom one */
     }
 
     /* Mobile responsive */
@@ -330,6 +433,9 @@
 @endsection
 
 @section('scripts')
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
 <script>
     function togglePassword(fieldId) {
         const passwordField = document.getElementById(fieldId);
@@ -367,5 +473,93 @@
             this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
         }
     });
+
+    // Google Sign-In Functions
+    let auth2;
+    
+    window.onload = function() {
+        gapi.load('auth2', function() {
+            auth2 = gapi.auth2.init({
+                client_id: '264276022373-f68e3gjlpi3ar4fnpbm3kv4je5u4vs58.apps.googleusercontent.com'
+            });
+            
+            // Render the sign-in button
+            gapi.signin2.render('g-signin2', {
+                'scope': 'profile email',
+                'width': 240,
+                'height': 50,
+                'longtitle': true,
+                'theme': 'dark',
+                'onsuccess': onSignIn,
+                'onfailure': onFailure
+            });
+        });
+    };
+
+    function signInWithGoogle() {
+        if (auth2) {
+            auth2.signIn().then(onSignIn, onFailure);
+        } else {
+            console.error('Google Auth2 not initialized');
+        }
+    }
+
+    function onSignIn(googleUser) {
+        const profile = googleUser.getBasicProfile();
+        const idToken = googleUser.getAuthResponse().id_token;
+        
+        console.log('ID: ' + profile.getId());
+        console.log('Name: ' + profile.getName());
+        console.log('Image URL: ' + profile.getImageUrl());
+        console.log('Email: ' + profile.getEmail());
+        
+        // Fill the form with Google data
+        document.getElementById('name').value = profile.getName();
+        document.getElementById('email').value = profile.getEmail();
+        document.getElementById('email_confirmation').value = profile.getEmail();
+        
+        // You can submit the form automatically or let user fill the password
+        alert('Datos de Google cargados. Complete la contraseña para continuar.');
+        
+        // Optionally send the ID token to your backend for verification
+        // sendTokenToBackend(idToken);
+    }
+
+    function onFailure(error) {
+        console.error('Google Sign-In failed:', error);
+        alert('Error al iniciar sesión con Google. Inténtalo de nuevo.');
+    }
+
+    function sendTokenToBackend(idToken) {
+        fetch('/auth/google', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                id_token: idToken
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = '/dashboard';
+            } else {
+                console.error('Backend authentication failed:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function signOut() {
+        if (auth2) {
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+    }
 </script>
 @endsection

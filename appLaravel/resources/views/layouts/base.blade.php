@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="google-signin-client_id" content="{{ env('GOOGLE_CLIENT_ID') }}">
     
     <title>@yield('title', 'Triple M.A. - Tecnologías Móviles')</title>
     
@@ -72,6 +73,10 @@
                 mobileToggle.classList.remove('active');
             }
         });
+
+
+
+
     </script>
 
     <!-- Page Content -->

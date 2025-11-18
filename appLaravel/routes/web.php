@@ -42,4 +42,9 @@ Route::get('/webpay', function () {
     return view('webpay');
 });
 
+// Google Authentication Routes
+use App\Http\Controllers\Auth\GoogleAuthController;
+Route::post('/auth/google/register', [GoogleAuthController::class, 'register'])->name('auth.google.register');
+Route::post('/auth/google/login', [GoogleAuthController::class, 'login'])->name('auth.google.login');
+
 require __DIR__.'/auth.php';

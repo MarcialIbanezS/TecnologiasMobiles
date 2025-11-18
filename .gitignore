@@ -8,3 +8,4 @@ appLaravel/.env
 /appLaravel/storage/*
 /appLaravel/*
 /appLaravel/.env
+appLaravel/.env

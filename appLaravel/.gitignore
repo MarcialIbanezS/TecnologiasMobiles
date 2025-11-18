@@ -1,3 +1,6 @@
+.env
+
+
 *.log
 .DS_Store
 .env
@@ -33,3 +36,5 @@ firebase_keys.json
 laravel_keys.json
 /laravel_keys.json
 /firebase_keys.json
+
+.editorconfig

@@ -1,7 +1,0 @@
-{
-  "name": "appBakan",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
-}

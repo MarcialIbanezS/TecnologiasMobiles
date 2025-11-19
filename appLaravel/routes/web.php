@@ -38,9 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/webpay', function () {
-    return view('webpay');
-});
+
 
 // Google Authentication Routes
 use App\Http\Controllers\Auth\GoogleAuthController;

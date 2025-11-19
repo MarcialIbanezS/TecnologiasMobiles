@@ -1,11 +1,281 @@
+
 <x-guest-layout>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+@section('styles')
+<style>
+    /* Override base styles for register page - use consistent color scheme */
+    body {
+        background: linear-gradient(135deg, var(--bg) 0%, var(--bg2) 100%) !important;
+    }
+
+    .register-form {
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        color: var(--text-primary);
+        font-weight: 500;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        color: var(--text-dark, #333);
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 0 0 3px rgba(17, 194, 203, 0.1);
+    }
+
+    .form-input::placeholder {
+        color: var(--muted);
+        opacity: 0.7;
+    }
+
+    .password-input-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 0.75rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        color: var(--muted);
+        transition: color 0.3s ease;
+    }
+
+    .password-toggle:hover {
+        color: var(--text-primary);
+    }
+
+    .toggle-icon {
+        font-size: 1.1rem;
+        user-select: none;
+    }
+
+    .error-message {
+        display: block;
+        color: var(--error, #ff6b6b);
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+    .checkbox-container {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        cursor: pointer;
+        position: relative;
+        line-height: 1.4;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+        opacity: 0;
+        position: absolute;
+        width: 0;
+        height: 0;
+    }
+
+    .checkmark {
+        width: 18px;
+        height: 18px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        position: relative;
+        flex-shrink: 0;
+        margin-top: 2px;
+        transition: all 0.3s ease;
+    }
+
+    .checkbox-container input[type="checkbox"]:checked + .checkmark {
+        background: var(--accent);
+        border-color: var(--accent);
+    }
+
+    .checkbox-container input[type="checkbox"]:checked + .checkmark:after {
+        content: "✓";
+        position: absolute;
+        left: 3px;
+        top: -1px;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .checkbox-text {
+        color: var(--muted);
+        font-size: 0.85rem;
+    }
+
+    .link {
+        color: var(--accent);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .link:hover {
+        color: var(--accent, #13d4de);
+        text-decoration: underline;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .btn-full {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+
+    .btn-primary {
+        background: var(--bg_button, linear-gradient(90deg, var(--accent), var(--accent-dark, #127e5c)));
+        color: white;
+        box-shadow: var(--btn-shadow, 0 4px 15px rgba(79, 70, 229, 0.3));
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--btn-hover-shadow, 0 6px 20px rgba(79, 70, 229, 0.4));
+    }
+
+    .form-footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .login-link {
+        color: var(--muted);
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    /* Google Sign-In Styles */
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0;
+        text-align: center;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .divider-text {
+        padding: 0 1rem;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        background: var(--bg);
+    }
+
+    .btn-google {
+        background: var(--surface, #fff);
+        color: var(--muted, #757575);
+        border: 1px solid var(--border, #dadce0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-google:hover {
+        background: var(--surface-2, #f8f9fa);
+        box-shadow: var(--muted-shadow, 0 1px 3px rgba(0, 0, 0, 0.12));
+        transform: translateY(-1px);
+        color: var(--text-secondary, #3c4043);
+    }
+
+    .google-icon {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+
+    .g-signin2 {
+        display: none; /* Hide the default Google button, use custom one */
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .container {
+            padding: 0 1rem !important;
+        }
+        
+        .card {
+            padding: 2rem 1.5rem !important;
+            margin: 0 !important;
+        }
+        
+        .form-header h1 {
+            font-size: 2rem !important;
+        }
+        
+        .form-input {
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .checkbox-text {
+            font-size: 0.8rem;
+        }
+        
+        /* Mobile header spacing fix */
+        div[style*="padding: 6rem 0 2rem 0"] {
+            padding: 4rem 0 2rem 0 !important;
+            margin-top: 1rem !important;
+        }
+    }
+</style>
+@endsection
+    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 ">
+        <div class="w-full sm:max-w-md mt-6 px-6 py-4  shadow-md overflow-hidden sm:rounded-lg">
             
             <!-- Header -->
             <div class="text-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Crear Cuenta</h1>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Únete a Triple M.A. y accede a nuestra plataforma médica</p>
+                <h1 class="text-2xl font-bold ">Crear Cuenta</h1>
+                <p class="text-sm text- mt-2">Únete a Triple M.A. y accede a nuestra plataforma médica yay</p>
             </div>
 
             <form method="POST" action="{{ route('register') }}">
@@ -73,8 +343,8 @@
                 <!-- Terms and Conditions -->
                 <div class="mt-4">
                     <label class="flex items-start space-x-2">
-                        <input type="checkbox" name="terms" required class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 mt-1">
-                        <span class="text-sm text-gray-600 dark:text-gray-400">
+                        <input type="checkbox" name="terms" required class="rounded  text-indigo-600 shadow-sm focus:ring-indigo-500 mt-1">
+                        <span class="text-sm ">
                             Acepto los <a href="/terms" class="text-indigo-600 hover:text-indigo-500 underline">Términos y Condiciones</a> y la 
                             <a href="/privacy" class="text-indigo-600 hover:text-indigo-500 underline">Política de Privacidad</a>
                         </span>
@@ -91,9 +361,9 @@
 
                 <!-- Login Link -->
                 <div class="mt-4 text-center">
-                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                    <p class="text-sm  ">
                         ¿Ya tienes una cuenta? 
-                        <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
+                        <a class="underline text-sm    rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 d" href="{{ route('login') }}">
                             Iniciar Sesión
                         </a>
                     </p>
@@ -159,7 +429,7 @@
             const confirmation = this.value;
             
             if (confirmation && password !== confirmation) {
-                this.style.borderColor = '#ef4444';
+                        this.style.borderColor = 'var(--error, #ef4444)';
             } else {
                 this.style.borderColor = '';
             }
@@ -171,7 +441,7 @@
             const confirmation = this.value;
             
             if (confirmation && email !== confirmation) {
-                this.style.borderColor = '#ef4444';
+                this.style.borderColor = 'var(--error, #ef4444)';
             } else {
                 this.style.borderColor = '';
             }

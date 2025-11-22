@@ -1,5 +1,9 @@
 Taller3.rar
 *.zip
+*.env
+
+
+#Laravel specific ignores
 /appLaravel/node_modules/*
 /appLaravel/node_modules
 appLaravel/.env
@@ -8,52 +12,67 @@ appLaravel/.env
 /appLaravel/storage/*
 /appLaravel/.env
 
+/appLaravel/*.log
+/appLaravel/.DS_Store
+/appLaravel/.phpactor.json
+/appLaravel/.phpunit.result.cache
+/appLaravel/.phpunit.cache
+/appLaravel/.vscode/
+/appLaravel/.idea/
+/appLaravel/.fleet/
+/appLaravel/.nova/
+/appLaravel/.zed/
+/appLaravel/auth.json
+/appLaravel/vendor/
+/appLaravel/public/build/
+/appLaravel/public/hot
+/appLaravel/public/storage
+/appLaravel/Homestead.json
+/appLaravel/Homestead.yaml
+/appLaravel/Thumbs.db
+/appLaravel/firebase_credentials.json
+/appLaravel/serviceAccountKey.json
+/appLaravel/firebase_keys.json
+/appLaravel/laravel_keys.json
+/appLaravel/.editorconfig
 
+# Laravel Storage directories - ignore contents but keep structure
+/appLaravel/storage/logs/*
+!/appLaravel/storage/logs/.gitignore
+/appLaravel/storage/framework/compiled.php
+/appLaravel/storage/framework/config.php
+/appLaravel/storage/framework/down
+/appLaravel/storage/framework/events.scanned.php
+/appLaravel/storage/framework/maintenance.php
+/appLaravel/storage/framework/routes.php
+/appLaravel/storage/framework/routes.scanned.php
+/appLaravel/storage/framework/schedule-*
+/appLaravel/storage/framework/services.json
+/appLaravel/storage/framework/cache/*
+!/appLaravel/storage/framework/cache/.gitignore
+/appLaravel/storage/framework/cache/data/*
+!/appLaravel/storage/framework/cache/data/.gitignore
+/appLaravel/storage/framework/sessions/*
+!/appLaravel/storage/framework/sessions/.gitignore
+/appLaravel/storage/framework/testing/*
+!/appLaravel/storage/framework/testing/.gitignore
+/appLaravel/storage/framework/views/*
+!/appLaravel/storage/framework/views/.gitignore
+/appLaravel/storage/app/*
+!/appLaravel/storage/app/private/
+!/appLaravel/storage/app/public/
+!/appLaravel/storage/app/.gitignore
+/appLaravel/storage/app/public/*
+!/appLaravel/storage/app/public/.gitignore
+/appLaravel/storage/app/private/*
+!/appLaravel/storage/app/private/.gitignore
 
+# Laravel Bootstrap cache
+/appLaravel/bootstrap/cache/*
+!/appLaravel/bootstrap/cache/.gitignore
 
-
-
-
-
-
-#Laravel specific ignores
-*.env
-
-*.log
-.DS_Store
-.env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/node_modules
-/node_modules/*
-/config/firebase.php
-
-
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
-Homestead.json
-Homestead.yaml
-Thumbs.db
-firebase_credentials.json
-serviceAccountKey.json
-firebase_keys.json
-laravel_keys.json
-/laravel_keys.json
-/firebase_keys.json
-
-.editorconfig
+# Laravel Database
+/appLaravel/database/*.sqlite
+/appLaravel/database/*.sqlite-journal
 
 #Flutter/Dart ignores

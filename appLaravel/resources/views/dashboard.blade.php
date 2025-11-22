@@ -123,6 +123,120 @@
                 </div>
             </div>
 
+            <!-- Chronic Diseases Chart -->
+            <div class="chart-section">
+                <h2>Distribución de Fichas por Enfermedad Crónica</h2>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <p class="chart-subtitle">Fichas médicas clasificadas por enfermedad crónica</p>
+                    </div>
+                    
+                    @php
+                        $cronicoChartData = $cronicoChartData ?? [];
+                        $maxValueCronico = !empty($cronicoChartData) ? max($cronicoChartData) : 1;
+                        $totalCronicos = array_sum($cronicoChartData);
+                        $avgCronicos = $totalCronicos > 0 && count($cronicoChartData) > 0 ? round($totalCronicos / count($cronicoChartData)) : 0;
+                    @endphp
+                    
+                    @if(!empty($cronicoChartData))
+                    <div class="bar-chart">
+                        <div class="chart-bars">
+                            @foreach($cronicoChartData as $cronico => $count)
+                            <div class="bar-group">
+                                <div class="bar bar-cronico" data-value="{{ $count }}" style="height: {{ $maxValueCronico > 0 ? ($count / $maxValueCronico * 100) : 0 }}%;">
+                                    <span class="bar-value">{{ $count }}</span>
+                                </div>
+                                <span class="bar-label">{{ $cronico }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <!-- Chart Y-axis labels -->
+                        <div class="chart-y-axis">
+                            <span class="y-label">{{ $maxValueCronico }}</span>
+                            <span class="y-label">{{ round($maxValueCronico * 0.8) }}</span>
+                            <span class="y-label">{{ round($maxValueCronico * 0.6) }}</span>
+                            <span class="y-label">{{ round($maxValueCronico * 0.4) }}</span>
+                            <span class="y-label">{{ round($maxValueCronico * 0.2) }}</span>
+                            <span class="y-label">0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart Legend -->
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, #ff6b6b, #ff8c42);"></div>
+                            <span>Fichas con Enfermedades Crónicas</span>
+                        </div>
+                        <div class="chart-summary">
+                            <span class="summary-text">Total: {{ number_format($totalCronicos) }} | Promedio: {{ number_format($avgCronicos) }}</span>
+                        </div>
+                    </div>
+                    @else
+                    <div class="empty-chart">
+                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de enfermedades crónicas disponibles</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Operations Chart -->
+            <div class="chart-section">
+                <h2>Distribución de Fichas por Operación</h2>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <p class="chart-subtitle">Fichas médicas clasificadas por tipo de operación</p>
+                    </div>
+                    
+                    @php
+                        $operacionChartData = $operacionChartData ?? [];
+                        $maxValueOperacion = !empty($operacionChartData) ? max($operacionChartData) : 1;
+                        $totalOperaciones = array_sum($operacionChartData);
+                        $avgOperaciones = $totalOperaciones > 0 && count($operacionChartData) > 0 ? round($totalOperaciones / count($operacionChartData)) : 0;
+                    @endphp
+                    
+                    @if(!empty($operacionChartData))
+                    <div class="bar-chart">
+                        <div class="chart-bars">
+                            @foreach($operacionChartData as $operacion => $count)
+                            <div class="bar-group">
+                                <div class="bar bar-operacion" data-value="{{ $count }}" style="height: {{ $maxValueOperacion > 0 ? ($count / $maxValueOperacion * 100) : 0 }}%;">
+                                    <span class="bar-value">{{ $count }}</span>
+                                </div>
+                                <span class="bar-label">{{ $operacion }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <!-- Chart Y-axis labels -->
+                        <div class="chart-y-axis">
+                            <span class="y-label">{{ $maxValueOperacion }}</span>
+                            <span class="y-label">{{ round($maxValueOperacion * 0.8) }}</span>
+                            <span class="y-label">{{ round($maxValueOperacion * 0.6) }}</span>
+                            <span class="y-label">{{ round($maxValueOperacion * 0.4) }}</span>
+                            <span class="y-label">{{ round($maxValueOperacion * 0.2) }}</span>
+                            <span class="y-label">0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart Legend -->
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, #4c6ef5, #7873f5);"></div>
+                            <span>Fichas con Operaciones</span>
+                        </div>
+                        <div class="chart-summary">
+                            <span class="summary-text">Total: {{ number_format($totalOperaciones) }} | Promedio: {{ number_format($avgOperaciones) }}</span>
+                        </div>
+                    </div>
+                    @else
+                    <div class="empty-chart">
+                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de operaciones disponibles</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
             <!-- Recent Activity -->
 
             
@@ -199,6 +313,10 @@
         background: rgba(255, 255, 255, 0.03);
         border-radius: 16px;
         border: 1px solid rgba(255, 255, 255, 0.08);
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        box-sizing: border-box;
     }
 
     .chart-section h2 {
@@ -213,46 +331,58 @@
     }
 
     .chart-subtitle {
-        color: var(--muted);
+        color: #c0e8e4;
         margin: 0;
         font-size: 0.95rem;
+        font-weight: 500;
     }
 
     .chart-container {
         position: relative;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
     }
 
     .bar-chart {
         position: relative;
         display: flex;
         align-items: flex-end;
-        height: 320px;
-        padding: 20px 60px 60px 60px;
-        background: rgba(255, 255, 255, 0.02);
+        height: 280px;
+        width: 100%;
+        max-width: 100%;
+        padding: 15px 40px 50px 50px;
+        background: rgba(11, 18, 32, 0.8);
         border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+        box-sizing: border-box;
     }
 
     .chart-bars {
         display: flex;
         align-items: flex-end;
-        gap: 1.5rem;
+        gap: 1rem;
         width: 100%;
         height: 100%;
         position: relative;
+        flex-shrink: 1;
+        min-width: 0;
     }
 
     .bar-group {
-        flex: 1;
+        flex: 1 1 0;
         display: flex;
         flex-direction: column;
         align-items: center;
         height: 100%;
+        min-width: 0;
+        max-width: 80px;
     }
 
     .bar {
         width: 100%;
-        max-width: 60px;
+        max-width: 100%;
         background: linear-gradient(180deg, var(--accent), #08ad6e);
         border-radius: 4px 4px 0 0;
         transition: all 0.3s ease;
@@ -285,22 +415,45 @@
         opacity: 1;
     }
 
+    .bar-cronico {
+        background: linear-gradient(180deg, #ff6b6b, #ff8c42);
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+
+    .bar-cronico:hover {
+        background: linear-gradient(180deg, #ff5252, #ff7030);
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+
+    .bar-operacion {
+        background: linear-gradient(180deg, #4c6ef5, #7873f5);
+        box-shadow: 0 4px 15px rgba(76, 110, 245, 0.3);
+    }
+
+    .bar-operacion:hover {
+        background: linear-gradient(180deg, #3d5ce0, #6661de);
+        box-shadow: 0 6px 20px rgba(76, 110, 245, 0.4);
+    }
+
     .bar-label {
-        margin-top: 10px;
-        color: var(--muted);
-        font-size: 0.8rem;
+        margin-top: 8px;
+        color: #e0e7ff;
+        font-size: 0.65rem;
         text-align: center;
         transform: rotate(-45deg);
-        transform-origin: center;
+        transform-origin: left top;
         white-space: nowrap;
-        min-width: 80px;
+        max-width: 100px;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .chart-y-axis {
         position: absolute;
-        left: 10px;
-        top: 20px;
-        bottom: 60px;
+        left: 5px;
+        top: 15px;
+        bottom: 50px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -308,9 +461,10 @@
     }
 
     .y-label {
-        color: var(--muted);
-        font-size: 0.75rem;
-        padding-right: 10px;
+        color: #d4d4e6;
+        font-size: 0.65rem;
+        padding-right: 8px;
+        font-weight: 500;
     }
 
     .chart-legend {
@@ -336,8 +490,9 @@
     }
 
     .legend-item span {
-        color: var(--muted);
+        color: #d4e8f5;
         font-size: 0.9rem;
+        font-weight: 500;
     }
 
     .chart-summary {

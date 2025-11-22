@@ -77,48 +77,68 @@ class FirebaseController extends Controller
                 }
             }
             
-            // Count fichas by alergia
+            // Count fichas by alergia - using descriptive names directly since fichas store full names
             $alergiaStats = [];
             
             if (is_array($fichasMedicas) || is_object($fichasMedicas)) {
                 foreach ($fichasMedicas as $ficha) {
-                    $idAlergia = is_object($ficha) ? ($ficha->idalergia ?? null) : ($ficha['idalergia'] ?? null);
-                    if ($idAlergia) {
-                        $alergiaStats[$idAlergia] = ($alergiaStats[$idAlergia] ?? 0) + 1;
+                    $alergiaName = is_object($ficha) ? ($ficha->idalergia ?? null) : ($ficha['idalergia'] ?? null);
+                    if ($alergiaName && !empty(trim($alergiaName))) {
+                        $alergiaStats[$alergiaName] = ($alergiaStats[$alergiaName] ?? 0) + 1;
                     }
                 }
             }
             
-            // Map alergia IDs to names
-            $alergiaChartData = [];
-            if (is_array($alergias) || is_object($alergias)) {
-                foreach ($alergias as $alergia) {
-                    try {
-                        $reflection = new \ReflectionClass($alergia);
-                        $dataProperty = $reflection->getProperty('data');
-                        $dataProperty->setAccessible(true);
-                        $data = $dataProperty->getValue($alergia);
-                        $idAlergia = $data['idalergia'] ?? null;
-                        $nombreAlergia = $data['nombrealergia'] ?? 'Desconocida';
-                        
-                        if ($idAlergia && isset($alergiaStats[$idAlergia])) {
-                            $alergiaChartData[$nombreAlergia] = $alergiaStats[$idAlergia];
-                        }
-                    } catch (\Exception $e) {
-                        \Log::warning('Failed to process alergia for chart', ['error' => $e->getMessage()]);
-                    }
-                }
-            }
+            // Since fichas store descriptive names directly, use them as chart data
+            $alergiaChartData = $alergiaStats;
             
             // Sort by count descending and take top 8
             arsort($alergiaChartData);
             $alergiaChartData = array_slice($alergiaChartData, 0, 8, true);
             
+            // Count fichas by cronico - using descriptive names directly
+            $cronicoStats = [];
+            if (is_array($fichasMedicas) || is_object($fichasMedicas)) {
+                foreach ($fichasMedicas as $ficha) {
+                    $cronicoName = is_object($ficha) ? ($ficha->idcronico ?? null) : ($ficha['idcronico'] ?? null);
+                    if ($cronicoName && !empty(trim($cronicoName))) {
+                        $cronicoStats[$cronicoName] = ($cronicoStats[$cronicoName] ?? 0) + 1;
+                    }
+                }
+            }
+            
+            // Since fichas store descriptive names directly, use them as chart data
+            $cronicoChartData = $cronicoStats;
+            
+            // Sort by count descending and take top 8
+            arsort($cronicoChartData);
+            $cronicoChartData = array_slice($cronicoChartData, 0, 8, true);
+            
+            // Count fichas by operacion - using descriptive names directly
+            $operacionStats = [];
+            if (is_array($fichasMedicas) || is_object($fichasMedicas)) {
+                foreach ($fichasMedicas as $ficha) {
+                    $operacionName = is_object($ficha) ? ($ficha->idoperacion ?? null) : ($ficha['idoperacion'] ?? null);
+                    if ($operacionName && !empty(trim($operacionName))) {
+                        $operacionStats[$operacionName] = ($operacionStats[$operacionName] ?? 0) + 1;
+                    }
+                }
+            }
+            
+            // Since fichas store descriptive names directly, use them as chart data
+            $operacionChartData = $operacionStats;
+            
+            // Sort by count descending and take top 8
+            arsort($operacionChartData);
+            $operacionChartData = array_slice($operacionChartData, 0, 8, true);
+            
             \Log::info('Dashboard data prepared', [
                 'total_pacientes' => $totalPacientes,
                 'total_fichas' => $totalFichas,
                 'fichas_this_year' => $fichasThisYear,
-                'alergia_chart_items' => count($alergiaChartData)
+                'alergia_chart_items' => count($alergiaChartData),
+                'cronico_chart_items' => count($cronicoChartData),
+                'operacion_chart_items' => count($operacionChartData)
             ]);
             
             return view('dashboard', [
@@ -126,7 +146,9 @@ class FirebaseController extends Controller
                 'fichasThisYear' => $fichasThisYear,
                 'mostCommonCronico' => $mostCommonCronicoName,
                 'totalFichas' => $totalFichas,
-                'alergiaChartData' => $alergiaChartData
+                'alergiaChartData' => $alergiaChartData,
+                'cronicoChartData' => $cronicoChartData,
+                'operacionChartData' => $operacionChartData
             ]);
             
         } catch (\Exception $e) {
@@ -143,6 +165,8 @@ class FirebaseController extends Controller
                 'mostCommonCronico' => 'N/A',
                 'totalFichas' => 0,
                 'alergiaChartData' => [],
+                'cronicoChartData' => [],
+                'operacionChartData' => [],
                 'error' => $e->getMessage()
             ]);
         }
@@ -601,53 +625,75 @@ class FirebaseController extends Controller
             
             \Log::info('Request validated successfully', ['validated_data' => $validated]);
             
-            // Find the ficha medica by idfichamedica field
-            $ficha = FichaMedica::where(['idfichamedica', '=', $id])->first();
-            
-            // Try as integer if not found as string
-            if (!$ficha) {
-                \Log::info('Not found as string, trying as integer');
-                $ficha = FichaMedica::where(['idfichamedica', '=', (int)$id])->first();
-            }
-            
-            if (!$ficha) {
-                \Log::error('Ficha not found', ['id' => $id]);
-                return response()->json(['success' => false, 'message' => 'Ficha médica no encontrada'], 404);
-            }
-            
-            \Log::info('Ficha found', ['ficha_type' => gettype($ficha)]);
-            
-            // Prepare update data
+            // Try to find and update using Roddy's where() method with correct array format
             $updateData = [];
+            
             if ($request->has('fechaingreso') && $request->input('fechaingreso')) {
                 $updateData['fechaingreso'] = $request->input('fechaingreso');
-                \Log::info('Updated fechaingreso', ['value' => $request->input('fechaingreso')]);
             }
             if ($request->has('idoperacion')) {
                 $updateData['idoperacion'] = $request->input('idoperacion') ?: null;
-                \Log::info('Updated idoperacion', ['value' => $request->input('idoperacion')]);
             }
             if ($request->has('idcronico')) {
                 $updateData['idcronico'] = $request->input('idcronico') ?: null;
-                \Log::info('Updated idcronico', ['value' => $request->input('idcronico')]);
             }
             if ($request->has('idalergia')) {
                 $updateData['idalergia'] = $request->input('idalergia') ?: null;
-                \Log::info('Updated idalergia', ['value' => $request->input('idalergia')]);
             }
             
-            // Update the ficha using the correct Roddy syntax
-            if (!empty($updateData)) {
-                $updatedFicha = $ficha->update($updateData);
-                \Log::info('Update operation completed', ['result' => $updatedFicha]);
+            \Log::info('Prepared update data', ['updateData' => $updateData]);
+            
+            // Try updating using Roddy's collection update method with correct array format
+            try {
+                // First verify the record exists using Roddy's array format
+                $existingFicha = FichaMedica::where(['idfichamedica', '=', $id])->first();
+                if (!$existingFicha) {
+                    // Try as integer
+                    $existingFicha = FichaMedica::where(['idfichamedica', '=', (int)$id])->first();
+                }
+                
+                if (!$existingFicha) {
+                    \Log::error('UPDATE: Ficha not found', ['id' => $id]);
+                    return response()->json(['success' => false, 'message' => 'Ficha médica no encontrada'], 404);
+                }
+                
+                \Log::info('UPDATE: Found existing ficha', ['ficha' => $existingFicha->idfichamedica]);
+                
+                // Update using Roddy's syntax: update the found record
+                if (!empty($updateData)) {
+                    $updateResult = $existingFicha->update($updateData);
+                    \Log::info('UPDATE: Update result', ['result' => $updateResult]);
+                }
+                
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Ficha médica actualizada exitosamente'
+                ]);
+                
+            } catch (\Exception $updateEx) {
+                \Log::error('UPDATE: Direct update failed, trying alternative method', [
+                    'error' => $updateEx->getMessage()
+                ]);
+                
+                // Alternative: Use collection-level update with correct array format
+                $affectedRows = FichaMedica::where(['idfichamedica', '=', $id])->update($updateData);
+                \Log::info('UPDATE: Collection update result', ['affected' => $affectedRows]);
+                
+                if ($affectedRows === 0) {
+                    // Try with integer ID
+                    $affectedRows = FichaMedica::where(['idfichamedica', '=', (int)$id])->update($updateData);
+                    \Log::info('UPDATE: Integer ID update result', ['affected' => $affectedRows]);
+                }
+                
+                if ($affectedRows > 0) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Ficha médica actualizada exitosamente'
+                    ]);
+                } else {
+                    return response()->json(['success' => false, 'message' => 'No se pudo actualizar la ficha médica'], 500);
+                }
             }
-            
-            \Log::info('Ficha medica updated successfully', ['id' => $id]);
-            
-            return response()->json([
-                'success' => true,
-                'message' => 'Ficha médica actualizada exitosamente'
-            ]);
             
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -670,14 +716,11 @@ class FirebaseController extends Controller
         \Log::info('=== deleteFichaMedica method called ===', ['id' => $id]);
         
         try {
-            // Find the ficha medica by idfichamedica field
+            // Delete a ficha with the specified ID
             $ficha = FichaMedica::where(['idfichamedica', '=', $id])->first();
-            
-            // Try as integer if not found as string
             if (!$ficha) {
-                \Log::info('Not found as string, trying as integer');
+                // Try as integer
                 $ficha = FichaMedica::where(['idfichamedica', '=', (int)$id])->first();
-                $res=FichaMedica::where(['idfichamedica', '=', (int)$id])->delete();
             }
             
             if (!$ficha) {
@@ -685,81 +728,11 @@ class FirebaseController extends Controller
                 return response()->json(['success' => false, 'message' => 'Ficha médica no encontrada'], 404);
             }
             
-            \Log::info('Ficha found for deletion', [
-                'idfichamedica' => $ficha->idfichamedica ?? 'unknown',
-                'fechaingreso' => $ficha->fechaingreso ?? 'unknown'
-            ]);
+            \Log::info('Found ficha for deletion', ['idfichamedica' => $ficha->idfichamedica]);
             
-            // Get all fichas BEFORE deletion for comparison
-            $countBefore = FichaMedica::count();
-            \Log::info('Count before delete', ['count' => $countBefore]);
+            $ficha->delete();
             
-            // Try multiple deletion methods
-            try {
-                // Method 1: Try forceDelete
-                if (method_exists($ficha, 'forceDelete')) {
-                    \Log::info('Trying forceDelete method');
-                    $result = $ficha->forceDelete();
-                    \Log::info('forceDelete result', ['result' => $result]);
-                }
-                
-                // Method 2: Get the Firestore doc ID and use whereId
-                $reflection = new \ReflectionClass($ficha);
-                if ($reflection->hasProperty('id')) {
-                    $idProperty = $reflection->getProperty('id');
-                    $idProperty->setAccessible(true);
-                    $docId = $idProperty->getValue($ficha);
-                    \Log::info('Got Firestore doc ID', ['doc_id' => $docId]);
-                    
-                    if ($docId) {
-                        // Try whereId delete
-                        \Log::info('Attempting whereId delete');
-                        $deleted = FichaMedica::whereId($docId)->delete();
-                        \Log::info('whereId delete result', ['result' => $deleted]);
-                    }
-                }
-                
-                // Method 3: Standard delete (last resort)
-                \Log::info('Attempting standard delete');
-                $deleteResult = $ficha->delete();
-                \Log::info('Standard delete result', ['result' => $deleteResult]);
-                
-            } catch (\Exception $deleteEx) {
-                \Log::error('Delete operation failed', [
-                    'error' => $deleteEx->getMessage(),
-                    'trace' => $deleteEx->getTraceAsString()
-                ]);
-                throw $deleteEx;
-            }
-            
-            // Clear any caches
-            if (method_exists('FichaMedica', 'clearCache')) {
-                FichaMedica::clearCache();
-            }
-            
-            // Wait for Firestore to process
-            sleep(1);
-            
-            // Verify deletion
-            $countAfter = FichaMedica::count();
-            \Log::info('Count after delete', ['count' => $countAfter]);
-            
-            $verifyDeleted = FichaMedica::where(['idfichamedica', '=', $id])->first();
-            
-            if ($verifyDeleted) {
-                \Log::warning('Document STILL EXISTS after all delete attempts!', [
-                    'id' => $id,
-                    'count_before' => $countBefore,
-                    'count_after' => $countAfter
-                ]);
-                return response()->json(['success' => false, 'message' => 'Error: El documento no se pudo eliminar de la base de datos'], 500);
-            }
-            
-            \Log::info('Ficha medica deleted and verified successfully', [
-                'id' => $id,
-                'count_before' => $countBefore,
-                'count_after' => $countAfter
-            ]);
+            \Log::info('Ficha médica deleted successfully', ['id' => $id]);
             
             return response()->json([
                 'success' => true,

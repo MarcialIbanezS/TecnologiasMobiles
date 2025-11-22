@@ -1,3 +1,5 @@
+<!--TEMPLATE PARA ELEMENTOS TERCER NIVEL (NO HEADER/FOOTER)-->
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -5,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>@yield('title', 'Triple M.A. - Tecnologías Móviles')</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -14,16 +16,17 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js','resources/css/style.css'])
         {{-- Page-specific styles --}}
+        @yield('styles')
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+    <body style="background: linear-gradient(135deg, var(--bg) 0%, var(--bg2) 100%); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem;">
+        <div style="width: 100%; max-width: 28rem; margin-top: 1.5rem; padding: 1.5rem; background: var(--card, #0b1220); border-radius: 0.5rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1);">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <a href="/" style="text-decoration: none;">
+                    <x-application-logo style="width: 5rem; height: 5rem; fill: var(--accent); display: block; margin: 0 auto;" />
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            <div style="width: 100%;">
                 {{ $slot }}
             </div>
         </div>

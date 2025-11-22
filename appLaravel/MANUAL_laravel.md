@@ -1,4 +1,4 @@
-# README — Ejecutar la aplicación Laravel por primera vez
+# Manual de Uso — Ejecutar la aplicación Laravel por primera vez
 
 Este documento explica los pasos mínimos para poner en marcha la aplicación Laravel en un entorno de desarrollo.
 
@@ -27,7 +27,26 @@ cp .env.example .env
 Editar `.env` y ajustar:
 - APP_NAME, APP_URL
 - DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
-- MAIL_*, REDIS_*, etc. según necesidad
+- MAIL_*, REDIS_*
+
+**Database Configuration**
+DB_CONNECTION=mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=<Nombre Base de datos>
+DB_USERNAME=<nombre usuario>
+DB_PASSWORD=<clave usuario>
+
+**Google OAuth Configuration**
+GOOGLE_CLIENT_ID=264276022373-f68e3gjlpi3ar4fnpbm3kv4je5u4vs58.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI="${APP_URL}/auth/google/callback"
+
+**Firebase Firestore**
+```bash
+#
+FIREBASE_PROJECT_ID=appmoviles-b5003
+```
 
 3. Instalar dependencias PHP
 ```bash

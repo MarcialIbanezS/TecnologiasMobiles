@@ -581,4 +581,200 @@ class FirebaseController extends Controller
             return redirect()->back()->with('error', 'Error al crear ficha médica: ' . $e->getMessage());
         }
     }
+
+    public function updateFichaMedica(Request $request, $id)
+    {
+        \Log::info('=== updateFichaMedica method called ===', [
+            'id' => $id,
+            'data' => $request->all()
+        ]);
+        
+        try {
+            // Validate the request
+            $validated = $request->validate([
+                'fechaingreso' => 'nullable|date',
+                'idoperacion' => 'nullable|string|max:255',
+                'idcronico' => 'nullable|string|max:255',
+                'idalergia' => 'nullable|string|max:255',
+                'alergia_descripcion' => 'nullable|string|max:1000'
+            ]);
+            
+            \Log::info('Request validated successfully', ['validated_data' => $validated]);
+            
+            // Find the ficha medica by idfichamedica field
+            $ficha = FichaMedica::where(['idfichamedica', '=', $id])->first();
+            
+            // Try as integer if not found as string
+            if (!$ficha) {
+                \Log::info('Not found as string, trying as integer');
+                $ficha = FichaMedica::where(['idfichamedica', '=', (int)$id])->first();
+            }
+            
+            if (!$ficha) {
+                \Log::error('Ficha not found', ['id' => $id]);
+                return response()->json(['success' => false, 'message' => 'Ficha médica no encontrada'], 404);
+            }
+            
+            \Log::info('Ficha found', ['ficha_type' => gettype($ficha)]);
+            
+            // Prepare update data
+            $updateData = [];
+            if ($request->has('fechaingreso') && $request->input('fechaingreso')) {
+                $updateData['fechaingreso'] = $request->input('fechaingreso');
+                \Log::info('Updated fechaingreso', ['value' => $request->input('fechaingreso')]);
+            }
+            if ($request->has('idoperacion')) {
+                $updateData['idoperacion'] = $request->input('idoperacion') ?: null;
+                \Log::info('Updated idoperacion', ['value' => $request->input('idoperacion')]);
+            }
+            if ($request->has('idcronico')) {
+                $updateData['idcronico'] = $request->input('idcronico') ?: null;
+                \Log::info('Updated idcronico', ['value' => $request->input('idcronico')]);
+            }
+            if ($request->has('idalergia')) {
+                $updateData['idalergia'] = $request->input('idalergia') ?: null;
+                \Log::info('Updated idalergia', ['value' => $request->input('idalergia')]);
+            }
+            
+            // Update the ficha using the correct Roddy syntax
+            if (!empty($updateData)) {
+                $updatedFicha = $ficha->update($updateData);
+                \Log::info('Update operation completed', ['result' => $updatedFicha]);
+            }
+            
+            \Log::info('Ficha medica updated successfully', ['id' => $id]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Ficha médica actualizada exitosamente'
+            ]);
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation failed', ['errors' => $e->errors()]);
+            return response()->json(['success' => false, 'message' => 'Validación fallida', 'errors' => $e->errors()], 422);
+            
+        } catch (\Exception $e) {
+            \Log::error('Exception in updateFichaMedica', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json(['success' => false, 'message' => 'Error al actualizar ficha médica: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function deleteFichaMedica($id)
+    {
+        \Log::info('=== deleteFichaMedica method called ===', ['id' => $id]);
+        
+        try {
+            // Find the ficha medica by idfichamedica field
+            $ficha = FichaMedica::where(['idfichamedica', '=', $id])->first();
+            
+            // Try as integer if not found as string
+            if (!$ficha) {
+                \Log::info('Not found as string, trying as integer');
+                $ficha = FichaMedica::where(['idfichamedica', '=', (int)$id])->first();
+                $res=FichaMedica::where(['idfichamedica', '=', (int)$id])->delete();
+            }
+            
+            if (!$ficha) {
+                \Log::error('Ficha not found', ['id' => $id]);
+                return response()->json(['success' => false, 'message' => 'Ficha médica no encontrada'], 404);
+            }
+            
+            \Log::info('Ficha found for deletion', [
+                'idfichamedica' => $ficha->idfichamedica ?? 'unknown',
+                'fechaingreso' => $ficha->fechaingreso ?? 'unknown'
+            ]);
+            
+            // Get all fichas BEFORE deletion for comparison
+            $countBefore = FichaMedica::count();
+            \Log::info('Count before delete', ['count' => $countBefore]);
+            
+            // Try multiple deletion methods
+            try {
+                // Method 1: Try forceDelete
+                if (method_exists($ficha, 'forceDelete')) {
+                    \Log::info('Trying forceDelete method');
+                    $result = $ficha->forceDelete();
+                    \Log::info('forceDelete result', ['result' => $result]);
+                }
+                
+                // Method 2: Get the Firestore doc ID and use whereId
+                $reflection = new \ReflectionClass($ficha);
+                if ($reflection->hasProperty('id')) {
+                    $idProperty = $reflection->getProperty('id');
+                    $idProperty->setAccessible(true);
+                    $docId = $idProperty->getValue($ficha);
+                    \Log::info('Got Firestore doc ID', ['doc_id' => $docId]);
+                    
+                    if ($docId) {
+                        // Try whereId delete
+                        \Log::info('Attempting whereId delete');
+                        $deleted = FichaMedica::whereId($docId)->delete();
+                        \Log::info('whereId delete result', ['result' => $deleted]);
+                    }
+                }
+                
+                // Method 3: Standard delete (last resort)
+                \Log::info('Attempting standard delete');
+                $deleteResult = $ficha->delete();
+                \Log::info('Standard delete result', ['result' => $deleteResult]);
+                
+            } catch (\Exception $deleteEx) {
+                \Log::error('Delete operation failed', [
+                    'error' => $deleteEx->getMessage(),
+                    'trace' => $deleteEx->getTraceAsString()
+                ]);
+                throw $deleteEx;
+            }
+            
+            // Clear any caches
+            if (method_exists('FichaMedica', 'clearCache')) {
+                FichaMedica::clearCache();
+            }
+            
+            // Wait for Firestore to process
+            sleep(1);
+            
+            // Verify deletion
+            $countAfter = FichaMedica::count();
+            \Log::info('Count after delete', ['count' => $countAfter]);
+            
+            $verifyDeleted = FichaMedica::where(['idfichamedica', '=', $id])->first();
+            
+            if ($verifyDeleted) {
+                \Log::warning('Document STILL EXISTS after all delete attempts!', [
+                    'id' => $id,
+                    'count_before' => $countBefore,
+                    'count_after' => $countAfter
+                ]);
+                return response()->json(['success' => false, 'message' => 'Error: El documento no se pudo eliminar de la base de datos'], 500);
+            }
+            
+            \Log::info('Ficha medica deleted and verified successfully', [
+                'id' => $id,
+                'count_before' => $countBefore,
+                'count_after' => $countAfter
+            ]);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Ficha médica eliminada exitosamente'
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Exception in deleteFichaMedica', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json(['success' => false, 'message' => 'Error al eliminar ficha médica: ' . $e->getMessage()], 500);
+        }
+    }
 }

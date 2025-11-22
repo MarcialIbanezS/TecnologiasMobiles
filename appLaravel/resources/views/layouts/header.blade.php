@@ -11,15 +11,13 @@
                 <!-- Authenticated Navigation -->
                 <li><a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a></li>
                 <li><a href="/about" class="nav-link {{ request()->is('about') ? 'active' : '' }}">Acerca de</a></li>
-                <li><a href="/contact" class="nav-link {{ request()->is('contact') ? 'active' : '' }}">Contacto</a></li>
-                <li><a href="/webpay" class="nav-link {{ request()->is('webpay') ? 'active' : '' }}">PAGOS</a></li>
+                <li><a href="/contact" class="nav-link {{ request()->is('contact') ? 'active' : '' }}">Fichas Médicas</a></li>
 
             @else
                 <!-- Guest Navigation -->
                 <li><a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Inicio</a></li>
                 <li><a href="/about" class="nav-link {{ request()->is('about') ? 'active' : '' }}">Acerca de</a></li>
-                <li><a href="/contact" class="nav-link {{ request()->is('contact') ? 'active' : '' }}">Contacto</a></li>
-                <li><a href="/webpay" class="nav-link {{ request()->is('webpay') ? 'active' : '' }}">PAGOS</a></li>
+                <li><a href="/contact" class="nav-link {{ request()->is('contact') ? 'active' : '' }}">Fichas Médicas</a></li>
             @endauth
         </ul>
         
@@ -84,7 +82,7 @@
                 <!-- Authenticated Mobile Links -->
                 <a href="{{ route('dashboard') }}" class="mobile-nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
                 <a href="/about" class="mobile-nav-link {{ request()->is('about') ? 'active' : '' }}">Acerca de</a>
-                <a href="/contact" class="mobile-nav-link {{ request()->is('contact') ? 'active' : '' }}">Contacto</a>
+                <a href="/contact" class="mobile-nav-link {{ request()->is('contact') ? 'active' : '' }}">Fichas Médicas</a>
                 
                 <!-- Mobile User Section -->
                 <div class="mobile-user-section">
@@ -104,7 +102,7 @@
                 <!-- Guest Mobile Links -->
                 <a href="/" class="mobile-nav-link {{ request()->is('/') ? 'active' : '' }}">Inicio</a>
                 <a href="/about" class="mobile-nav-link {{ request()->is('about') ? 'active' : '' }}">Acerca de</a>
-                <a href="/contact" class="mobile-nav-link {{ request()->is('contact') ? 'active' : '' }}">Contacto</a>
+                <a href="/contact" class="mobile-nav-link {{ request()->is('contact') ? 'active' : '' }}">Fichas Médicas</a>
                 
                 <!-- Mobile Guest Actions -->
                 <div class="mobile-auth-actions">

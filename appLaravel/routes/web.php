@@ -32,6 +32,12 @@ Route::post('/contact', [FirebaseController::class,
 Route::post('/contact/search', [FirebaseController::class, 
 'searchFichaMedica'])->middleware(['auth', 'verified'])->name('contact.search');
 
+Route::put('/contact/{id}', [FirebaseController::class, 
+'updateFichaMedica'])->middleware(['auth', 'verified'])->name('contact.update');
+
+Route::delete('/contact/{id}', [FirebaseController::class, 
+'deleteFichaMedica'])->middleware(['auth', 'verified'])->name('contact.delete');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

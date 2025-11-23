@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Editar Ficha Médica</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- 🔥 FORMULARIO REACTIVO OBLIGATORIO -->
+  <form [formGroup]="form">
+
+    <ion-item>
+      <ion-label position="stacked">Nombre Paciente</ion-label>
+      <ion-input formControlName="nombrePaciente"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">RUT</ion-label>
+      <ion-input formControlName="rut"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Dirección</ion-label>
+      <ion-input formControlName="direccion"></ion-input>
+    </ion-item>
+      
+    <ion-item>
+      <ion-label position="stacked">Alergia</ion-label>
+      <ion-input formControlName="idalergia"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Condición Crónica</ion-label>
+      <ion-input formControlName="idcronico"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Operación</ion-label>
+      <ion-input formControlName="idoperacion"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" color="success" (click)="guardar()">
+      Guardar Cambios
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" color="danger" (click)="cerrar()">
+      Cancelar
+    </ion-button>
+
+  </form>
+  <!-- 🔥 FIN FORMULARIO -->
+
+</ion-content>

@@ -18,11 +18,6 @@
     <div class="scan-text">Toca para escanear tu huella...</div>
   </div>
 
-  <!-- Estado: Mostrando QR -->
-  <div *ngIf="state === 'qr'" class="qr-container">
-    <qrcode [qrdata]="qrUrl" [width]="200" errorCorrectionLevel="M"></qrcode>
-    <p>Escanea este código desde tu celular para validar tu acceso</p>
-  </div>
 
   <!-- Estado: Esperando aprobación -->
   <div *ngIf="state === 'waiting'" class="waiting-container">

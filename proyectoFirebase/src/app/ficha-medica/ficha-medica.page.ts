@@ -12,6 +12,9 @@ import { MedicalRecordService, DetailedMedicalRecord, MedicalRecord } from '../s
 import { NavigationService } from '../servicios/navigation.service';
 import { addIcons } from 'ionicons';
 import { downloadOutline, refreshOutline, personCircleOutline, calendarOutline, medicalOutline, checkmarkCircleOutline } from 'ionicons/icons';
+import { ModalController } from '@ionic/angular';
+import { EditarFichaModalComponent } from '../componentes/editar-ficha-modal/editar-ficha-modal.component';
+
 
 interface Breadcrumb {
   label: string;
@@ -23,6 +26,7 @@ interface Breadcrumb {
   templateUrl: './ficha-medica.page.html',
   styleUrls: ['./ficha-medica.page.scss'],
   standalone: true,
+  providers: [ModalController],
   imports: [
     IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule,
     IonBreadcrumb, IonBreadcrumbs, RouterModule, IonCard, IonCardContent, IonCardHeader,
@@ -42,7 +46,8 @@ export class FichaMedicaPage implements OnInit {
   constructor(
     private router: Router,
     private medicalRecordService: MedicalRecordService,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private modalController: ModalController
   ) {
     addIcons({ downloadOutline, refreshOutline, personCircleOutline, calendarOutline, medicalOutline, checkmarkCircleOutline });
 
@@ -193,6 +198,26 @@ export class FichaMedicaPage implements OnInit {
       console.error(error);
     }
   }
+
+  async abrirModalEditar() {
+  if (!this.selectedMedicalRecord) return;
+
+  const modal = await this.modalController.create({
+    component: EditarFichaModalComponent,
+    componentProps: {
+      record: this.selectedMedicalRecord
+    }
+  });
+
+  await modal.present();
+
+  // 👇 Si el modal devolvió "true", recargamos la ficha
+  const { data } = await modal.onDidDismiss();
+  
+  if (data === true) {
+    this.refreshMedicalRecords();
+  }
+}
 
   refreshMedicalRecords() {
     this.loadMedicalRecords();

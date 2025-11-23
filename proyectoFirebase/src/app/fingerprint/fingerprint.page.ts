@@ -31,7 +31,7 @@ export class FingerprintPage {
 
     setTimeout(() => {
       this.moveToWaiting();
-    }, 2000); 
+    }, 100); 
   }
 
   moveToWaiting() {

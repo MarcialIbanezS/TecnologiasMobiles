@@ -29,6 +29,8 @@
     <ion-button (click)="refreshMedicalRecords()" [disabled]="isLoading" fill="outline" color="secondary">
       <ion-icon name="refresh-outline" slot="start"></ion-icon> Actualizar
     </ion-button>
+    <ion-button (click)="abrirModalEditar()" [disabled]="!selectedMedicalRecord" fill="solid" color="tertiary">
+    <ion-icon name="create-outline" slot="start"></ion-icon> Editar</ion-button>
   </div>
 
   <!-- Lista de fichas disponibles -->
@@ -92,59 +94,62 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Alergias -->
-    <ion-card class="dashboard-card allergies" *ngIf="selectedMedicalRecord">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="warning-outline"></ion-icon> Alergias
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-chip *ngIf="selectedMedicalRecord?.idalergia" color="warning">
-          <ion-label>{{ selectedMedicalRecord.idalergia }}</ion-label>
-        </ion-chip>
-        <div *ngIf="!selectedMedicalRecord?.idalergia" class="no-data-message">
-          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
-          No hay alergias registradas
-        </div>
-      </ion-card-content>
-    </ion-card>
+   <!-- Alergias -->
+<ion-card class="dashboard-card allergies" *ngIf="selectedMedicalRecord">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-icon name="warning-outline"></ion-icon> Alergias
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-chip *ngIf="selectedMedicalRecord.idalergia" color="warning">
+      <ion-label>{{ selectedMedicalRecord.idalergia }}</ion-label>
+    </ion-chip>
 
-    <!-- Condiciones Crónicas -->
-    <ion-card class="dashboard-card chronic" *ngIf="selectedMedicalRecord">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="medkit-outline"></ion-icon> Condiciones Crónicas
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-chip *ngIf="selectedMedicalRecord?.idcronico" color="medium">
-          <ion-label>{{ selectedMedicalRecord.idcronico }}</ion-label>
-        </ion-chip>
-        <div *ngIf="!selectedMedicalRecord?.idcronico" class="no-data-message">
-          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
-          No hay condiciones crónicas registradas
-        </div>
-      </ion-card-content>
-    </ion-card>
+    <div *ngIf="!selectedMedicalRecord.idalergia" class="no-data-message">
+      <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+      No hay alergias registradas
+    </div>
+  </ion-card-content>
+</ion-card>
 
-    <!-- Operaciones -->
-    <ion-card class="dashboard-card operations" *ngIf="selectedMedicalRecord">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="bandage-outline"></ion-icon> Operaciones
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-chip *ngIf="selectedMedicalRecord?.idoperacion" color="primary">
-          <ion-label>{{ selectedMedicalRecord.idoperacion }}</ion-label>
-        </ion-chip>
-        <div *ngIf="!selectedMedicalRecord?.idoperacion" class="no-data-message">
-          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
-          No hay operaciones registradas
-        </div>
-      </ion-card-content>
-    </ion-card>
+<!-- Condiciones Crónicas -->
+<ion-card class="dashboard-card chronic" *ngIf="selectedMedicalRecord">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-icon name="medkit-outline"></ion-icon> Condiciones Crónicas
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-chip *ngIf="selectedMedicalRecord.idcronico" color="medium">
+      <ion-label>{{ selectedMedicalRecord.idcronico }}</ion-label>
+    </ion-chip>
+
+    <div *ngIf="!selectedMedicalRecord.idcronico" class="no-data-message">
+      <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+      No hay condiciones crónicas registradas
+    </div>
+  </ion-card-content>
+</ion-card>
+
+<!-- Operaciones -->
+<ion-card class="dashboard-card operations" *ngIf="selectedMedicalRecord">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-icon name="bandage-outline"></ion-icon> Operaciones
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-chip *ngIf="selectedMedicalRecord.idoperacion" color="primary">
+      <ion-label>{{ selectedMedicalRecord.idoperacion }}</ion-label>
+    </ion-chip>
+
+    <div *ngIf="!selectedMedicalRecord.idoperacion" class="no-data-message">
+      <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
+      No hay operaciones registradas
+    </div>
+  </ion-card-content>
+</ion-card>
 
   </div>
 </ion-content>

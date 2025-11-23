@@ -9,12 +9,12 @@ import { Observable, BehaviorSubject } from 'rxjs';
 
 // 🧾 Modelo base
 export interface MedicalRecord {
-  idfichamedica: number;     // ID numérico de ficha
-  idpaciente: string;        // ID del paciente
+  idfichamedica: number;
+  idpaciente: string;
   fechaingreso: string;
-  idalergia?: string;        // Texto: nombre de alergia
-  idcronico?: string;        // Texto: nombre de condición crónica
-  idoperacion?: string;      // Texto: nombre de operación
+  idalergia?: string;
+  idcronico?: string;
+  idoperacion?: string;
   nombrePaciente?: string;
   rut?: string;
   fechaNacimiento?: string;
@@ -25,7 +25,6 @@ export interface MedicalRecord {
   nombreProfesional?: string;
 }
 
-// 🧬 Interfaces para compatibilidad con vistas previas
 export interface Allergy {
   idalergia: string;
   nombrealergia: string;
@@ -59,7 +58,6 @@ export class MedicalRecordService {
 
   constructor(private firestore: Firestore) {}
 
-  // 🔹 Obtener todas las fichas médicas de un paciente
   getMedicalRecordsByPatient(patientId: string): Observable<MedicalRecord[]> {
     const medicalRecordsRef = collection(this.firestore, this.collectionName);
     const queryRef = query(medicalRecordsRef, where('idpaciente', '==', patientId));
@@ -67,80 +65,61 @@ export class MedicalRecordService {
     return new Observable<MedicalRecord[]>(subscriber => {
       const unsubscribe = collectionData(queryRef, { idField: 'idfichamedica' }).subscribe({
         next: data => subscriber.next(data as MedicalRecord[]),
-        error: error => {
-          console.error('Error al obtener fichas médicas:', error);
-          subscriber.error(error);
-        }
+        error: error => subscriber.error(error)
       });
       return () => unsubscribe.unsubscribe();
     });
   }
 
-  // 🔹 Obtener ficha médica por ID (básico)
   getMedicalRecordById(recordId: string): Observable<MedicalRecord | undefined> {
     const recordDoc = doc(this.firestore, `${this.collectionName}/${recordId}`);
     return docData(recordDoc, { idField: 'idfichamedica' }) as Observable<MedicalRecord | undefined>;
   }
 
-  // 🔹 Obtener detalles completos (ya no hay relaciones)
+  // ⚠️ CORREGIDO → NO FABRICAMOS ARRAYS FALSOS
   async getMedicalRecordDetails(recordId: string): Promise<DetailedMedicalRecord | null> {
     try {
-      console.log('Obteniendo detalles de ficha médica:', recordId);
-
       const recordDoc = doc(this.firestore, `${this.collectionName}/${recordId}`);
+
       const recordSnap = await new Promise<any>((resolve) => {
         const sub = docData(recordDoc, { idField: 'idfichamedica' }).subscribe({
-          next: (data) => { resolve(data); sub.unsubscribe(); },
-          error: (err) => { console.error('Error al obtener ficha médica:', err); resolve(null); }
+          next: data => { resolve(data); sub.unsubscribe(); },
+          error: () => resolve(null)
         });
       });
 
-      if (!recordSnap) {
-        console.warn('No se encontró la ficha médica:', recordId);
-        return null;
-      }
+      if (!recordSnap) return null;
 
-      // Adaptar al formato de DetailedMedicalRecord
       const details: DetailedMedicalRecord = {
         ...recordSnap,
-        allergies: recordSnap.idalergia
-          ? [{ idalergia: '1', nombrealergia: recordSnap.idalergia, descripcionAlergia: '' }]
-          : [],
-        chronicConditions: recordSnap.idcronico
-          ? [{ idcronico: '1', enfermedadcronica: recordSnap.idcronico }]
-          : [],
-        operations: recordSnap.idoperacion
-          ? [{ idoperacion: '1', operacion: recordSnap.idoperacion }]
-          : []
+        allergies: [],
+        chronicConditions: [],
+        operations: []
       };
 
       return details;
 
     } catch (error) {
-      console.error('Error obteniendo ficha médica con detalles:', error);
+      console.error('Error obteniendo ficha médica:', error);
       return null;
     }
   }
 
-  // 🔹 Crear ficha médica
   async createMedicalRecord(medicalRecord: Omit<MedicalRecord, 'idfichamedica'>): Promise<void> {
     const ref = collection(this.firestore, this.collectionName);
     await addDoc(ref, medicalRecord);
   }
 
-  // 🔹 Actualizar ficha médica
   async updateMedicalRecord(recordId: string, data: Partial<MedicalRecord>): Promise<void> {
     const ref = doc(this.firestore, `${this.collectionName}/${recordId}`);
     await updateDoc(ref, data);
   }
 
-  // 🔹 Eliminar ficha médica
   async deleteMedicalRecord(recordId: string): Promise<void> {
     const ref = doc(this.firestore, `${this.collectionName}/${recordId}`);
     await deleteDoc(ref);
   }
 
-  // 🔹 Gestión del registro seleccionado
   setSelectedMedicalRecord(record: DetailedMedicalRecord | null): void {
     this.selectedMedicalRecordSubject.next(record);
   }
@@ -153,7 +132,6 @@ export class MedicalRecordService {
     this.selectedMedicalRecordSubject.next(null);
   }
 
-  // 🔹 Utilidades de formato
   formatDate(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -190,20 +168,9 @@ export class MedicalRecordService {
     if (record.nombreProfesional) summary.push(`Profesional: ${record.nombreProfesional}`);
     if (record.fechaConsulta) summary.push(`Fecha de Consulta: ${this.formatDate(record.fechaConsulta)}`);
 
-    if (record.allergies?.length) {
-      summary.push('\nALERGIAS:');
-      record.allergies.forEach(a => summary.push(`• ${a.nombrealergia}`));
-    }
-
-    if (record.chronicConditions?.length) {
-      summary.push('\nCONDICIONES CRÓNICAS:');
-      record.chronicConditions.forEach(c => summary.push(`• ${c.enfermedadcronica}`));
-    }
-
-    if (record.operations?.length) {
-      summary.push('\nOPERACIONES:');
-      record.operations.forEach(o => summary.push(`• ${o.operacion}`));
-    }
+    if (record.idalergia) summary.push(`\nAlergia: ${record.idalergia}`);
+    if (record.idcronico) summary.push(`Condición Crónica: ${record.idcronico}`);
+    if (record.idoperacion) summary.push(`Operación: ${record.idoperacion}`);
 
     summary.push(`\nGenerado el: ${new Date().toLocaleDateString('es-CL')}`);
     return summary.join('\n');

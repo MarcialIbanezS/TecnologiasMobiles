@@ -29,6 +29,10 @@ Route::get('/contact', [FirebaseController::class,
 Route::post('/contact', [FirebaseController::class, 
 'createFichaMedica'])->middleware(['auth', 'verified'])->name('contact.store');
 
+Route::get('/contact/search', function() {
+    return redirect()->route('contact');
+})->middleware(['auth', 'verified']);
+
 Route::post('/contact/search', [FirebaseController::class, 
 'searchFichaMedica'])->middleware(['auth', 'verified'])->name('contact.search');
 

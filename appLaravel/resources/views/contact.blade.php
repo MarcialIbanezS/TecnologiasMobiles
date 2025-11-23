@@ -147,7 +147,7 @@
         </div>
 
         <!-- Data Table -->
-        <div class="table-card">
+        <div class="table-card" id="results-section">
             <div class="table-header">
                 <h2 class="table-title">
                     <svg class="table-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1080,5 +1080,20 @@
             closeEditModal();
         }
     });
+
+    // Auto-scroll to results section on successful search
+    @if(session('success') && str_contains(session('success'), 'encontrada'))
+        document.addEventListener('DOMContentLoaded', function() {
+            const resultsSection = document.getElementById('results-section');
+            if (resultsSection) {
+                setTimeout(function() {
+                    resultsSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }, 300); // Small delay to ensure page is fully loaded
+            }
+        });
+    @endif
 </script>
 @endsection

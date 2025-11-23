@@ -61,8 +61,6 @@
                 <h2>Acciones Rápidas</h2>
                 <div class="buttons">
                     <a class="btn btn-primary" href="{{ route('contact') }}">Ver Fichas Médicas</a>
-                    <a class="btn btn-ghost" href="{{ route('contact') }}">Buscar Ficha</a>
-                    <a class="btn btn-ghost" href="{{ route('dashboard') }}">Actualizar Dashboard</a>
                 </div>
             </div>
 
@@ -341,7 +339,8 @@
         position: relative;
         width: 100%;
         max-width: 100%;
-        overflow: hidden;
+        overflow: visible;
+        z-index: 1;
     }
 
     .bar-chart {
@@ -355,8 +354,9 @@
         background: rgba(11, 18, 32, 0.8);
         border-radius: 12px;
         border: 1px solid rgba(255, 255, 255, 0.1);
-        overflow: hidden;
+        overflow: visible;
         box-sizing: border-box;
+        z-index: 1;
     }
 
     .chart-bars {
@@ -374,6 +374,7 @@
         flex: 1 1 0;
         display: flex;
         flex-direction: column;
+        justify-content: flex-end;
         align-items: center;
         height: 100%;
         min-width: 0;
@@ -400,15 +401,34 @@
 
     .bar-value {
         position: absolute;
-        top: -25px;
+        top: -35px;
         left: 50%;
         transform: translateX(-50%);
-        color: var(--text-primary);
-        font-size: 0.8rem;
-        font-weight: 600;
+        background: rgba(17, 194, 203, 0.95);
+        color: #0b1220;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 6px;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.2s ease;
         white-space: nowrap;
+        pointer-events: none;
+        z-index: 1000;
+        box-shadow: 0 4px 12px rgba(17, 194, 203, 0.4);
+    }
+
+    .bar-value::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid rgba(17, 194, 203, 0.95);
     }
 
     .bar:hover .bar-value {

@@ -389,7 +389,7 @@ class FirebaseController extends Controller
             $searchId = $request->input('search_id');
             
             if (empty($searchId)) {
-                return redirect()->back()->with('error', 'Por favor ingrese un ID de ficha médica para buscar');
+                return redirect()->route('contact')->with('error', 'Por favor ingrese un ID de ficha médica para buscar');
             }
             
             // Search for the ficha by idfichamedica field
@@ -408,7 +408,7 @@ class FirebaseController extends Controller
             // Roddy returns an array, not a collection
             if (empty($fichaResult) || (is_array($fichaResult) && count($fichaResult) === 0)) {
                 \Log::info('No ficha found with the given ID');
-                return redirect()->back()->with('error', 'No se encontró ninguna ficha médica con el ID: ' . $searchId);
+                return redirect()->route('contact')->with('error', 'No se encontró ninguna ficha médica con el ID: ' . $searchId);
             }
             
             $ficha = is_array($fichaResult) ? (object)$fichaResult[0] : $fichaResult->first();
@@ -545,7 +545,7 @@ class FirebaseController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             
-            return redirect()->back()->with('error', 'Error al buscar ficha médica: ' . $e->getMessage());
+            return redirect()->route('contact')->with('error', 'Error al buscar ficha médica: ' . $e->getMessage());
         }
     }
 

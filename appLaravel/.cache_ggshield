@@ -1,1 +1,1 @@
-{"last_found_secrets": [{"name": "Laravel APP_KEY - c:\\Users\\lenovo\\Desktop\\PROYECTOS\\TecnologiasMobiles\\appLaravel\\.env", "match": "c88a61ffedc6365e9d91b81735489c3002d38ba77ae09246d7c5b057f5d54a95"}]}
+{"last_found_secrets": [{"match": "2be9da86080c14a915b2dde5924ad1ab06202edf7b58c8f51a4dde7cb1743a03", "name": "Google Cloud Keys - c:\\Users\\lenovo\\Desktop\\PROYECTOS\\TecnologiasMobiles\\appLaravel\\app\\Http\\Controllers\\FirebaseController.php"}]}

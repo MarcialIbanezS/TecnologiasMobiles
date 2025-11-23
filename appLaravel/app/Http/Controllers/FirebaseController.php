@@ -21,8 +21,15 @@ class FirebaseController extends Controller
             \Log::info('Fetching dashboard data');
             
             // Fetch all collections
-            $fichasMedicas = FichaMedica::all();
-            $pacientes = Paciente::all();
+            
+            //WARNING: THIS IS WHERE THE LIMIT IS CHANGED
+            //WARNING: THIS IS WHERE THE LIMIT IS CHANGED
+            //WARNING: THIS IS WHERE THE LIMIT IS CHANGED
+            //WARNING: THIS IS WHERE THE LIMIT IS CHANGED
+            $call_limit = 100;
+
+            $fichasMedicas = FichaMedica::limit($call_limit)->get();
+            $pacientes = Paciente::limit($call_limit)->get();
             $operaciones = Operacion::all();
             $cronicos = Cronico::all();
             $alergias = Alergia::all();
@@ -132,13 +139,33 @@ class FirebaseController extends Controller
             arsort($operacionChartData);
             $operacionChartData = array_slice($operacionChartData, 0, 8, true);
             
+            // Count fichas by year for line chart
+            $yearStats = [];
+            if (is_array($fichasMedicas) || is_object($fichasMedicas)) {
+                foreach ($fichasMedicas as $ficha) {
+                    $fechaIngreso = is_object($ficha) ? ($ficha->fechaingreso ?? '') : ($ficha['fechaingreso'] ?? '');
+                    if (!empty($fechaIngreso)) {
+                        // Extract year from date (format: YYYY-MM-DD)
+                        $year = substr($fechaIngreso, 0, 4);
+                        if (is_numeric($year)) {
+                            $yearStats[$year] = ($yearStats[$year] ?? 0) + 1;
+                        }
+                    }
+                }
+            }
+            
+            // Sort years in ascending order
+            ksort($yearStats);
+            $yearChartData = $yearStats;
+            
             \Log::info('Dashboard data prepared', [
                 'total_pacientes' => $totalPacientes,
                 'total_fichas' => $totalFichas,
                 'fichas_this_year' => $fichasThisYear,
                 'alergia_chart_items' => count($alergiaChartData),
                 'cronico_chart_items' => count($cronicoChartData),
-                'operacion_chart_items' => count($operacionChartData)
+                'operacion_chart_items' => count($operacionChartData),
+                'year_chart_items' => count($yearChartData)
             ]);
             
             return view('dashboard', [
@@ -148,7 +175,8 @@ class FirebaseController extends Controller
                 'totalFichas' => $totalFichas,
                 'alergiaChartData' => $alergiaChartData,
                 'cronicoChartData' => $cronicoChartData,
-                'operacionChartData' => $operacionChartData
+                'operacionChartData' => $operacionChartData,
+                'yearChartData' => $yearChartData
             ]);
             
         } catch (\Exception $e) {
@@ -167,6 +195,7 @@ class FirebaseController extends Controller
                 'alergiaChartData' => [],
                 'cronicoChartData' => [],
                 'operacionChartData' => [],
+                'yearChartData' => [],
                 'error' => $e->getMessage()
             ]);
         }

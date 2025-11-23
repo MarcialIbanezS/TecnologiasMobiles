@@ -38,15 +38,6 @@
                 </div>
                 
                 <div class="stat-card">
-                    <div class="stat-icon">📈</div>
-                    <div class="stat-content">
-                        <h3>Condición Común</h3>
-                        <p class="stat-number" style="font-size: 1.2rem;">{{ $mostCommonCronico ?? 'N/A' }}</p>
-                        <p class="stat-label">Más frecuente</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
                     <div class="stat-icon">🏥</div>
                     <div class="stat-content">
                         <h3>Total Fichas</h3>
@@ -101,9 +92,7 @@
                             <div class="legend-color"></div>
                             <span>Fichas con Alergias</span>
                         </div>
-                        <div class="chart-summary">
-                            <span class="summary-text">Total: {{ number_format($totalAlergias) }} | Promedio: {{ number_format($avgAlergias) }}</span>
-                        </div>
+
                     </div>
                     @else
                     <div class="empty-chart">
@@ -158,9 +147,7 @@
                             <div class="legend-color" style="background: linear-gradient(90deg, #ff6b6b, #ff8c42);"></div>
                             <span>Fichas con Enfermedades Crónicas</span>
                         </div>
-                        <div class="chart-summary">
-                            <span class="summary-text">Total: {{ number_format($totalCronicos) }} | Promedio: {{ number_format($avgCronicos) }}</span>
-                        </div>
+
                     </div>
                     @else
                     <div class="empty-chart">
@@ -215,13 +202,108 @@
                             <div class="legend-color" style="background: linear-gradient(90deg, #4c6ef5, #7873f5);"></div>
                             <span>Fichas con Operaciones</span>
                         </div>
-                        <div class="chart-summary">
-                            <span class="summary-text">Total: {{ number_format($totalOperaciones) }} | Promedio: {{ number_format($avgOperaciones) }}</span>
-                        </div>
+
                     </div>
                     @else
                     <div class="empty-chart">
                         <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de operaciones disponibles</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Fichas Created Over Years Chart -->
+            <div class="chart-section" style="background: #006f64bc;">
+                <h2>Fichas Médicas Creadas por Año</h2>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <p class="chart-subtitle">Tendencia histórica de fichas médicas creadas</p>
+                    </div>
+                    
+                    @php
+                        $yearChartData = $yearChartData ?? [];
+                        $maxValueYear = !empty($yearChartData) ? max($yearChartData) : 1;
+                        $totalYearFichas = array_sum($yearChartData);
+                    @endphp
+                    
+                    @if(!empty($yearChartData))
+                    <div class="line-chart-container">
+                        <svg class="line-chart" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet">
+                            <!-- Grid lines -->
+                            <line x1="60" y1="20" x2="60" y2="260" stroke="rgba(255, 255, 255, 0.1)" stroke-width="2"/>
+                            <line x1="60" y1="260" x2="980" y2="260" stroke="rgba(255, 255, 255, 0.1)" stroke-width="2"/>
+                            
+                            <!-- Y-axis labels -->
+                            <text x="50" y="268" font-size="12" fill="#d4d4e6" text-anchor="end">0</text>
+                            <text x="50" y="210" font-size="12" fill="#d4d4e6" text-anchor="end">{{ round($maxValueYear * 0.25) }}</text>
+                            <text x="50" y="152" font-size="12" fill="#d4d4e6" text-anchor="end">{{ round($maxValueYear * 0.5) }}</text>
+                            <text x="50" y="94" font-size="12" fill="#d4d4e6" text-anchor="end">{{ round($maxValueYear * 0.75) }}</text>
+                            <text x="50" y="36" font-size="12" fill="#d4d4e6" text-anchor="end">{{ $maxValueYear }}</text>
+                            
+                            <!-- Horizontal grid lines -->
+                            <line x1="60" y1="260" x2="980" y2="260" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1"/>
+                            <line x1="60" y1="208" x2="980" y2="208" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1"/>
+                            <line x1="60" y1="156" x2="980" y2="156" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1"/>
+                            <line x1="60" y1="104" x2="980" y2="104" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1"/>
+                            <line x1="60" y1="52" x2="980" y2="52" stroke="rgba(255, 255, 255, 0.05)" stroke-width="1"/>
+                            
+                            <!-- Line path -->
+                            @php
+                                $years = array_keys($yearChartData);
+                                $counts = array_values($yearChartData);
+                                $pointsCount = count($years);
+                                $xStep = ($pointsCount > 1) ? (920 / ($pointsCount - 1)) : 0;
+                                $points = '';
+                                
+                                for ($i = 0; $i < $pointsCount; $i++) {
+                                    $x = 60 + ($i * $xStep);
+                                    $y = 260 - (($counts[$i] / $maxValueYear) * 208);
+                                    $points .= $x . ',' . $y . ' ';
+                                }
+                            @endphp
+                            
+                            <!-- Gradient area under line -->
+                            <defs>
+                                <linearGradient id="lineChartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:rgba(17, 194, 203, 0.3);stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:rgba(17, 194, 203, 0.05);stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <polyline points="{{ trim($points) }}" fill="none" stroke="rgba(17, 194, 203, 0.95)" stroke-width="3" stroke-linejoin="round"/>
+                            
+                            <!-- Data points -->
+                            @foreach($yearChartData as $year => $count)
+                                @php
+                                    $index = array_search($year, $years);
+                                    $x = 60 + ($index * $xStep);
+                                    $y = 260 - (($count / $maxValueYear) * 208);
+                                @endphp
+                                <circle cx="{{ $x }}" cy="{{ $y }}" r="4" fill="rgba(17, 194, 203, 0.95)" stroke="#11c2cb" stroke-width="2"/>
+                                <text x="{{ $x }}" y="{{ $y - 12 }}" font-size="14" fill="#c7faf5ff" text-anchor="middle" font-weight="bold">{{ $count }}</text>
+                            @endforeach
+                            
+                            <!-- X-axis labels (years) -->
+                            @foreach($yearChartData as $year => $count)
+                                @php
+                                    $index = array_search($year, $years);
+                                    $x = 60 + ($index * $xStep);
+                                @endphp
+                                <text x="{{ $x }}" y="285" font-size="12" fill="#d4d4e6" text-anchor="middle">{{ $year }}</text>
+                            @endforeach
+                        </svg>
+                    </div>
+                    
+                    <!-- Chart Legend -->
+                    <div class="chart-legend">
+
+                        <div class="legend-item">
+                            <span class="summary-text">Período: {{ min(array_keys($yearChartData)) }} - {{ max(array_keys($yearChartData)) }}</span>
+                        </div>
+                    </div>
+                    @else
+                    <div class="empty-chart">
+                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de fichas disponibles</p>
                     </div>
                     @endif
                 </div>
@@ -520,6 +602,24 @@
         padding: 0.5rem 1rem;
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Line Chart Styles */
+    .line-chart-container {
+        position: relative;
+        width: 100%;
+        padding: 20px;
+        background: rgba(11, 18, 32, 0.8);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 1.5rem;
+    }
+
+    .line-chart {
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        display: block;
     }
 
     .activity-list {

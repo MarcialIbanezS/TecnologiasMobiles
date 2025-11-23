@@ -3,7 +3,7 @@
 @section('title', 'Acerca de - Triple M.A.')
 
 @section('page-content')
-<div style="padding: 6rem 0 2rem 0; margin-top: 2rem;">
+<div style="padding: 2rem 0 2rem 0; ">
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
         
         <!-- Hero Section -->

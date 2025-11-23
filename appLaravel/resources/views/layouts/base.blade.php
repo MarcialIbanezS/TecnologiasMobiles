@@ -87,11 +87,11 @@
     </main>
 
     <!-- Footer -->
-    @guest
+    
         <footer class="site-footer">
             @include('layouts.footer')
         </footer>
-    @endguest
+    
 
     <!-- Scripts -->
     @yield('scripts')

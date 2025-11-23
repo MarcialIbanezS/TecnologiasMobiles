@@ -1,9 +1,9 @@
 :root {
             --bg: #caf9eb;
             --bg2: #198080;
-            --bg_button: linear-gradient(90deg, var(--accent), #08ad6e);
+            --bg_button: linear-gradient(90deg, var(--accent), #068d59);
             --card: #0b1220;
-            --accent: #11c2cb;
+            --accent: #017d83;
             --muted: #c0e8e4;
             --text-primary: #f0f4f8;
             --text-button: #abf7dd;
@@ -40,11 +40,11 @@
         }
 
         .card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: linear-gradient(180deg, rgba(11, 18, 32, 0.7), rgba(8, 12, 24, 0.8));
+            border: 1px solid rgba(17, 194, 203, 0.15);
             padding: 48px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px var(--shadow);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(10px);
             text-align: center;
         }
@@ -64,9 +64,15 @@
             background-clip: text;
         }
 
+        .stat-label {
+            font-size: 1rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
         .lead {
             margin: 0 0 32px 0;
-            color: var(--muted);
+            color: #d0e0f0;
             font-size: 1.125rem;
             line-height: 1.6;
             max-width: 600px;

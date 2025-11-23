@@ -12,7 +12,7 @@
                     <li><a href="/">Inicio</a></li>
                     <li><a href="/dashboard">Dashboard</a></li>
                     <li><a href="/about">Acerca de</a></li>
-                    <li><a href="/contact">Contacto</a></li>
+                    <li><a href="/contact">Fichas</a></li>
                 </ul>
             </div>
             

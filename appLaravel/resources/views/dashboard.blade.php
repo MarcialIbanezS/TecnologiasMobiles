@@ -3,9 +3,9 @@
 @section('title', 'Dashboard - Triple M.A.')
 
 @section('page-content')
-<div style="padding: 6rem 0 2rem 0; margin-top: 2rem;">
-    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
-        <div class="card" >
+<div style="padding: 0 0 2rem 0; ">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; ">
+        <div class="card" style="background: #00b3a1ff;">
             <div class="hero-content">
                 <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-primary);">Dashboard</h1>
                 <p class="lead" style="font-size: 1.125rem; color: var(--text-primary); margin-bottom: 2rem; max-width: none;">Bienvenido al panel de control de Triple M.A. Aquí puedes gestionar todos los aspectos de tu aplicación médica.</p>
@@ -56,16 +56,8 @@
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <h2>Acciones Rápidas</h2>
-                <div class="buttons">
-                    <a class="btn btn-primary" href="{{ route('contact') }}">Ver Fichas Médicas</a>
-                </div>
-            </div>
-
             <!-- Ingresos por Comuna Chart -->
-            <div class="chart-section">
+            <div class="chart-section" style="background: #006f64bc;">
                 <h2>Distribución de Fichas por Alergia</h2>
                 <div class="chart-container">
                     <div class="chart-header">
@@ -122,7 +114,7 @@
             </div>
 
             <!-- Chronic Diseases Chart -->
-            <div class="chart-section">
+            <div class="chart-section" style="background: #006f64bc;">
                 <h2>Distribución de Fichas por Enfermedad Crónica</h2>
                 <div class="chart-container">
                     <div class="chart-header">
@@ -179,7 +171,7 @@
             </div>
 
             <!-- Operations Chart -->
-            <div class="chart-section">
+            <div class="chart-section" style="background: #006f64bc;">
                 <h2>Distribución de Fichas por Operación</h2>
                 <div class="chart-container">
                     <div class="chart-header">
@@ -253,10 +245,10 @@
     }
 
     .stat-card {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(11, 18, 32, 0.6);
         padding: 1.5rem;
         border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(17, 194, 203, 0.2);
         display: flex;
         align-items: center;
         gap: 1rem;
@@ -265,7 +257,8 @@
 
     .stat-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
+        box-shadow: 0 8px 25px rgba(17, 194, 203, 0.2);
+        background: rgba(11, 18, 32, 0.8);
     }
 
     .stat-icon {
@@ -288,9 +281,10 @@
     }
 
     .stat-label {
-        color: var(--muted);
+        color: #a0d8d4;
         margin: 0;
         font-size: 0.85rem;
+        font-weight: 500;
     }
 
     .quick-actions, .recent-activity {

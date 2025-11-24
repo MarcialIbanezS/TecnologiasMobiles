@@ -643,6 +643,11 @@ class FirebaseController extends Controller
         ]);
         
         try {
+
+            $operaciones = Operacion::all();
+            $cronicos = Cronico::all();
+            $alergias = Alergia::all();
+            
             // Validate the request
             $validated = $request->validate([
                 'fechaingreso' => 'nullable|date',
@@ -655,20 +660,26 @@ class FirebaseController extends Controller
             \Log::info('Request validated successfully', ['validated_data' => $validated]);
 
             $updateData = [];
-            if ($request->has('fechaingreso') && $request->input('fechaingreso')) {
+            if ($request->has('fechaingreso') && $request->filled('fechaingreso')) {
                 $updateData['fechaingreso'] = $request->input('fechaingreso');
             }
-            if ($request->has('idoperacion')) {
-                $updateData['idoperacion'] = $request->input('idoperacion') ?: null;
+            // Map idoperacion to its value
+            if ($request->has('idoperacion') && $request->filled('idoperacion')) {
+                $operacion = \App\FModels\Operacion::where([['idoperacion', '=', $request->input('idoperacion')]])->first();
+                $updateData['idoperacion'] = $operacion ? $operacion->operacion : $request->input('idoperacion');
             }
-            if ($request->has('idcronico')) {
-                $updateData['idcronico'] = $request->input('idcronico') ?: null;
+            // Map idcronico to its value
+            if ($request->has('idcronico') && $request->filled('idcronico')) {
+                $cronico = \App\FModels\Cronico::where([['idcronico', '=', $request->input('idcronico')]])->first();
+                $updateData['idcronico'] = $cronico ? $cronico->enfermedadcronica : $request->input('idcronico');
             }
-            if ($request->has('idalergia')) {
-                $updateData['idalergia'] = $request->input('idalergia') ?: null;
+            // Map idalergia to its descripcionAlergia value
+            if ($request->has('idalergia') && $request->filled('idalergia')) {
+                $alergia = \App\FModels\Alergia::where([['idalergia', '=', $request->input('idalergia')]])->first();
+                $updateData['idalergia'] = $alergia ? $alergia->descripcionAlergia : $request->input('idalergia');
             }
-            if ($request->has('alergia_descripcion')) {
-                $updateData['alergia_descripcion'] = $request->input('alergia_descripcion') ?: null;
+            if ($request->has('alergia_descripcion') && $request->filled('alergia_descripcion')) {
+                $updateData['alergia_descripcion'] = $request->input('alergia_descripcion');
             }
 
             \Log::info('Prepared update data', ['updateData' => $updateData]);
@@ -711,12 +722,12 @@ class FirebaseController extends Controller
                         'document_data' => $docData
                     ]);
 
-                    // Update the document using its Firestore document ID
-                    $collection->document($docId)->update(
-                        array_map(function($field, $value) {
-                            return ['path' => $field, 'value' => $value];
-                        }, array_keys($updateData), $updateData)
-                    );
+                    // Build update array correctly
+                    $updateArray = [];
+                    foreach ($updateData as $field => $value) {
+                        $updateArray[] = ['path' => $field, 'value' => $value];
+                    }
+                    $collection->document($docId)->update($updateArray);
 
                     $updatedCount++;
                     $updatedDocIds[] = $docId;

@@ -651,12 +651,10 @@ class FirebaseController extends Controller
                 'idalergia' => 'nullable|string|max:255',
                 'alergia_descripcion' => 'nullable|string|max:1000'
             ]);
-            
+
             \Log::info('Request validated successfully', ['validated_data' => $validated]);
-            
-            // Try to find and update using Roddy's where() method with correct array format
+
             $updateData = [];
-            
             if ($request->has('fechaingreso') && $request->input('fechaingreso')) {
                 $updateData['fechaingreso'] = $request->input('fechaingreso');
             }
@@ -669,74 +667,86 @@ class FirebaseController extends Controller
             if ($request->has('idalergia')) {
                 $updateData['idalergia'] = $request->input('idalergia') ?: null;
             }
-            
-            \Log::info('Prepared update data', ['updateData' => $updateData]);
-            
-            // Try updating using Roddy's collection update method with correct array format
-            try {
-                // First verify the record exists using Roddy's array format
-                $existingFicha = FichaMedica::where(['idfichamedica', '=', $id])->first();
-                if (!$existingFicha) {
-                    // Try as integer
-                    $existingFicha = FichaMedica::where(['idfichamedica', '=', (int)$id])->first();
-                }
-                
-                if (!$existingFicha) {
-                    \Log::error('UPDATE: Ficha not found', ['id' => $id]);
-                    return response()->json(['success' => false, 'message' => 'Ficha médica no encontrada'], 404);
-                }
-                
-                \Log::info('UPDATE: Found existing ficha', ['ficha' => $existingFicha->idfichamedica]);
-                
-                // Update using Roddy's syntax: update the found record
-                if (!empty($updateData)) {
-                    $updateResult = $existingFicha->update($updateData);
-                    \Log::info('UPDATE: Update result', ['result' => $updateResult]);
-                }
+            if ($request->has('alergia_descripcion')) {
+                $updateData['alergia_descripcion'] = $request->input('alergia_descripcion') ?: null;
+            }
 
-                //MANUALLY UPDATING IT BY HAND BECAUSE RODDY SEEMS TO HAVE ISSUES
-                $user = FichaMedica::where(['idfichamedica', '=', 9142])->first();
-                $updatedUser = $user->update([
-                    'fechaingreso' => "2022-11-11",
-                    'idalergia' => "Alergia a los gatos",
-                    'idcronico' => "Hipertension",
-                    'idoperacion' => "Apendicitis",
-                ]);
-                
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Ficha médica actualizada exitosamente'
-                ]);
-                
-            } catch (\Exception $updateEx) {
-                \Log::error('UPDATE: Direct update failed, trying alternative method', [
-                    'error' => $updateEx->getMessage()
-                ]);
-                
-                // Alternative: Use collection-level update with correct array format
-                $affectedRows = FichaMedica::where(['idfichamedica', '=', $id])->update($updateData);
-                \Log::info('UPDATE: Collection update result', ['affected' => $affectedRows]);
-                
-                if ($affectedRows === 0) {
-                    // Try with integer ID
-                    $affectedRows = FichaMedica::where(['idfichamedica', '=', (int)$id])->update($updateData);
-                    \Log::info('UPDATE: Integer ID update result', ['affected' => $affectedRows]);
-                }
-                
-                if ($affectedRows > 0) {
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Ficha médica actualizada exitosamente'
+            \Log::info('Prepared update data', ['updateData' => $updateData]);
+
+            $projectId = env('FIREBASE_PROJECT_ID');
+            $credentialsPath = env('FIREBASE_CREDENTIALS');
+            if ($credentialsPath && !file_exists($credentialsPath)) {
+                $credentialsPath = base_path($credentialsPath);
+            }
+            if (!file_exists($credentialsPath)) {
+                throw new \Exception("Firebase credentials file not found at: {$credentialsPath}");
+            }
+
+            \Log::info('Creating Firestore client for update', [
+                'projectId' => $projectId,
+                'credentialsPath' => $credentialsPath
+            ]);
+
+            $db = new \Google\Cloud\Firestore\FirestoreClient([
+                'projectId' => $projectId,
+                'keyFilePath' => $credentialsPath
+            ]);
+
+            // Query for the document(s) with matching idfichamedica
+            $collection = $db->collection('fichamedica');
+            $query = $collection->where('idfichamedica', '=', (int)$id);
+            $documents = $query->documents();
+
+            $updatedCount = 0;
+            $updatedDocIds = [];
+
+            foreach ($documents as $document) {
+                if ($document->exists()) {
+                    $docId = $document->id();
+                    $docData = $document->data();
+
+                    \Log::info('Found document to update', [
+                        'firestore_doc_id' => $docId,
+                        'idfichamedica_field' => $docData['idfichamedica'] ?? 'N/A',
+                        'document_data' => $docData
                     ]);
-                } else {
-                    return response()->json(['success' => false, 'message' => 'No se pudo actualizar la ficha médica'], 500);
+
+                    // Update the document using its Firestore document ID
+                    $collection->document($docId)->update(
+                        array_map(function($field, $value) {
+                            return ['path' => $field, 'value' => $value];
+                        }, array_keys($updateData), $updateData)
+                    );
+
+                    $updatedCount++;
+                    $updatedDocIds[] = $docId;
+                    \Log::info('Document updated successfully', ['firestore_doc_id' => $docId]);
                 }
             }
-            
+
+            if ($updatedCount === 0) {
+                \Log::warning('No documents found to update', ['idfichamedica' => $id]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ficha médica no encontrada con ID: ' . $id
+                ], 404);
+            }
+
+            \Log::info('Update completed', [
+                'updated_count' => $updatedCount,
+                'updated_firestore_doc_ids' => $updatedDocIds
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Ficha médica actualizada exitosamente',
+                'updated_count' => $updatedCount,
+                'updated_document_ids' => $updatedDocIds
+            ]);
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::error('Validation failed', ['errors' => $e->errors()]);
             return response()->json(['success' => false, 'message' => 'Validación fallida', 'errors' => $e->errors()], 422);
-            
         } catch (\Exception $e) {
             \Log::error('Exception in updateFichaMedica', [
                 'message' => $e->getMessage(),
@@ -744,8 +754,10 @@ class FirebaseController extends Controller
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
-            return response()->json(['success' => false, 'message' => 'Error al actualizar ficha médica: ' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar ficha médica: ' . $e->getMessage()
+            ], 500);
         }
     }
 

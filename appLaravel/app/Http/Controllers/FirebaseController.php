@@ -600,17 +600,45 @@ class FirebaseController extends Controller
             $randomId = 'FICHA_' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
             
             \Log::info('Generated random ID for ficha medica', ['generated_id' => $randomId]);
+
+            if ($request->has('idoperacion') && $request->filled('idoperacion')) {
+                $operacionInput = $request->input('idoperacion');
+                if ($operacionInput == '0') {
+                    $operationCreate = null;
+                } else {
+                    //$operacion = Operacion::where([['idoperacion', '=', (int)$operacionInput]])->first();
+                    $operationCreate = Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first() ? Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first()->operacion : $request->input('idoperacion');
+                }
+            }
+            if ($request->has('idcronico') && $request->filled('idcronico')) {
+                $cronicoInput = $request->input('idcronico');
+                if ($cronicoInput == '0') {
+                    $cronicoCreate = null;
+                } else {
+                    //$cronico = Cronico::where([['idcronico', '=', (int)$cronicoInput]])->first();
+                    $cronicoCreate = Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first() ? Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first()->enfermedadcronica : $request->input('idcronico');
+                }
+            }
+            if ($request->has('idalergia') && $request->filled('idalergia')) {
+                $alergiaInput = $request->input('idalergia');
+                if ($alergiaInput == '0') {
+                    $alergiaCreate = null;
+                } else {
+                    //$alergia = Alergia::where([['idalergia', '=', (int)$alergiaInput]])->first();
+                    $alergiaCreate = Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first() ? Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first()->descripcionAlergia : $request->input('idalergia');
+                }
+            }
             
             // Create new FichaMedica using the Roddy Firestore model
             \Log::info('Creating ficha medica in Firestore');
-            $fichaMedica = FichaMedica::create([
-                'idfichamedica' => $randomId, // Use auto-generated ID
-                'fechaingreso' => $request->input('fechaingreso'),
-                'idpaciente' => $request->input('idpaciente'),
-                'idoperacion' => Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first() ? Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first()->operacion : $request->input('idoperacion'),
-                'idcronico' => Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first() ? Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first()->enfermedadcronica : $request->input('idcronico'),
-                'idalergia' => Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first() ? Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first()->descripcionAlergia : $request->input('idalergia')
-            ]);
+                $fichaMedica = FichaMedica::create([
+                    'idfichamedica' => $randomId, // Use auto-generated ID
+                    'fechaingreso' => date('Y-m-d', strtotime($request->input('fechaingreso'))),
+                    'idpaciente' => $request->input('idpaciente'),
+                    'idoperacion' => $operationCreate,
+                    'idcronico' => $cronicoCreate,
+                    'idalergia' => $alergiaCreate
+                ]);
             
             \Log::info('Ficha medica saved successfully', [
                 'fichamedica' => $fichaMedica

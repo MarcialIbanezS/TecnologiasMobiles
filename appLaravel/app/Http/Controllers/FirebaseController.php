@@ -607,13 +607,13 @@ class FirebaseController extends Controller
                 'idfichamedica' => $randomId, // Use auto-generated ID
                 'fechaingreso' => $request->input('fechaingreso'),
                 'idpaciente' => $request->input('idpaciente'),
-                'idoperacion' => $request->input('idoperacion'),
-                'idcronico' => $request->input('idcronico'),
-                'idalergia' => $request->input('idalergia')
+                'idoperacion' => Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first() ? Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first()->operacion : $request->input('idoperacion'),
+                'idcronico' => Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first() ? Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first()->enfermedadcronica : $request->input('idcronico'),
+                'idalergia' => Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first() ? Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first()->descripcionAlergia : $request->input('idalergia')
             ]);
             
             \Log::info('Ficha medica saved successfully', [
-                'idfichamedica' => $fichaMedica->idfichamedica ?? 'unknown'
+                'fichamedica' => $fichaMedica
             ]);
             
             return redirect()->back()->with('success', 'Ficha médica creada exitosamente');
@@ -647,6 +647,9 @@ class FirebaseController extends Controller
             $operaciones = Operacion::all();
             $cronicos = Cronico::all();
             $alergias = Alergia::all();
+            \Log::info('Related collections loaded for update', [
+                'operaciones' => $operaciones
+            ]);
             
             // Validate the request
             $validated = $request->validate([
@@ -665,22 +668,28 @@ class FirebaseController extends Controller
             }
             // Map idoperacion to its value
             if ($request->has('idoperacion') && $request->filled('idoperacion')) {
-                $operacion = \App\FModels\Operacion::where([['idoperacion', '=', $request->input('idoperacion')]])->first();
-                $updateData['idoperacion'] = $operacion ? $operacion->operacion : $request->input('idoperacion');
+                //$operacionInput = $request->input('idoperacion');
+                //$operacion = Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first();
+                
+                //$updateData['idoperacion'] = $operacion ? $operacion->operacion : $operacionInput;
+
+                $updateData['idoperacion'] = Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first() ? Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first()->operacion : $request->input('idoperacion');
             }
+
+
             // Map idcronico to its value
             if ($request->has('idcronico') && $request->filled('idcronico')) {
-                $cronico = \App\FModels\Cronico::where([['idcronico', '=', $request->input('idcronico')]])->first();
-                $updateData['idcronico'] = $cronico ? $cronico->enfermedadcronica : $request->input('idcronico');
+                //$cronicoInput = $request->input('idcronico');
+                //$cronico = Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first();
+                $updateData['idcronico'] = Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first() ? Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first()->enfermedadcronica : $request->input('idcronico');
             }
             // Map idalergia to its descripcionAlergia value
             if ($request->has('idalergia') && $request->filled('idalergia')) {
-                $alergia = \App\FModels\Alergia::where([['idalergia', '=', $request->input('idalergia')]])->first();
-                $updateData['idalergia'] = $alergia ? $alergia->descripcionAlergia : $request->input('idalergia');
+                //$alergiaInput = $request->input('idalergia');
+                //$alergia = Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first();
+                $updateData['idalergia'] = Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first() ? Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first()->descripcionAlergia : $request->input('idalergia');
             }
-            if ($request->has('alergia_descripcion') && $request->filled('alergia_descripcion')) {
-                $updateData['alergia_descripcion'] = $request->input('alergia_descripcion');
-            }
+
 
             \Log::info('Prepared update data', ['updateData' => $updateData]);
 
@@ -732,6 +741,7 @@ class FirebaseController extends Controller
                     $updatedCount++;
                     $updatedDocIds[] = $docId;
                     \Log::info('Document updated successfully', ['firestore_doc_id' => $docId]);
+                    \Log::info('UPDATED DATA', [$updateArray]);
                 }
             }
 

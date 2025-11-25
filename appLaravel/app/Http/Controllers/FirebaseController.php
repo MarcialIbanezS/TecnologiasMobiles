@@ -666,28 +666,37 @@ class FirebaseController extends Controller
             if ($request->has('fechaingreso') && $request->filled('fechaingreso')) {
                 $updateData['fechaingreso'] = $request->input('fechaingreso');
             }
-            // Map idoperacion to its value
+            // Map idoperacion to its value or null if 0
             if ($request->has('idoperacion') && $request->filled('idoperacion')) {
-                //$operacionInput = $request->input('idoperacion');
-                //$operacion = Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first();
-                
-                //$updateData['idoperacion'] = $operacion ? $operacion->operacion : $operacionInput;
-
-                $updateData['idoperacion'] = Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first() ? Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first()->operacion : $request->input('idoperacion');
+                $operacionInput = $request->input('idoperacion');
+                if ($operacionInput == '0') {
+                    $updateData['idoperacion'] = null;
+                } else {
+                    //$operacion = Operacion::where([['idoperacion', '=', (int)$operacionInput]])->first();
+                    $updateData['idoperacion'] = Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first() ? Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first()->operacion : $request->input('idoperacion');
+                }
             }
 
 
-            // Map idcronico to its value
+            // Map idcronico to its value or null if 0
             if ($request->has('idcronico') && $request->filled('idcronico')) {
-                //$cronicoInput = $request->input('idcronico');
-                //$cronico = Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first();
-                $updateData['idcronico'] = Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first() ? Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first()->enfermedadcronica : $request->input('idcronico');
+                $cronicoInput = $request->input('idcronico');
+                if ($cronicoInput == '0') {
+                    $updateData['idcronico'] = null;
+                } else {
+                    //$cronico = Cronico::where([['idcronico', '=', (int)$cronicoInput]])->first();
+                    $updateData['idcronico'] = Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first() ? Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first()->enfermedadcronica : $request->input('idcronico');
+                }
             }
-            // Map idalergia to its descripcionAlergia value
+            // Map idalergia to its descripcionAlergia value or null if 0
             if ($request->has('idalergia') && $request->filled('idalergia')) {
-                //$alergiaInput = $request->input('idalergia');
-                //$alergia = Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first();
-                $updateData['idalergia'] = Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first() ? Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first()->descripcionAlergia : $request->input('idalergia');
+                $alergiaInput = $request->input('idalergia');
+                if ($alergiaInput == '0') {
+                    $updateData['idalergia'] = null;
+                } else {
+                    //$alergia = Alergia::where([['idalergia', '=', (int)$alergiaInput]])->first();
+                    $updateData['idalergia'] = Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first() ? Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first()->descripcionAlergia : $request->input('idalergia');
+                }
             }
 
 

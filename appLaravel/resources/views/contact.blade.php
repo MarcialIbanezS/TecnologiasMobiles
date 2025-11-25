@@ -64,7 +64,7 @@
                     <div class="form-group">
                         <label for="idoperacion" class="form-label">Operación</label>
                         <select id="idoperacion" name="idoperacion" class="form-input">
-                            <option value="">Sin operación</option>
+                            <option value="0">Sin operación</option>
                             @foreach($operacionOptions ?? [] as $id => $nombre)
                                 <option value="{{ $id }}">{{ $nombre }}</option>
                             @endforeach
@@ -74,7 +74,7 @@
                     <div class="form-group">
                         <label for="idcronico" class="form-label">Enfermedad Crónica</label>
                         <select id="idcronico" name="idcronico" class="form-input">
-                            <option value="">Sin enfermedad crónica</option>
+                            <option value="0">Sin enfermedad crónica</option>
                             @foreach($cronicoOptions ?? [] as $id => $nombre)
                                 <option value="{{ $id }}">{{ $nombre }}</option>
                             @endforeach
@@ -84,7 +84,7 @@
                     <div class="form-group">
                         <label for="idalergia" class="form-label">Alergia</label>
                         <select id="idalergia" name="idalergia" class="form-input">
-                            <option value="">Sin alergia</option>
+                            <option value="0">Sin alergia</option>
                             @foreach($alergiaOptions ?? [] as $id => $nombre)
                                 <option value="{{ $id }}">{{ $nombre }}</option>
                             @endforeach
@@ -263,7 +263,7 @@
                     <div class="form-group">
                         <label class="form-label">Operación</label>
                         <select id="edit-operacion" class="form-input">
-                            <option value="">Sin operación</option>
+                            <option value="0">Sin operación</option>
                             @foreach($operacionOptions ?? [] as $id => $nombre)
                                 <option value="{{ $id }}">{{ $nombre }}</option>
                             @endforeach
@@ -272,7 +272,7 @@
                     <div class="form-group">
                         <label class="form-label">Enfermedad Crónica</label>
                         <select id="edit-cronico" class="form-input">
-                            <option value="">Sin enfermedad crónica</option>
+                            <option value="0">Sin enfermedad crónica</option>
                             @foreach($cronicoOptions ?? [] as $id => $nombre)
                                 <option value="{{ $id }}">{{ $nombre }}</option>
                             @endforeach
@@ -284,7 +284,7 @@
                     <div class="form-group">
                         <label class="form-label">Alergia</label>
                         <select id="edit-alergia" class="form-input">
-                            <option value="">Sin alergia</option>
+                            <option value="0">Sin alergia</option>
                             @foreach($alergiaOptions ?? [] as $id => $nombre)
                                 <option value="{{ $id }}">{{ $nombre }}</option>
                             @endforeach

@@ -3,13 +3,16 @@
 @section('title', 'Dashboard - Triple M.A.')
 
 @section('page-content')
-<div style="padding: 0 0 2rem 0; ">
+<div style="padding: 2rem 0 2rem 0; ">
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; ">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Dashboard</h1>
+            <p class="page-subtitle">Bienvenido al panel de control de Triple M.A.</p>
+        </div>
+
         <div class="card" style="background: #00b3a1ff;">
-            <div class="hero-content">
-                <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-primary);">Dashboard</h1>
-                <p class="lead" style="font-size: 1.125rem; color: var(--text-primary); margin-bottom: 2rem; max-width: none;">Bienvenido al panel de control de Triple M.A. Aquí puedes gestionar todos los aspectos de tu aplicación médica.</p>
-            </div>
 
             @if(isset($error))
             <div class="alert alert-error" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
@@ -22,7 +25,7 @@
                 <div class="stat-card">
                     <div class="stat-icon">👥</div>
                     <div class="stat-content">
-                        <h3>Pacientes</h3>
+                        <h3>Pacientes Registrados</h3>
                         <p class="stat-number">{{ number_format($totalPacientes ?? 0) }}</p>
                         <p class="stat-label">Total pacientes registrados</p>
                     </div>
@@ -31,7 +34,7 @@
                 <div class="stat-card">
                     <div class="stat-icon">📊</div>
                     <div class="stat-content">
-                        <h3>Fichas</h3>
+                        <h3>Fichas en {{ date('Y') }}</h3>
                         <p class="stat-number">{{ number_format($fichasThisYear ?? 0) }}</p>
                         <p class="stat-label">Fichas creadas este año</p>
                     </div>
@@ -47,173 +50,8 @@
                 </div>
             </div>
 
-            <!-- Ingresos por Comuna Chart -->
-            <div class="chart-section" style="background: #006f64bc;">
-                <h2>Distribución de Fichas por Alergia</h2>
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <p class="chart-subtitle">Fichas médicas clasificadas por tipo de alergia</p>
-                    </div>
-                    
-                    @php
-                        $alergiaChartData = $alergiaChartData ?? [];
-                        $maxValue = !empty($alergiaChartData) ? max($alergiaChartData) : 1;
-                        $totalAlergias = array_sum($alergiaChartData);
-                        $avgAlergias = $totalAlergias > 0 && count($alergiaChartData) > 0 ? round($totalAlergias / count($alergiaChartData)) : 0;
-                    @endphp
-                    
-                    @if(!empty($alergiaChartData))
-                    <div class="bar-chart">
-                        <div class="chart-bars">
-                            @foreach($alergiaChartData as $alergia => $count)
-                            <div class="bar-group">
-                                <div class="bar" data-value="{{ $count }}" style="height: {{ $maxValue > 0 ? ($count / $maxValue * 100) : 0 }}%;">
-                                    <span class="bar-value">{{ $count }}</span>
-                                </div>
-                                <span class="bar-label">{{ $alergia }}</span>
-                            </div>
-                            @endforeach
-                        </div>
-                        
-                        <!-- Chart Y-axis labels -->
-                        <div class="chart-y-axis">
-                            <span class="y-label">{{ $maxValue }}</span>
-                            <span class="y-label">{{ round($maxValue * 0.8) }}</span>
-                            <span class="y-label">{{ round($maxValue * 0.6) }}</span>
-                            <span class="y-label">{{ round($maxValue * 0.4) }}</span>
-                            <span class="y-label">{{ round($maxValue * 0.2) }}</span>
-                            <span class="y-label">0</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Chart Legend -->
-                    <div class="chart-legend">
-                        <div class="legend-item">
-                            <div class="legend-color"></div>
-                            <span>Fichas con Alergias</span>
-                        </div>
-
-                    </div>
-                    @else
-                    <div class="empty-chart">
-                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de alergias disponibles</p>
-                    </div>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Chronic Diseases Chart -->
-            <div class="chart-section" style="background: #006f64bc;">
-                <h2>Distribución de Fichas por Enfermedad Crónica</h2>
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <p class="chart-subtitle">Fichas médicas clasificadas por enfermedad crónica</p>
-                    </div>
-                    
-                    @php
-                        $cronicoChartData = $cronicoChartData ?? [];
-                        $maxValueCronico = !empty($cronicoChartData) ? max($cronicoChartData) : 1;
-                        $totalCronicos = array_sum($cronicoChartData);
-                        $avgCronicos = $totalCronicos > 0 && count($cronicoChartData) > 0 ? round($totalCronicos / count($cronicoChartData)) : 0;
-                    @endphp
-                    
-                    @if(!empty($cronicoChartData))
-                    <div class="bar-chart">
-                        <div class="chart-bars">
-                            @foreach($cronicoChartData as $cronico => $count)
-                            <div class="bar-group">
-                                <div class="bar bar-cronico" data-value="{{ $count }}" style="height: {{ $maxValueCronico > 0 ? ($count / $maxValueCronico * 100) : 0 }}%;">
-                                    <span class="bar-value">{{ $count }}</span>
-                                </div>
-                                <span class="bar-label">{{ $cronico }}</span>
-                            </div>
-                            @endforeach
-                        </div>
-                        
-                        <!-- Chart Y-axis labels -->
-                        <div class="chart-y-axis">
-                            <span class="y-label">{{ $maxValueCronico }}</span>
-                            <span class="y-label">{{ round($maxValueCronico * 0.8) }}</span>
-                            <span class="y-label">{{ round($maxValueCronico * 0.6) }}</span>
-                            <span class="y-label">{{ round($maxValueCronico * 0.4) }}</span>
-                            <span class="y-label">{{ round($maxValueCronico * 0.2) }}</span>
-                            <span class="y-label">0</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Chart Legend -->
-                    <div class="chart-legend">
-                        <div class="legend-item">
-                            <div class="legend-color" style="background: linear-gradient(90deg, #ff6b6b, #ff8c42);"></div>
-                            <span>Fichas con Enfermedades Crónicas</span>
-                        </div>
-
-                    </div>
-                    @else
-                    <div class="empty-chart">
-                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de enfermedades crónicas disponibles</p>
-                    </div>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Operations Chart -->
-            <div class="chart-section" style="background: #006f64bc;">
-                <h2>Distribución de Fichas por Operación</h2>
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <p class="chart-subtitle">Fichas médicas clasificadas por tipo de operación</p>
-                    </div>
-                    
-                    @php
-                        $operacionChartData = $operacionChartData ?? [];
-                        $maxValueOperacion = !empty($operacionChartData) ? max($operacionChartData) : 1;
-                        $totalOperaciones = array_sum($operacionChartData);
-                        $avgOperaciones = $totalOperaciones > 0 && count($operacionChartData) > 0 ? round($totalOperaciones / count($operacionChartData)) : 0;
-                    @endphp
-                    
-                    @if(!empty($operacionChartData))
-                    <div class="bar-chart">
-                        <div class="chart-bars">
-                            @foreach($operacionChartData as $operacion => $count)
-                            <div class="bar-group">
-                                <div class="bar bar-operacion" data-value="{{ $count }}" style="height: {{ $maxValueOperacion > 0 ? ($count / $maxValueOperacion * 100) : 0 }}%;">
-                                    <span class="bar-value">{{ $count }}</span>
-                                </div>
-                                <span class="bar-label">{{ $operacion }}</span>
-                            </div>
-                            @endforeach
-                        </div>
-                        
-                        <!-- Chart Y-axis labels -->
-                        <div class="chart-y-axis">
-                            <span class="y-label">{{ $maxValueOperacion }}</span>
-                            <span class="y-label">{{ round($maxValueOperacion * 0.8) }}</span>
-                            <span class="y-label">{{ round($maxValueOperacion * 0.6) }}</span>
-                            <span class="y-label">{{ round($maxValueOperacion * 0.4) }}</span>
-                            <span class="y-label">{{ round($maxValueOperacion * 0.2) }}</span>
-                            <span class="y-label">0</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Chart Legend -->
-                    <div class="chart-legend">
-                        <div class="legend-item">
-                            <div class="legend-color" style="background: linear-gradient(90deg, #4c6ef5, #7873f5);"></div>
-                            <span>Fichas con Operaciones</span>
-                        </div>
-
-                    </div>
-                    @else
-                    <div class="empty-chart">
-                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de operaciones disponibles</p>
-                    </div>
-                    @endif
-                </div>
-            </div>
-
             <!-- Fichas Created Over Years Chart -->
-            <div class="chart-section" style="background: #006f64bc;">
+            <div class="chart-section" >
                 <h2>Fichas Médicas Creadas por Año</h2>
                 <div class="chart-container">
                     <div class="chart-header">
@@ -227,7 +65,7 @@
                     @endphp
                     
                     @if(!empty($yearChartData))
-                    <div class="line-chart-container">
+                    <div class="line-chart-container" style="background: #006f643d;">
                         <svg class="line-chart" viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet">
                             <!-- Grid lines -->
                             <line x1="60" y1="20" x2="60" y2="260" stroke="rgba(255, 255, 255, 0.1)" stroke-width="2"/>
@@ -309,7 +147,170 @@
                 </div>
             </div>
 
-            <!-- Recent Activity -->
+            <!-- Ingresos por Comuna Chart -->
+            <div class="chart-section" >
+                <h2>Distribución de Fichas por Alergia</h2>
+                <div class="chart-container" >
+                    <div class="chart-header">
+                        <p class="chart-subtitle">Fichas médicas clasificadas por tipo de alergia</p>
+                    </div>
+                    
+                    @php
+                        $alergiaChartData = $alergiaChartData ?? [];
+                        $maxValue = !empty($alergiaChartData) ? max($alergiaChartData) : 1;
+                        $totalAlergias = array_sum($alergiaChartData);
+                        $avgAlergias = $totalAlergias > 0 && count($alergiaChartData) > 0 ? round($totalAlergias / count($alergiaChartData)) : 0;
+                    @endphp
+                    
+                    @if(!empty($alergiaChartData))
+                    <div class="bar-chart" style="background: #006f643d;">
+                        <div class="chart-bars">
+                            @foreach($alergiaChartData as $alergia => $count)
+                            <div class="bar-group">
+                                <div class="bar" data-value="{{ $count }}" style="height: {{ $maxValue > 0 ? ($count / $maxValue * 100) : 0 }}%;">
+                                    <span class="bar-value">{{ $count }}</span>
+                                </div>
+                                <span class="bar-label">{{ $alergia }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <!-- Chart Y-axis labels -->
+                        <div class="chart-y-axis">
+                            <span class="y-label">{{ $maxValue }}</span>
+                            <span class="y-label">{{ round($maxValue * 0.8) }}</span>
+                            <span class="y-label">{{ round($maxValue * 0.6) }}</span>
+                            <span class="y-label">{{ round($maxValue * 0.4) }}</span>
+                            <span class="y-label">{{ round($maxValue * 0.2) }}</span>
+                            <span class="y-label">0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart Legend -->
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color"></div>
+                            <span>Fichas con Alergias</span>
+                        </div>
+
+                    </div>
+                    @else
+                    <div class="empty-chart">
+                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de alergias disponibles</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Chronic Diseases Chart -->
+            <div class="chart-section">
+                <h2>Distribución de Fichas por Enfermedad Crónica</h2>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <p class="chart-subtitle">Fichas médicas clasificadas por enfermedad crónica</p>
+                    </div>
+                    
+                    @php
+                        $cronicoChartData = $cronicoChartData ?? [];
+                        $maxValueCronico = !empty($cronicoChartData) ? max($cronicoChartData) : 1;
+                        $totalCronicos = array_sum($cronicoChartData);
+                        $avgCronicos = $totalCronicos > 0 && count($cronicoChartData) > 0 ? round($totalCronicos / count($cronicoChartData)) : 0;
+                    @endphp
+                    
+                    @if(!empty($cronicoChartData))
+                    <div class="bar-chart" style="background: #006f643d;">
+                        <div class="chart-bars">
+                            @foreach($cronicoChartData as $cronico => $count)
+                            <div class="bar-group">
+                                <div class="bar bar-cronico" data-value="{{ $count }}" style="height: {{ $maxValueCronico > 0 ? ($count / $maxValueCronico * 100) : 0 }}%;">
+                                    <span class="bar-value">{{ $count }}</span>
+                                </div>
+                                <span class="bar-label">{{ $cronico }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <!-- Chart Y-axis labels -->
+                        <div class="chart-y-axis">
+                            <span class="y-label">{{ $maxValueCronico }}</span>
+                            <span class="y-label">{{ round($maxValueCronico * 0.8) }}</span>
+                            <span class="y-label">{{ round($maxValueCronico * 0.6) }}</span>
+                            <span class="y-label">{{ round($maxValueCronico * 0.4) }}</span>
+                            <span class="y-label">{{ round($maxValueCronico * 0.2) }}</span>
+                            <span class="y-label">0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart Legend -->
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, #ff6b6b, #ff8c42);"></div>
+                            <span>Fichas con Enfermedades Crónicas</span>
+                        </div>
+
+                    </div>
+                    @else
+                    <div class="empty-chart">
+                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de enfermedades crónicas disponibles</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Operations Chart -->
+            <div class="chart-section" >
+                <h2>Distribución de Fichas por Operación</h2>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <p class="chart-subtitle">Fichas médicas clasificadas por tipo de operación</p>
+                    </div>
+                    
+                    @php
+                        $operacionChartData = $operacionChartData ?? [];
+                        $maxValueOperacion = !empty($operacionChartData) ? max($operacionChartData) : 1;
+                        $totalOperaciones = array_sum($operacionChartData);
+                        $avgOperaciones = $totalOperaciones > 0 && count($operacionChartData) > 0 ? round($totalOperaciones / count($operacionChartData)) : 0;
+                    @endphp
+                    
+                    @if(!empty($operacionChartData))
+                    <div class="bar-chart" style="background: #006f643d;">
+                        <div class="chart-bars">
+                            @foreach($operacionChartData as $operacion => $count)
+                            <div class="bar-group">
+                                <div class="bar bar-operacion" data-value="{{ $count }}" style="height: {{ $maxValueOperacion > 0 ? ($count / $maxValueOperacion * 100) : 0 }}%;">
+                                    <span class="bar-value">{{ $count }}</span>
+                                </div>
+                                <span class="bar-label">{{ $operacion }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <!-- Chart Y-axis labels -->
+                        <div class="chart-y-axis">
+                            <span class="y-label">{{ $maxValueOperacion }}</span>
+                            <span class="y-label">{{ round($maxValueOperacion * 0.8) }}</span>
+                            <span class="y-label">{{ round($maxValueOperacion * 0.6) }}</span>
+                            <span class="y-label">{{ round($maxValueOperacion * 0.4) }}</span>
+                            <span class="y-label">{{ round($maxValueOperacion * 0.2) }}</span>
+                            <span class="y-label">0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart Legend -->
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: linear-gradient(90deg, #4c6ef5, #7873f5);"></div>
+                            <span>Fichas con Operaciones</span>
+                        </div>
+
+                    </div>
+                    @else
+                    <div class="empty-chart">
+                        <p style="text-align: center; color: var(--muted); padding: 3rem;">No hay datos de operaciones disponibles</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
 
             
         </div>
@@ -319,15 +320,40 @@
 
 @section('styles')
 <style>
+
+    /* Page Layout */
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--text-primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .page-subtitle {
+        font-size: 1.2rem;
+        color: #0b004dff;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
     .dashboard-stats {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1.5rem;
         margin: 2rem 0;
+        
     }
 
     .stat-card {
-        background: rgba(11, 18, 32, 0.6);
+        background: var(--card);
         padding: 1.5rem;
         border-radius: 12px;
         border: 1px solid rgba(17, 194, 203, 0.2);
@@ -337,11 +363,7 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(17, 194, 203, 0.2);
-        background: rgba(11, 18, 32, 0.8);
-    }
+
 
     .stat-icon {
         font-size: 2.5rem;
@@ -350,7 +372,7 @@
 
     .stat-content h3 {
         margin: 0 0 0.5rem 0;
-        color: var(--accent);
+        color: #00e68eff;
         font-size: 1rem;
         font-weight: 600;
     }
@@ -359,7 +381,7 @@
         font-size: 2rem;
         font-weight: bold;
         margin: 0;
-        color: var(--text-primary);
+        color: #82ffd9ff ;
     }
 
     .stat-label {
@@ -384,7 +406,7 @@
     .chart-section {
         margin: 3rem 0;
         padding: 2rem;
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--card);        
         border-radius: 16px;
         border: 1px solid rgba(255, 255, 255, 0.08);
         width: 100%;
@@ -394,7 +416,7 @@
     }
 
     .chart-section h2 {
-        color: var(--text-primary);
+        color: #00e68eff;
         margin: 0 0 0.5rem 0;
         font-size: 1.75rem;
         font-weight: 600;

@@ -1,11 +1,11 @@
 :root {
-            --bg: #caf9eb;
-            --bg2: #198080;
+            --bg: #37fff1;
+            --bg2: #0d4747;
             --bg_button: linear-gradient(90deg, var(--accent), #068d59);
             --card: #0b1220;
             --accent: #017d83;
-            --muted: #c0e8e4;
-            --text-primary: #f0f4f8;
+            --muted: #e6fffc;
+            --text-primary: #f0f4f8; 
             --text-button: #abf7dd;
 
             

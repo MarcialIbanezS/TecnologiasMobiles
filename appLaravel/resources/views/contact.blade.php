@@ -35,7 +35,7 @@
         @endif
 
         <!-- Add New Ficha Form -->
-        <div class="form-card" style="background: linear-gradient(180deg, rgba(0, 158, 147, 1), rgba(14, 148, 143, 0.75));">
+        <div class="form-card" >
             <h2 class="form-title">
                 <svg class="form-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -45,7 +45,7 @@
             
             <form method="POST" action="{{ route('contact.store') }}" class="ficha-form">
                 @csrf
-                <div class="form-grid">
+                <div class="form-grid" >
                     <div class="form-group">
                         <label for="fechaingreso" class="form-label">Fecha de Ingreso</label>
                         <input type="date" id="fechaingreso" name="fechaingreso" class="form-input" value="{{ date('Y-m-d') }}" required>
@@ -104,20 +104,17 @@
         </div>
 
         <!-- Search Specific Ficha Form -->
-        <div class="form-card" style="background: linear-gradient(180deg, rgba(0, 158, 147, 1), rgba(14, 148, 143, 0.75));">
+        <div class="form-card" >
             <h2 class="form-title">
                 <svg class="form-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 Buscar Ficha Médica Específica
             </h2>
-            <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 0.95rem;">
-                Busca una ficha médica directamente desde la base de datos. Útil cuando hay más de 100 fichas registradas.
-            </p>
             
             <form method="POST" action="{{ route('contact.search') }}" class="ficha-form">
                 @csrf
-                <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                <div class="form-grid">
                     <div class="form-group" style="flex: 1; max-width: 500px;">
                         <label for="search_id" class="form-label">ID de Ficha Médica</label>
                         <input 
@@ -130,18 +127,21 @@
                             autocomplete="off"
                         >
                     </div>
+                <div class="form-actions">
                     <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
                         <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                         Buscar Ficha
                     </button>
-                    <a href="{{ route('contact') }}" class="btn btn-secondary" style="white-space: nowrap;">
+                        <a href="{{ route('contact') }}" class="btn btn-secondary" style="white-space: nowrap; margin-left: 0.75rem;">
                         <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
-                        Limpiar Búsqueda
+                            Limpiar búsqueda
+                        </a>
                     </a>
+                    </div>
                 </div>
             </form>
         </div>
@@ -305,8 +305,8 @@
                 ELIMINAR FICHA
             </button>
             <div style="display: flex; gap: 0.75rem; margin-left: auto;">
+                <button class="btn btn-primary" onclick="saveEditedFicha()">Guardar Cambios</button>
                 <button class="btn-secondary" onclick="closeEditModal()">Cancelar</button>
-                <button class="btn-primary" onclick="saveEditedFicha()">Guardar Cambios</button>
             </div>
         </div>
     </div>
@@ -316,7 +316,7 @@
 
 @section('styles')
 <style>
-    /* Page Layout */
+        /* Page Layout */
     .page-header {
         text-align: center;
         margin-bottom: 3rem;
@@ -334,7 +334,7 @@
 
     .page-subtitle {
         font-size: 1.2rem;
-        color: var(--muted);
+        color: #0b004dff;
         max-width: 600px;
         margin: 0 auto;
     }
@@ -370,7 +370,7 @@
 
     /* Form Card */
     .form-card {
-        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        background: var(--card);       
         border: 1px solid rgba(255,255,255,0.04);
         padding: 2.5rem;
         border-radius: 16px;
@@ -382,7 +382,7 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        color: var(--text-primary);
+        color: #00e68eff;
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 2rem;
@@ -407,7 +407,7 @@
     }
 
     .form-label {
-        color: var(--text-primary);
+        color: #a0d8d4;
         font-weight: 500;
         font-size: 0.9rem;
         margin-bottom: 0.5rem;
@@ -426,7 +426,7 @@
     .form-input:focus {
         outline: none;
         border-color: var(--accent);
-        background: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.89);
         box-shadow: 0 0 0 3px rgba(17, 194, 203, 0.1);
     }
 
@@ -445,9 +445,9 @@
         display: inline-flex;
         align-items: center;
         padding: 0.875rem 1.5rem;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 67, 65, 0.37);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        color: var(--text-primary);
+        color: #00e68eff;
         font-size: 0.95rem;
         font-weight: 500;
         border-radius: 8px;
@@ -464,7 +464,7 @@
 
     /* Table Card */
     .table-card {
-        background: linear-gradient(180deg, rgba(0, 158, 147, 1), rgba(14, 148, 90, 1));
+        background: var(--card);       
         border: 1px solid rgba(255,255,255,0.04);
         border-radius: 16px;
         box-shadow: 0 10px 30px rgba(2,6,23,0.6);
@@ -483,7 +483,7 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        color: var(--text-primary);
+        color: #00e68eff;
         font-size: 1.5rem;
         font-weight: 600;
         margin: 0;
@@ -519,7 +519,7 @@
     }
 
     .empty-state h3 {
-        color: var(--text-primary);
+        color: #a0d8d4;
         font-size: 1.5rem;
         margin-bottom: 0.5rem;
     }
@@ -540,8 +540,8 @@
     }
 
     .data-table th {
-        background: rgba(255, 255, 255, 0.02);
-        color: var(--text-primary);
+        background: rgba(0, 67, 65, 0.37);
+        color: #00e68eff;
         font-weight: 600;
         font-size: 0.9rem;
         padding: 1rem 1.5rem;
@@ -715,7 +715,7 @@
     }
 
     .modal-header h2 {
-        color: var(--text-primary);
+        color: #00e68eff;
         margin: 0;
         font-size: 1.5rem;
         font-weight: 600;

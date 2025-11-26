@@ -4,6 +4,7 @@ import 'patients.dart';
 import 'services/firestore_repository.dart';
 import 'services/navigation_service.dart';
 import 'widgets/breadcrumb_bar.dart';
+import 'app_localizations.dart';
 
 class PatientsListPage extends StatefulWidget {
   const PatientsListPage({super.key});
@@ -141,6 +142,7 @@ class _PatientsListPageState extends State<PatientsListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       floatingActionButton: _showScrollTop
           ? FloatingActionButton(
@@ -155,7 +157,7 @@ class _PatientsListPageState extends State<PatientsListPage> {
             )
           : null,
       appBar: AppBar(
-        title: const Text('Búsqueda básica'),
+        title: Text(l10n.searchBasic),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -169,7 +171,10 @@ class _PatientsListPageState extends State<PatientsListPage> {
           children: [
             BreadcrumbBar(
               breadcrumbs:
-                  NavigationService.instance.buildPatientListBreadcrumbs(),
+                  NavigationService.instance.buildPatientListBreadcrumbs(
+                inicioLabel: l10n.homeTitle,
+                patientsLabel: l10n.patients,
+              ),
               onTap: (crumb) {
                 if (crumb.route != '/pacientes') {
                   Navigator.pushNamed(context, crumb.route);
@@ -181,7 +186,7 @@ class _PatientsListPageState extends State<PatientsListPage> {
               controller: _searchController,
               onChanged: _onSearchChanged,
               decoration: InputDecoration(
-                hintText: 'Buscar por nombre o RUT',
+                hintText: l10n.searchPlaceholder,
                 prefixIcon: const Icon(Icons.search),
                 suffixIcon: _isSearching
                     ? IconButton(
@@ -211,8 +216,12 @@ class _PatientsListPageState extends State<PatientsListPage> {
                       : RefreshIndicator(
                           onRefresh: _loadPatients,
                           child: _visiblePatients.isEmpty
-                              ? const Center(
-                                  child: Text('No se encontraron pacientes'),
+                              ? Center(
+                                  child: Text(
+                                    _isSearching
+                                        ? l10n.noResults
+                                        : l10n.noPatients,
+                                  ),
                                 )
                               : ListView.builder(
                                   controller: _scrollController,

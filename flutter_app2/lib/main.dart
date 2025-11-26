@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'app_settings.dart';
+import 'app_localizations.dart';
 import 'fingerprint_page.dart';
 import 'firebase_options.dart';
 import 'homepage.dart';
@@ -11,6 +11,7 @@ import 'page2.dart';
 import 'patient_profile.dart';
 import 'start_page.dart';
 import 'user_profile.dart';
+import 'ficha_dummy_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,16 +54,8 @@ class MyApp extends StatelessWidget {
               useMaterial3: true,
             ),
             locale: settings.locale,
-            supportedLocales: const [
-              Locale('es'),
-              Locale('en'),
-              Locale('pt'),
-            ],
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
             initialRoute: '/',
             routes: {
               '/': (context) => const StartPage(),
@@ -73,6 +66,7 @@ class MyApp extends StatelessWidget {
               '/fingerprint': (context) => const FingerprintPage(),
               '/perfilUsuario': (context) => const UserProfilePage(),
               '/user_profile': (context) => const UserProfilePage(),
+              '/fichaDummy': (context) => const FichaDummyPage(),
             },
           ),
         );

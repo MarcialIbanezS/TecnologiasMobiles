@@ -41,30 +41,37 @@ class NavigationService {
     _selectedPatient = patient;
   }
 
-  List<Breadcrumb> buildInicioBreadcrumbs() {
-    return const [
-      Breadcrumb(label: 'Inicio', route: '/inicio', isActive: true),
+  List<Breadcrumb> buildInicioBreadcrumbs({String inicioLabel = 'Inicio'}) {
+    return [
+      Breadcrumb(label: inicioLabel, route: '/inicio', isActive: true),
     ];
   }
 
-  List<Breadcrumb> buildPatientListBreadcrumbs() {
+  List<Breadcrumb> buildPatientListBreadcrumbs({
+    String inicioLabel = 'Inicio',
+    String patientsLabel = 'Pacientes',
+  }) {
     return [
-      const Breadcrumb(label: 'Inicio', route: '/inicio'),
-      const Breadcrumb(
-        label: 'Pacientes',
+      Breadcrumb(label: inicioLabel, route: '/inicio'),
+      Breadcrumb(
+        label: patientsLabel,
         route: '/pacientes',
         isActive: true,
       ),
     ];
   }
 
-  List<Breadcrumb> buildPatientProfileBreadcrumbs(Paciente? patient) {
+  List<Breadcrumb> buildPatientProfileBreadcrumbs(
+    Paciente? patient, {
+    String inicioLabel = 'Inicio',
+    String patientsLabel = 'Pacientes',
+  }) {
     final displayName = patient == null || patient.nombrePaciente.isEmpty
         ? 'Paciente'
         : patient.nombrePaciente;
     return [
-      const Breadcrumb(label: 'Inicio', route: '/inicio'),
-      const Breadcrumb(label: 'Pacientes', route: '/pacientes'),
+      Breadcrumb(label: inicioLabel, route: '/inicio'),
+      Breadcrumb(label: patientsLabel, route: '/pacientes'),
       Breadcrumb(
         label: displayName,
         route: '/perfilPaciente',
@@ -74,11 +81,20 @@ class NavigationService {
     ];
   }
 
-  List<Breadcrumb> buildMedicalRecordBreadcrumbs(Paciente? patient) {
-    final crumbs = buildPatientProfileBreadcrumbs(patient);
+  List<Breadcrumb> buildMedicalRecordBreadcrumbs(
+    Paciente? patient, {
+    String inicioLabel = 'Inicio',
+    String patientsLabel = 'Pacientes',
+    String recordLabel = 'Ficha Médica',
+  }) {
+    final crumbs = buildPatientProfileBreadcrumbs(
+      patient,
+      inicioLabel: inicioLabel,
+      patientsLabel: patientsLabel,
+    );
     crumbs.add(
       Breadcrumb(
-        label: 'Ficha Médica',
+        label: recordLabel,
         route: '/fichaMedica',
         arguments: patient,
         isActive: true,

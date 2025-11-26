@@ -1,5 +1,15 @@
+import 'dart:convert';
+import 'dart:typed_data';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import 'app_localizations.dart';
 
 import 'medical_record.dart';
 import 'patients.dart';
@@ -75,6 +85,7 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
   }
 
   Future<void> _loadRecords() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_patient == null) return;
     setState(() {
       _isLoading = true;
@@ -95,12 +106,12 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
         setState(() {
           _isLoading = false;
           _selectedRecord = null;
-          _error = 'No hay fichas médicas registradas para este paciente.';
+          _error = l10n.noRecords;
         });
       }
     } catch (e) {
       setState(() {
-        _error = 'Ocurrió un error al cargar las fichas.';
+        _error = l10n.errorLoadingRecords;
       });
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -108,6 +119,7 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
   }
 
   Future<void> _loadRecordDetails(String recordId) async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _isLoading = true;
       _error = null;
@@ -127,37 +139,116 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
 
   void _downloadRecord() {
     if (_selectedRecord == null) return;
-    final summary = _repository.generateMedicalRecordSummary(_selectedRecord!);
-    showDialog(
+    final l10n = AppLocalizations.of(context)!;
+    showModalBottomSheet(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Resumen de ficha'),
-        content: SingleChildScrollView(
-          child: Text(summary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: summary));
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Texto copiado al portapapeles')),
-              );
-            },
-            child: const Text('Copiar'),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.description),
+                title: Text(l10n.downloadTxt),
+                onTap: () {
+                  Navigator.pop(context);
+                  _downloadTxt();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.picture_as_pdf),
+                title: Text(l10n.downloadPdf),
+                onTap: () {
+                  Navigator.pop(context);
+                  _downloadPdf();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.copy),
+                title: Text(l10n.copyText),
+                onTap: () {
+                  Navigator.pop(context);
+                  final summary =
+                      _repository.generateMedicalRecordSummary(_selectedRecord!);
+                  Clipboard.setData(ClipboardData(text: summary));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.copiedMessage)),
+                  );
+                },
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cerrar'),
-          ),
-        ],
+        );
+      },
+    );
+  }
+
+  void _downloadTxt() {
+    if (_selectedRecord == null) return;
+    final summary = _repository.generateMedicalRecordSummary(_selectedRecord!);
+    if (kIsWeb) {
+      final bytes = utf8.encode(summary);
+      final blob = html.Blob([bytes], 'text/plain', 'native');
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.AnchorElement(href: url)
+        ..setAttribute(
+            'download',
+            'ficha-medica-${_selectedRecord?.nombrePaciente ?? 'paciente'}.txt')
+        ..click();
+      html.Url.revokeObjectUrl(url);
+    } else {
+      Printing.sharePdf(
+        bytes: Uint8List.fromList(summary.codeUnits),
+        filename: 'ficha-medica.txt',
+      );
+    }
+  }
+
+  Future<void> _downloadPdf() async {
+    if (_selectedRecord == null) return;
+    final record = _selectedRecord!;
+    final doc = pw.Document();
+    doc.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text(
+                'Ficha médica',
+                style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+              ),
+              pw.SizedBox(height: 12),
+              pw.Text('Paciente: ${record.nombrePaciente ?? 'N/A'}'),
+              pw.Text('RUT: ${record.rut ?? 'N/A'}'),
+              pw.Text('Dirección: ${record.direccion ?? 'N/A'}'),
+              pw.SizedBox(height: 12),
+              pw.Text('Fecha ingreso: ${_repository.formatDate(record.fechaIngreso)}'),
+              pw.Text('Servicio: ${record.tipoServicio ?? 'N/A'}'),
+              pw.Text('Profesional: ${record.nombreProfesional ?? 'N/A'}'),
+              pw.Text('Fecha consulta: ${_repository.formatDate(record.fechaConsulta)}'),
+              pw.SizedBox(height: 12),
+              pw.Text('Alergia: ${record.idAlergia ?? 'N/A'}'),
+              pw.Text('Condición crónica: ${record.idCronico ?? 'N/A'}'),
+              pw.Text('Operación: ${record.idOperacion ?? 'N/A'}'),
+            ],
+          );
+        },
       ),
+    );
+
+    await Printing.layoutPdf(
+      name: 'ficha-medica-${record.nombrePaciente ?? 'paciente'}.pdf',
+      onLayout: (format) async => doc.save(),
     );
   }
 
   Future<void> _editRecord() async {
     if (_selectedRecord == null) return;
     final record = _selectedRecord!;
+    final l10n = AppLocalizations.of(context)!;
+    final formKey = GlobalKey<FormState>();
     final nombreController =
         TextEditingController(text: record.nombrePaciente ?? '');
     final rutController = TextEditingController(text: record.rut ?? '');
@@ -180,38 +271,45 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
           right: 16,
           top: 24,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'Editar ficha médica',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            _buildField('Nombre paciente', nombreController),
-            _buildField('RUT', rutController),
-            _buildField('Dirección', direccionController),
-            _buildField('Alergia', alergiaController),
-            _buildField('Condición crónica', cronicoController),
-            _buildField('Operación', operacionController),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () => Navigator.pop(context, false),
-                    child: const Text('Cancelar'),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l10n.editMedicalRecord,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              _buildField(l10n.userLabel, nombreController, requiredField: true),
+              _buildField(l10n.rut, rutController),
+              _buildField(l10n.address, direccionController),
+              _buildField(l10n.allergy, alergiaController),
+              _buildField(l10n.chronicCondition, cronicoController),
+              _buildField(l10n.operation, operacionController),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: Text(l10n.cancel),
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    child: const Text('Guardar'),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (formKey.currentState?.validate() ?? false) {
+                          Navigator.pop(context, true);
+                        }
+                      },
+                      child: Text(l10n.save),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -236,14 +334,19 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
 
   @override
   Widget build(BuildContext context) {
-    final breadcrumbs =
-        NavigationService.instance.buildMedicalRecordBreadcrumbs(_patient);
+    final l10n = AppLocalizations.of(context)!;
+    final breadcrumbs = NavigationService.instance.buildMedicalRecordBreadcrumbs(
+      _patient,
+      inicioLabel: l10n.homeTitle,
+      patientsLabel: l10n.patients,
+      recordLabel: l10n.medicalRecordTitle,
+    );
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ficha médica'),
+        title: Text(l10n.medicalRecordTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -274,7 +377,7 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
                 ElevatedButton.icon(
                   onPressed: _selectedRecord == null ? null : _downloadRecord,
                   icon: const Icon(Icons.download),
-                  label: const Text('Descargar'),
+                  label: Text(l10n.download),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.primary,
                     foregroundColor: colorScheme.onPrimary,
@@ -284,7 +387,7 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
                 OutlinedButton.icon(
                   onPressed: _isLoading ? null : _refresh,
                   icon: const Icon(Icons.refresh),
-                  label: const Text('Actualizar'),
+                  label: Text(l10n.refresh),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: colorScheme.onSurface,
                   ),
@@ -293,7 +396,7 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
                 ElevatedButton.icon(
                   onPressed: _selectedRecord == null ? null : _editRecord,
                   icon: const Icon(Icons.edit),
-                  label: const Text('Editar'),
+                  label: Text(l10n.edit),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.primaryContainer,
                     foregroundColor: colorScheme.onPrimaryContainer,
@@ -337,8 +440,8 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
                   : _error != null
                       ? Center(child: Text(_error!))
                       : _selectedRecord == null
-                          ? const Center(
-                              child: Text('No hay ficha seleccionada'),
+                          ? Center(
+                              child: Text(l10n.noRecordSelected),
                             )
                           : _MedicalRecordDetail(
                               record: _selectedRecord!,
@@ -351,11 +454,20 @@ class _MedicalRecordPageState extends State<MedicalRecordPage> {
     );
   }
 
-  Widget _buildField(String label, TextEditingController controller) {
+  Widget _buildField(String label, TextEditingController controller,
+      {bool requiredField = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
+        validator: requiredField
+            ? (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Campo requerido';
+                }
+                return null;
+              }
+            : null,
         decoration: InputDecoration(
           labelText: label,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -376,6 +488,7 @@ class _MedicalRecordDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -387,11 +500,12 @@ class _MedicalRecordDetail extends StatelessWidget {
             subtitle: record.rut ?? 'Sin RUT',
             icon: Icons.person,
             children: [
-              _info(context, 'Dirección', record.direccion ?? 'N/A'),
-              _info(context, 'Fecha ingreso',
+              _info(context, l10n.address, record.direccion ?? 'N/A'),
+              _info(context, l10n.admissionDate,
                   repository.formatDate(record.fechaIngreso)),
-              _info(context, 'Servicio', record.tipoServicio ?? 'N/A'),
-              _info(context, 'Profesional', record.nombreProfesional ?? 'N/A'),
+              _info(context, l10n.service, record.tipoServicio ?? 'N/A'),
+              _info(context, l10n.professional,
+                  record.nombreProfesional ?? 'N/A'),
             ],
           ),
           _DashboardCard(

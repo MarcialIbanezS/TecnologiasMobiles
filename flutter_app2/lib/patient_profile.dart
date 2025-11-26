@@ -4,6 +4,7 @@ import 'patients.dart';
 import 'services/firestore_repository.dart';
 import 'services/navigation_service.dart';
 import 'widgets/breadcrumb_bar.dart';
+import 'app_localizations.dart';
 
 class PatientProfilePage extends StatefulWidget {
   const PatientProfilePage({super.key});
@@ -76,14 +77,19 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final breadcrumbs =
-        NavigationService.instance.buildPatientProfileBreadcrumbs(_patient);
+        NavigationService.instance.buildPatientProfileBreadcrumbs(
+      _patient,
+      inicioLabel: l10n.homeTitle,
+      patientsLabel: l10n.patients,
+    );
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Perfil del paciente'),
+        title: Text(l10n.patientProfileTitle),
         actions: [
           IconButton(
             icon: Icon(Icons.person, color: colorScheme.onSurface),
@@ -97,7 +103,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
               ? _ErrorView(message: _error!)
               : _patient == null
                   ? _ErrorView(
-                      message: 'Paciente no disponible',
+                      message: l10n.patientUnavailable,
                       action: () => Navigator.pushNamed(context, '/pacientes'),
                     )
                   : SingleChildScrollView(
@@ -157,7 +163,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Información general',
+                                    l10n.generalInfo,
                                     style: textTheme.titleMedium?.copyWith(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -166,27 +172,27 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
                                   const SizedBox(height: 10),
                                   _infoRow(
                                     Icons.badge,
-                                    'ID paciente',
+                                    l10n.patientId,
                                     _patient!.idpaciente,
                                   ),
                                   _infoRow(
                                     Icons.cake,
-                                    'Fecha de nacimiento',
+                                    l10n.birthDate,
                                     _patient!.fechaNacimiento,
                                   ),
                                   _infoRow(
                                     Icons.home,
-                                    'Dirección',
+                                    l10n.address,
                                     _patient!.direccion,
                                   ),
                                   _infoRow(
                                     Icons.phone,
-                                    'Teléfono',
+                                    l10n.phone,
                                     _patient!.telefono ?? '-',
                                   ),
                                   _infoRow(
                                     Icons.email,
-                                    'Email',
+                                    l10n.email,
                                     _patient!.email ?? '-',
                                   ),
                                 ],
@@ -270,7 +276,7 @@ class _ErrorView extends StatelessWidget {
           if (action != null)
             TextButton(
               onPressed: action,
-              child: const Text('Volver al listado'),
+              child: Text(AppLocalizations.of(context)!.searchBasic),
             ),
         ],
       ),

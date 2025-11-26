@@ -17,6 +17,8 @@ class AuthApiService {
   String get _apiBaseUrl =>
       _envApiUrl.isNotEmpty ? _envApiUrl : _defaultApiUrl;
 
+  String get apiBaseUrl => _apiBaseUrl;
+
   Uri _buildUri(String path) {
     final base = _apiBaseUrl.endsWith('/')
         ? _apiBaseUrl.substring(0, _apiBaseUrl.length - 1)

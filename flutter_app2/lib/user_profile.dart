@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_settings.dart';
+import 'app_localizations.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -91,16 +92,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
       }, SetOptions(merge: true));
     }
 
+    final l10n = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('✅ Configuraciones guardadas')),
+      SnackBar(content: Text('✅ ${l10n.settingsSaved}')),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    String _languageLabel(String code) {
+      switch (code) {
+        case 'en':
+          return 'English';
+        case 'pt':
+          return 'Português';
+        default:
+          return 'Español';
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Perfil del Usuario'),
+        title: Text(l10n.userProfileTitle),
         backgroundColor: Colors.blueAccent,
       ),
       body: Padding(
@@ -118,7 +132,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             const SizedBox(height: 15),
             Center(
               child: Text(
-                user?.email ?? 'Usuario invitado',
+                user?.email ?? l10n.guestUser,
                 style: TextStyle(fontSize: _fontSize),
               ),
             ),
@@ -126,7 +140,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
             // 🌙 Modo oscuro
             SwitchListTile(
-              title: const Text('Modo oscuro'),
+              title: Text(l10n.darkMode),
               value: _darkMode,
               onChanged: (value) {
                 _appSettings?.update(darkMode: value);
@@ -137,19 +151,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
             // 🌐 Idioma
             ListTile(
-              title: const Text('Idioma'),
+              title: Text(l10n.language),
               trailing: DropdownButton<String>(
                 value: _language,
                 items: _languages.map((lang) {
                   return DropdownMenuItem(
                     value: lang,
-                    child: Text(
-                      lang == 'es'
-                          ? 'Español'
-                          : lang == 'en'
-                              ? 'Inglés'
-                              : 'Portugués',
-                    ),
+                    child: Text(_languageLabel(lang)),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -163,7 +171,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
             // 🔠 Tamaño de fuente
             ListTile(
-              title: const Text('Tamaño de fuente'),
+              title: Text(l10n.fontSize),
               subtitle: Slider(
                 min: 12,
                 max: 24,
@@ -182,9 +190,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
             // 💾 Botón Guardar
             ElevatedButton.icon(
               icon: const Icon(Icons.save),
-              label: const Text('Guardar cambios'),
+              label: Text(l10n.saveChanges),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
               ),
               onPressed: _saveSettings,
             ),

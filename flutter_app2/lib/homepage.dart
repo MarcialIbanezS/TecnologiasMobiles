@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'patients.dart';
 import 'services/navigation_service.dart';
 import 'widgets/breadcrumb_bar.dart';
+import 'app_localizations.dart';
 
 class InicioPage extends StatefulWidget {
   const InicioPage({super.key});
@@ -49,10 +50,11 @@ class _InicioPageState extends State<InicioPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inicio'),
+        title: Text(l10n.homeTitle),
         actions: [
           IconButton(
             icon: CircleAvatar(
@@ -69,11 +71,13 @@ class _InicioPageState extends State<InicioPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BreadcrumbBar(
-              breadcrumbs: NavigationService.instance.buildInicioBreadcrumbs(),
+              breadcrumbs: NavigationService.instance.buildInicioBreadcrumbs(
+                inicioLabel: l10n.homeTitle,
+              ),
             ),
             const SizedBox(height: 24),
             Text(
-              'Panel principal',
+              l10n.mainPanelTitle,
               style: textTheme.titleLarge?.copyWith(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -90,7 +94,7 @@ class _InicioPageState extends State<InicioPage> {
             ElevatedButton.icon(
               onPressed: _goToList,
               icon: const Icon(Icons.search),
-              label: const Text('Búsqueda básica'),
+              label: Text(l10n.searchBasic),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50),
                 backgroundColor: colorScheme.primary,
@@ -120,7 +124,7 @@ class _InicioPageState extends State<InicioPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Escanea la huella del paciente',
+                              l10n.fingerprintCardTitle,
                               style: textTheme.titleMedium?.copyWith(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -128,7 +132,7 @@ class _InicioPageState extends State<InicioPage> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              'Puedes autenticar la identidad usando el lector biométrico.',
+                              l10n.fingerprintCardSubtitle,
                               style: textTheme.bodyMedium?.copyWith(
                                 color: colorScheme.onSurfaceVariant,
                               ),
@@ -160,6 +164,7 @@ class _SelectedPatientCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -179,16 +184,16 @@ class _SelectedPatientCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 6),
-            Text('RUT: ${patient.rut}'),
-            Text('Sexo: ${patient.sexo}'),
-            Text('Dirección: ${patient.direccion}'),
+            Text('${l10n.rut}: ${patient.rut}'),
+            Text('${l10n.sex}: ${patient.sexo}'),
+            Text('${l10n.address}: ${patient.direccion}'),
             const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton.icon(
                 onPressed: onTap,
                 icon: const Icon(Icons.description),
-                label: const Text('Ver ficha médica'),
+                label: Text(l10n.viewMedicalRecord),
               ),
             ),
           ],
@@ -205,6 +210,7 @@ class _EmptyPatientCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
@@ -216,7 +222,7 @@ class _EmptyPatientCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'No hay paciente seleccionado',
+              l10n.noPatientSelected,
               style: textTheme.titleSmall?.copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -224,7 +230,7 @@ class _EmptyPatientCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Busca un paciente o utiliza el lector de huella para continuar.',
+              l10n.selectPatientHint,
               textAlign: TextAlign.center,
               style: textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,

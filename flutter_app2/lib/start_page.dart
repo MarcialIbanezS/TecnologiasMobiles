@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'services/auth_api_service.dart';
+import 'app_localizations.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -66,6 +67,7 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       body: SingleChildScrollView(
@@ -86,25 +88,25 @@ class _StartPageState extends State<StartPage> {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CircleAvatar(
+                children: [
+                  const CircleAvatar(
                     radius: 60,
                     backgroundImage: AssetImage('assets/images/image.png'),
                     backgroundColor: Colors.white,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
-                    'Bienvenido a Doble M.A.',
-                    style: TextStyle(
+                    l10n.welcomeTitle,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
-                    'Accede al sistema médico con tus credenciales',
-                    style: TextStyle(color: Colors.white70),
+                    l10n.welcomeSubtitle,
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ],
               ),
@@ -119,14 +121,14 @@ class _StartPageState extends State<StartPage> {
                       controller: _usernameController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.person_outline),
-                        labelText: 'Usuario',
+                        labelText: l10n.userLabel,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(18),
                         ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Ingresa tu usuario';
+                          return l10n.userLabel;
                         }
                         return null;
                       },
@@ -137,14 +139,14 @@ class _StartPageState extends State<StartPage> {
                       obscureText: true,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.lock_outline),
-                        labelText: 'Contraseña',
+                        labelText: l10n.passwordLabel,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(18),
                         ),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Ingresa tu contraseña';
+                          return l10n.passwordLabel;
                         }
                         return null;
                       },
@@ -179,9 +181,9 @@ class _StartPageState extends State<StartPage> {
                                       AlwaysStoppedAnimation<Color>(Colors.white),
                                 ),
                               )
-                            : const Text(
-                                'Ingresar',
-                                style: TextStyle(fontSize: 16),
+                            : Text(
+                                l10n.loginButton,
+                                style: const TextStyle(fontSize: 16),
                               ),
                       ),
                     ),
@@ -190,12 +192,12 @@ class _StartPageState extends State<StartPage> {
                       onPressed: () =>
                           Navigator.pushNamed(context, '/fingerprint'),
                       icon: const Icon(Icons.fingerprint, color: Colors.purple),
-                      label: const Text('Ingresar con huella dactilar'),
+                      label: Text(l10n.loginFingerprint),
                     ),
                     TextButton(
                       onPressed: () =>
                           Navigator.pushReplacementNamed(context, '/inicio'),
-                      child: const Text('Entrar como invitado'),
+                      child: Text(l10n.loginGuest),
                     ),
                   ],
                 ),

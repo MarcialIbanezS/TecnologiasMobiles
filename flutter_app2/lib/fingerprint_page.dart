@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'services/navigation_service.dart';
 import 'widgets/breadcrumb_bar.dart';
+import 'app_localizations.dart';
 
 enum FingerprintState { scanner, qr, waiting }
 
@@ -32,25 +33,22 @@ class _FingerprintPageState extends State<FingerprintPage> {
       setState(() => _state = FingerprintState.waiting);
       _timer = Timer(const Duration(seconds: 3), () {
         if (!mounted) return;
-        Navigator.pushReplacementNamed(context, '/pacientes');
+        Navigator.pushReplacementNamed(context, '/fichaDummy');
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final breadcrumbs = [
-      const Breadcrumb(label: 'Inicio', route: '/inicio'),
-      const Breadcrumb(
-        label: 'Huella',
-        route: '/fingerprint',
-        isActive: true,
-      ),
+      Breadcrumb(label: l10n.homeTitle, route: '/inicio'),
+      Breadcrumb(label: l10n.fingerprintTitle, route: '/fingerprint', isActive: true),
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verificación biométrica'),
+        title: Text(l10n.fingerprintTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -86,14 +84,14 @@ class _FingerprintPageState extends State<FingerprintPage> {
                 icon: const Icon(Icons.fingerprint),
                 label: Text(
                   _state == FingerprintState.qr
-                      ? 'Escaneando...'
+                      ? l10n.scanning
                       : _state == FingerprintState.waiting
-                          ? 'Validando...'
-                          : 'Escanear huella',
+                          ? l10n.validating
+                          : l10n.scanFingerprint,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple,
-                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
               ),
@@ -105,13 +103,13 @@ class _FingerprintPageState extends State<FingerprintPage> {
   }
 
   Widget _buildStateCard() {
+    final l10n = AppLocalizations.of(context)!;
     switch (_state) {
       case FingerprintState.scanner:
         return _InfoCard(
-          title: 'Escanee la huella del paciente',
+          title: l10n.fingerprintCardTitle,
           icon: Icons.fingerprint,
-          description:
-              'Usa el lector para autenticar al paciente y recuperar su ficha.',
+          description: l10n.fingerprintCardSubtitle,
         );
       case FingerprintState.qr:
         return _InfoCard(
@@ -158,6 +156,8 @@ class _InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
@@ -166,12 +166,11 @@ class _InfoCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 48, color: Colors.teal),
+            Icon(icon, size: 48, color: colorScheme.primary),
             const SizedBox(height: 16),
             Text(
               title,
-              style: const TextStyle(
-                fontSize: 20,
+              style: textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
@@ -180,7 +179,9 @@ class _InfoCard extends StatelessWidget {
             Text(
               description,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.black54),
+              style: textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
             if (child != null) child!,
           ],

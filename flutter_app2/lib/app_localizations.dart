@@ -284,6 +284,7 @@ class AppLocalizations {
   String get service => _translate('service');
   String get professional => _translate('professional');
   String get patients => _translate('patients');
+  String get logout => _translate('logout');
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
       _AppLocalizationsDelegate();

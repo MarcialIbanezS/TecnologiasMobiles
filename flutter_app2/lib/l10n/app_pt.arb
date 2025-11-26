@@ -63,5 +63,6 @@
   "admissionDate": "Data de internação",
   "service": "Serviço",
   "professional": "Profissional",
-  "patients": "Pacientes"
+  "patients": "Pacientes",
+  "logout": "Sair"
 }

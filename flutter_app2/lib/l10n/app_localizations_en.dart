@@ -201,4 +201,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get patients => 'Patients';
+
+  @override
+  String get logout => 'Log out';
 }

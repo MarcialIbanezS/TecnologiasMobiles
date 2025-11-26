@@ -483,6 +483,12 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Pacientes'**
   String get patients;
+
+  /// No description provided for @logout.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar sesión'**
+  String get logout;
 }
 
 class _AppLocalizationsDelegate

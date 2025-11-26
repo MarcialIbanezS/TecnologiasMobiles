@@ -63,5 +63,6 @@
   "admissionDate": "Fecha ingreso",
   "service": "Servicio",
   "professional": "Profesional",
-  "patients": "Pacientes"
+  "patients": "Pacientes",
+  "logout": "Cerrar sesión"
 }

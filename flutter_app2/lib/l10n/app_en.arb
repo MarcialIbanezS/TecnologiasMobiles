@@ -63,5 +63,6 @@
   "admissionDate": "Admission date",
   "service": "Service",
   "professional": "Professional",
-  "patients": "Patients"
+  "patients": "Patients",
+  "logout": "Log out"
 }

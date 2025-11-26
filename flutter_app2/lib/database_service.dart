@@ -97,7 +97,7 @@ Future<void> crearListasBase() async {
       'idpaciente': 'P05639',
       'nomberPaciente': 'Matías',
       'apellidoPaciente': 'Flores',
-      'rut': '22222222-7',
+      'rut': '22222222-2',
       'sexo': 'Femenino',
       'direccion': 'Camino del Río 22, Pueblo Nuevo',
       'fechaNacimiento': '1965-05-03'

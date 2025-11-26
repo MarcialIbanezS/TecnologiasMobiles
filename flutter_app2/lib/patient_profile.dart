@@ -1,185 +1,277 @@
 import 'package:flutter/material.dart';
-import 'database_service.dart';
+
+import 'patients.dart';
+import 'services/firestore_repository.dart';
+import 'services/navigation_service.dart';
+import 'widgets/breadcrumb_bar.dart';
 
 class PatientProfilePage extends StatefulWidget {
-  final String pacienteId;
-  const PatientProfilePage({super.key, required this.pacienteId});
+  const PatientProfilePage({super.key});
 
   @override
   State<PatientProfilePage> createState() => _PatientProfilePageState();
 }
 
 class _PatientProfilePageState extends State<PatientProfilePage> {
-  final DatabaseService db = DatabaseService();
-  Map<String, dynamic>? paciente;
-  bool cargando = true;
+  final FirestoreRepository _repository = FirestoreRepository();
+  Paciente? _patient;
+  bool _isLoading = true;
+  String? _error;
 
   @override
-  void initState() {
-    super.initState();
-    cargarPaciente();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is Paciente) {
+      _setPatient(args);
+    } else if (args is String) {
+      _loadPatientById(args);
+    } else {
+      final stored = NavigationService.instance.selectedPatient;
+      if (stored != null) {
+        _setPatient(stored);
+      } else {
+        setState(() {
+          _isLoading = false;
+          _error = 'Selecciona un paciente desde el listado.';
+        });
+      }
+    }
   }
 
-  Future<void> cargarPaciente() async {
-    try {
-      final snapshot = await db.listarPacientes();
-      final encontrado =
-          snapshot.firstWhere((p) => p['id'] == widget.pacienteId, orElse: () => {});
+  Future<void> _loadPatientById(String id) async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+    final patient = await _repository.getPatientById(id);
+    if (!mounted) return;
+    if (patient == null) {
       setState(() {
-        paciente = encontrado;
-        cargando = false;
+        _isLoading = false;
+        _error = 'Paciente no encontrado.';
       });
-    } catch (e) {
-      print("Error cargando paciente: $e");
-      setState(() => cargando = false);
+    } else {
+      _setPatient(patient);
     }
+  }
+
+  void _setPatient(Paciente patient) {
+    NavigationService.instance.setSelectedPatient(patient);
+    setState(() {
+      _patient = patient;
+      _isLoading = false;
+      _error = null;
+    });
+  }
+
+  void _openMedicalRecord() {
+    if (_patient == null) return;
+    Navigator.pushNamed(
+      context,
+      '/fichaMedica',
+      arguments: _patient,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (cargando) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
+    final breadcrumbs =
+        NavigationService.instance.buildPatientProfileBreadcrumbs(_patient);
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-    if (paciente == null || paciente!.isEmpty) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text("Perfil del Paciente"),
-          backgroundColor: Colors.teal,
-        ),
-        body: const Center(child: Text("Paciente no encontrado")),
-      );
-    }
-
-    final p = paciente!;
     return Scaffold(
-      backgroundColor: const Color(0xFFF9FAFB),
       appBar: AppBar(
-        title: const Text("Perfil del Paciente"),
-        backgroundColor: const Color(0xFF009688),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
+        title: const Text('Perfil del paciente'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.person, color: colorScheme.onSurface),
+            onPressed: () => Navigator.pushNamed(context, '/perfilUsuario'),
+          ),
+        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Colors.teal.shade100,
-              child: const Icon(Icons.person, size: 60, color: Colors.teal),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              p['nombreCompleto'] ?? 'Sin nombre',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF004D40),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "RUT: ${p['rut'] ?? '-'}",
-              style: const TextStyle(color: Colors.black54),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              p['sexo'] ?? '',
-              style: const TextStyle(color: Colors.black54),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              p['direccion'] ?? '',
-              style: const TextStyle(color: Colors.black54),
-            ),
-            const SizedBox(height: 25),
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Información General",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.teal,
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _error != null
+              ? _ErrorView(message: _error!)
+              : _patient == null
+                  ? _ErrorView(
+                      message: 'Paciente no disponible',
+                      action: () => Navigator.pushNamed(context, '/pacientes'),
+                    )
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BreadcrumbBar(
+                            breadcrumbs: breadcrumbs,
+                            onTap: (crumb) {
+                              if (crumb.route != '/perfilPaciente') {
+                                Navigator.pushNamed(
+                                  context,
+                                  crumb.route,
+                                  arguments: crumb.arguments,
+                                );
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          Center(
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor:
+                                      colorScheme.primaryContainer,
+                                  child: Icon(
+                                    Icons.person,
+                                    size: 50,
+                                    color: colorScheme.onPrimaryContainer,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  _patient!.nombreCompleto,
+                                  style: textTheme.headlineSmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text('RUT: ${_patient!.rut}'),
+                                Text('Sexo: ${_patient!.sexo}'),
+                                Text(_patient!.direccion),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            color: colorScheme.surface,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Información general',
+                                    style: textTheme.titleMedium?.copyWith(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  _infoRow(
+                                    Icons.badge,
+                                    'ID paciente',
+                                    _patient!.idpaciente,
+                                  ),
+                                  _infoRow(
+                                    Icons.cake,
+                                    'Fecha de nacimiento',
+                                    _patient!.fechaNacimiento,
+                                  ),
+                                  _infoRow(
+                                    Icons.home,
+                                    'Dirección',
+                                    _patient!.direccion,
+                                  ),
+                                  _infoRow(
+                                    Icons.phone,
+                                    'Teléfono',
+                                    _patient!.telefono ?? '-',
+                                  ),
+                                  _infoRow(
+                                    Icons.email,
+                                    'Email',
+                                    _patient!.email ?? '-',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: _openMedicalRecord,
+                              icon: const Icon(Icons.description),
+                              label: const Text('Ver ficha médica'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: colorScheme.primary,
+                                foregroundColor: colorScheme.onPrimary,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(22),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  _infoRow(Icons.cake, "Fecha de nacimiento",
-                      p['fechaNacimiento'] ?? '-'),
-                  _infoRow(Icons.home, "Dirección", p['direccion'] ?? '-'),
-                  _infoRow(Icons.phone, "Teléfono", p['telefono'] ?? '-'),
-                ],
-              ),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/third',
-                  arguments: widget.pacienteId,
-                );
-              },
-              icon: const Icon(Icons.description),
-              label: const Text("Ver Ficha Médica"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF009688),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
   Widget _infoRow(IconData icon, String label, String value) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Icon(icon, color: Colors.teal, size: 22),
-          const SizedBox(width: 12),
+          Icon(icon, color: colorScheme.primary),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
-              "$label: ",
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
+              label,
+              style: textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          Flexible(
+          Expanded(
             flex: 2,
             child: Text(
               value,
-              style: const TextStyle(color: Colors.black54),
-              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ErrorView extends StatelessWidget {
+  const _ErrorView({required this.message, this.action});
+
+  final String message;
+  final VoidCallback? action;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            message,
+            style: TextStyle(color: colorScheme.onSurfaceVariant),
+          ),
+          if (action != null)
+            TextButton(
+              onPressed: action,
+              child: const Text('Volver al listado'),
+            ),
         ],
       ),
     );

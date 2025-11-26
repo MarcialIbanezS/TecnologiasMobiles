@@ -62,7 +62,7 @@
                 </div>
             @else
                 <!-- Guest Actions -->
-                <a href="/login" class="btn-nav btn-nav-ghost">Iniciar Sesión</a>
+                <a href="/login" class="btn-nav btn-nav-ghost" >Iniciar Sesión</a>
                 <a href="/register" class="btn-nav btn-nav-primary">Registrarse</a>
             @endauth
         </div>
@@ -99,7 +99,7 @@
                     </div>
                 </div>
             @else
-                <!-- Guest Mobile Links -->
+                <!-- Guest Mobile Links --> 
                 <a href="/" class="mobile-nav-link {{ request()->is('/') ? 'active' : '' }}">Inicio</a>
                 <a href="/about" class="mobile-nav-link {{ request()->is('about') ? 'active' : '' }}">Acerca de</a>
                 <a href="/contact" class="mobile-nav-link {{ request()->is('contact') ? 'active' : '' }}">Fichas Médicas</a>
@@ -287,6 +287,15 @@
 /* Mobile Toggle Animation */
 .mobile-toggle span {
     transition: all 0.3s ease;
+}
+
+.btn-nav-ghost {
+
+        background: var(--card);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #00e68eff;
+ 
+
 }
 
 @media (max-width: 768px) {

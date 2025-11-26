@@ -1,13 +1,13 @@
-<div class="footer-content">
+<div class="footer-content" style="background: var(--card); padding: 2rem 0;">
     <div class="footer-container">
         <div class="footer-main">
             <div class="footer-section">
-                <h4>Triple M.A.</h4>
+                <h4 style="color: #00e68eff ;">Triple M.A.</h4>
                 <p>Tecnologías Móviles para el futuro de la medicina.</p>
             </div>
             
-            <div class="footer-section">
-                <h4>Enlaces</h4>
+            <div class="footer-section" >
+                <h4 style="color: #00e68eff ;">Enlaces</h4>
                 <ul>
                     <li><a href="/">Inicio</a></li>
                     <li><a href="/dashboard">Dashboard</a></li>
@@ -17,7 +17,7 @@
             </div>
             
             <div class="footer-section">
-                <h4>Contacto</h4>
+                <h4 style="color: #00e68eff ;">Contacto</h4>
                 <ul>
                     <li>Email: info@triplemma.com</li>
                     <li>Teléfono: +1 (555) 123-4567</li>

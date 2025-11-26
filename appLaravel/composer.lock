@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5696263f562a56d57be3b3e80acbc80b",
+    "content-hash": "2bc37734163f0f876e067dda8bd17f02",
     "packages": [
         {
             "name": "beste/clock",
@@ -210,16 +210,16 @@
         },
         {
             "name": "brick/math",
-            "version": "0.14.0",
+            "version": "0.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/math.git",
-                "reference": "113a8ee2656b882d4c3164fa31aa6e12cbb7aaa2"
+                "reference": "f05858549e5f9d7bb45875a75583240a38a281d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/113a8ee2656b882d4c3164fa31aa6e12cbb7aaa2",
-                "reference": "113a8ee2656b882d4c3164fa31aa6e12cbb7aaa2",
+                "url": "https://api.github.com/repos/brick/math/zipball/f05858549e5f9d7bb45875a75583240a38a281d0",
+                "reference": "f05858549e5f9d7bb45875a75583240a38a281d0",
                 "shasum": ""
             },
             "require": {
@@ -258,7 +258,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/math/issues",
-                "source": "https://github.com/brick/math/tree/0.14.0"
+                "source": "https://github.com/brick/math/tree/0.14.1"
             },
             "funding": [
                 {
@@ -266,7 +266,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-29T12:40:03+00:00"
+            "time": "2025-11-24T14:40:29+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1104,6 +1104,63 @@
                 "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.68.2"
             },
             "time": "2025-10-25T01:16:28+00:00"
+        },
+        {
+            "name": "google/cloud-firestore",
+            "version": "v1.54.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/google-cloud-php-firestore.git",
+                "reference": "c104c59ee4f745576014f3e449da517e5d38e73d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-firestore/zipball/c104c59ee4f745576014f3e449da517e5d38e73d",
+                "reference": "c104c59ee4f745576014f3e449da517e5d38e73d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-grpc": "*",
+                "google/cloud-core": "^1.57",
+                "google/gax": "^1.38.0",
+                "php": "^8.1",
+                "ramsey/uuid": "^3.0|^4.0"
+            },
+            "require-dev": {
+                "erusev/parsedown": "^1.6",
+                "phpdocumentor/reflection": "^5.3.3||^6.0",
+                "phpdocumentor/reflection-docblock": "^5.3",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.0",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "suggest": {
+                "ext-protobuf": "Provides a significant increase in throughput over the pure PHP protobuf implementation. See https://cloud.google.com/php/grpc for installation instructions."
+            },
+            "type": "library",
+            "extra": {
+                "component": {
+                    "id": "cloud-firestore",
+                    "path": "Firestore",
+                    "entry": "src/FirestoreClient.php",
+                    "target": "googleapis/google-cloud-php-firestore.git"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Google\\Cloud\\Firestore\\": "src",
+                    "GPBMetadata\\Google\\Firestore\\": "metadata"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Cloud Firestore Client for PHP",
+            "support": {
+                "source": "https://github.com/googleapis/google-cloud-php-firestore/tree/v1.54.3"
+            },
+            "time": "2025-11-14T22:26:16+00:00"
         },
         {
             "name": "google/cloud-storage",
@@ -4870,6 +4927,48 @@
                 }
             ],
             "time": "2025-11-13T11:34:13+00:00"
+        },
+        {
+            "name": "svk/yc-grpc-injector",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/svk/yc-grpc-injector.git",
+                "reference": "727b71c551aaacc23b22e00e9f7caf82b00e626a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/svk%2Fyc-grpc-injector/repository/archive.zip?sha=727b71c551aaacc23b22e00e9f7caf82b00e626a",
+                "reference": "727b71c551aaacc23b22e00e9f7caf82b00e626a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "provide": {
+                "ext-grpc": "1.32.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "svk\\GRPCInjector\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "svk",
+                    "email": "svk@svk.su"
+                }
+            ],
+            "description": "Интеграция драйвера grpc для php 7.4.4 в Cloud Functions Яндекс.Облака",
+            "support": {
+                "issues": "https://gitlab.com/api/v4/projects/21838721/issues"
+            },
+            "time": "2020-10-17T10:01:49+00:00"
         },
         {
             "name": "symfony/cache",
@@ -10266,5 +10365,5 @@
         "php": "^8.2"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

@@ -276,7 +276,7 @@
             
             <!-- Header -->
             <div class="text-center mb-6">
-                <h1 class="text-2xl font-bold ">Crear Cuenta</h1>
+                <h1 class="text-2xl font-bold " >Crear Cuenta</h1>
                 <p class="text-sm text- mt-2">Únete a Triple M.A. y accede a nuestra plataforma médica yay</p>
             </div>
 

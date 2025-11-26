@@ -1,17 +1,18 @@
-// patients.dart
-// Modelo adaptado al Firebase usado por el proyecto Ionic
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Paciente {
-  final String id;              // id del documento en Firestore
-  final String idpaciente;      // id interno del paciente (P05639, etc.)
-  final String nombrePaciente;  // nombre corregido (de "nomberPaciente")
+  final String id;
+  final String idpaciente;
+  final String nombrePaciente;
   final String apellidoPaciente;
   final String rut;
-  final String sexo;            // antes era "genero"
+  final String sexo;
   final String direccion;
   final String fechaNacimiento;
+  final String? telefono;
+  final String? email;
 
-  Paciente({
+  const Paciente({
     required this.id,
     required this.idpaciente,
     required this.nombrePaciente,
@@ -20,18 +21,24 @@ class Paciente {
     required this.sexo,
     required this.direccion,
     required this.fechaNacimiento,
+    this.telefono,
+    this.email,
   });
 
   factory Paciente.fromFirestore(Map<String, dynamic> data, String id) {
     return Paciente(
       id: id,
-      idpaciente: data['idpaciente'] ?? '',
-      nombrePaciente: data['nomberPaciente'] ?? data['nombrePaciente'] ?? '',
-      apellidoPaciente: data['apellidoPaciente'] ?? '',
-      rut: data['rut'] ?? '',
-      sexo: data['sexo'] ?? data['genero'] ?? '',
-      direccion: data['direccion'] ?? '',
-      fechaNacimiento: data['fechaNacimiento'] ?? '',
+      idpaciente: (data['idpaciente'] ?? id).toString(),
+      nombrePaciente: data['nomberPaciente']?.toString() ??
+          data['nombrePaciente']?.toString() ??
+          '',
+      apellidoPaciente: data['apellidoPaciente']?.toString() ?? '',
+      rut: data['rut']?.toString() ?? '',
+      sexo: data['sexo']?.toString() ?? data['genero']?.toString() ?? '',
+      direccion: data['direccion']?.toString() ?? '',
+      fechaNacimiento: _formatDate(data['fechaNacimiento']),
+      telefono: data['telefono']?.toString(),
+      email: data['email']?.toString(),
     );
   }
 
@@ -44,9 +51,22 @@ class Paciente {
       'sexo': sexo,
       'direccion': direccion,
       'fechaNacimiento': fechaNacimiento,
+      if (telefono != null) 'telefono': telefono,
+      if (email != null) 'email': email,
     };
   }
 
-  /// 🔹 Campo de conveniencia para mostrar nombre completo
   String get nombreCompleto => '$nombrePaciente $apellidoPaciente'.trim();
+}
+
+String _formatDate(dynamic value) {
+  if (value == null) return '';
+  if (value is String) return value;
+  if (value is Timestamp) {
+    final date = value.toDate();
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '${date.year}-$month-$day';
+  }
+  return value.toString();
 }

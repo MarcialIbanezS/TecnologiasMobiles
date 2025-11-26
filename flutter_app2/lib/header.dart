@@ -23,17 +23,16 @@ AppBar buildHeader(BuildContext context) {
           if (selectedValue != null) {
             switch (selectedValue) {
               case 'Inicio':
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/inicio');
                 break;
               case 'Cuenta':
-                // Navigate to account/profile page (you may need to create this route)
-                Navigator.pushNamed(context, '/account');
+                Navigator.pushNamed(context, '/perfilUsuario');
                 break;
               case 'Buscar Fichas':
-                Navigator.pushNamed(context, '/second');
+                Navigator.pushNamed(context, '/pacientes');
                 break;
               case 'Subir Fichas':
-                Navigator.pushNamed(context, '/third');
+                Navigator.pushNamed(context, '/fichaMedica');
                 break;
             }
           }

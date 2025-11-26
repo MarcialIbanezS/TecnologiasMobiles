@@ -600,20 +600,48 @@ class FirebaseController extends Controller
             $randomId = 'FICHA_' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
             
             \Log::info('Generated random ID for ficha medica', ['generated_id' => $randomId]);
+
+            if ($request->has('idoperacion') && $request->filled('idoperacion')) {
+                $operacionInput = $request->input('idoperacion');
+                if ($operacionInput == '0') {
+                    $operationCreate = null;
+                } else {
+                    //$operacion = Operacion::where([['idoperacion', '=', (int)$operacionInput]])->first();
+                    $operationCreate = Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first() ? Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first()->operacion : $request->input('idoperacion');
+                }
+            }
+            if ($request->has('idcronico') && $request->filled('idcronico')) {
+                $cronicoInput = $request->input('idcronico');
+                if ($cronicoInput == '0') {
+                    $cronicoCreate = null;
+                } else {
+                    //$cronico = Cronico::where([['idcronico', '=', (int)$cronicoInput]])->first();
+                    $cronicoCreate = Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first() ? Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first()->enfermedadcronica : $request->input('idcronico');
+                }
+            }
+            if ($request->has('idalergia') && $request->filled('idalergia')) {
+                $alergiaInput = $request->input('idalergia');
+                if ($alergiaInput == '0') {
+                    $alergiaCreate = null;
+                } else {
+                    //$alergia = Alergia::where([['idalergia', '=', (int)$alergiaInput]])->first();
+                    $alergiaCreate = Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first() ? Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first()->descripcionAlergia : $request->input('idalergia');
+                }
+            }
             
             // Create new FichaMedica using the Roddy Firestore model
             \Log::info('Creating ficha medica in Firestore');
-            $fichaMedica = FichaMedica::create([
-                'idfichamedica' => $randomId, // Use auto-generated ID
-                'fechaingreso' => $request->input('fechaingreso'),
-                'idpaciente' => $request->input('idpaciente'),
-                'idoperacion' => $request->input('idoperacion'),
-                'idcronico' => $request->input('idcronico'),
-                'idalergia' => $request->input('idalergia')
-            ]);
+                $fichaMedica = FichaMedica::create([
+                    'idfichamedica' => $randomId, // Use auto-generated ID
+                    'fechaingreso' => date('Y-m-d', strtotime($request->input('fechaingreso'))),
+                    'idpaciente' => $request->input('idpaciente'),
+                    'idoperacion' => $operationCreate,
+                    'idcronico' => $cronicoCreate,
+                    'idalergia' => $alergiaCreate
+                ]);
             
             \Log::info('Ficha medica saved successfully', [
-                'idfichamedica' => $fichaMedica->idfichamedica ?? 'unknown'
+                'fichamedica' => $fichaMedica
             ]);
             
             return redirect()->back()->with('success', 'Ficha médica creada exitosamente');
@@ -643,6 +671,14 @@ class FirebaseController extends Controller
         ]);
         
         try {
+
+            $operaciones = Operacion::all();
+            $cronicos = Cronico::all();
+            $alergias = Alergia::all();
+            \Log::info('Related collections loaded for update', [
+                'operaciones' => $operaciones
+            ]);
+            
             // Validate the request
             $validated = $request->validate([
                 'fechaingreso' => 'nullable|date',
@@ -651,92 +687,124 @@ class FirebaseController extends Controller
                 'idalergia' => 'nullable|string|max:255',
                 'alergia_descripcion' => 'nullable|string|max:1000'
             ]);
-            
+
             \Log::info('Request validated successfully', ['validated_data' => $validated]);
-            
-            // Try to find and update using Roddy's where() method with correct array format
+
             $updateData = [];
-            
-            if ($request->has('fechaingreso') && $request->input('fechaingreso')) {
+            if ($request->has('fechaingreso') && $request->filled('fechaingreso')) {
                 $updateData['fechaingreso'] = $request->input('fechaingreso');
             }
-            if ($request->has('idoperacion')) {
-                $updateData['idoperacion'] = $request->input('idoperacion') ?: null;
-            }
-            if ($request->has('idcronico')) {
-                $updateData['idcronico'] = $request->input('idcronico') ?: null;
-            }
-            if ($request->has('idalergia')) {
-                $updateData['idalergia'] = $request->input('idalergia') ?: null;
-            }
-            
-            \Log::info('Prepared update data', ['updateData' => $updateData]);
-            
-            // Try updating using Roddy's collection update method with correct array format
-            try {
-                // First verify the record exists using Roddy's array format
-                $existingFicha = FichaMedica::where(['idfichamedica', '=', $id])->first();
-                if (!$existingFicha) {
-                    // Try as integer
-                    $existingFicha = FichaMedica::where(['idfichamedica', '=', (int)$id])->first();
-                }
-                
-                if (!$existingFicha) {
-                    \Log::error('UPDATE: Ficha not found', ['id' => $id]);
-                    return response()->json(['success' => false, 'message' => 'Ficha médica no encontrada'], 404);
-                }
-                
-                \Log::info('UPDATE: Found existing ficha', ['ficha' => $existingFicha->idfichamedica]);
-                
-                // Update using Roddy's syntax: update the found record
-                if (!empty($updateData)) {
-                    $updateResult = $existingFicha->update($updateData);
-                    \Log::info('UPDATE: Update result', ['result' => $updateResult]);
-                }
-
-                //MANUALLY UPDATING IT BY HAND BECAUSE RODDY SEEMS TO HAVE ISSUES
-                $user = FichaMedica::where(['idfichamedica', '=', 9142])->first();
-                $updatedUser = $user->update([
-                    'fechaingreso' => "2022-11-11",
-                    'idalergia' => "Alergia a los gatos",
-                    'idcronico' => "Hipertension",
-                    'idoperacion' => "Apendicitis",
-                ]);
-                
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Ficha médica actualizada exitosamente'
-                ]);
-                
-            } catch (\Exception $updateEx) {
-                \Log::error('UPDATE: Direct update failed, trying alternative method', [
-                    'error' => $updateEx->getMessage()
-                ]);
-                
-                // Alternative: Use collection-level update with correct array format
-                $affectedRows = FichaMedica::where(['idfichamedica', '=', $id])->update($updateData);
-                \Log::info('UPDATE: Collection update result', ['affected' => $affectedRows]);
-                
-                if ($affectedRows === 0) {
-                    // Try with integer ID
-                    $affectedRows = FichaMedica::where(['idfichamedica', '=', (int)$id])->update($updateData);
-                    \Log::info('UPDATE: Integer ID update result', ['affected' => $affectedRows]);
-                }
-                
-                if ($affectedRows > 0) {
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Ficha médica actualizada exitosamente'
-                    ]);
+            // Map idoperacion to its value or null if 0
+            if ($request->has('idoperacion') && $request->filled('idoperacion')) {
+                $operacionInput = $request->input('idoperacion');
+                if ($operacionInput == '0') {
+                    $updateData['idoperacion'] = null;
                 } else {
-                    return response()->json(['success' => false, 'message' => 'No se pudo actualizar la ficha médica'], 500);
+                    //$operacion = Operacion::where([['idoperacion', '=', (int)$operacionInput]])->first();
+                    $updateData['idoperacion'] = Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first() ? Operacion::where([['idoperacion', '=', (int)$request->input('idoperacion')]])->first()->operacion : $request->input('idoperacion');
                 }
             }
-            
+
+
+            // Map idcronico to its value or null if 0
+            if ($request->has('idcronico') && $request->filled('idcronico')) {
+                $cronicoInput = $request->input('idcronico');
+                if ($cronicoInput == '0') {
+                    $updateData['idcronico'] = null;
+                } else {
+                    //$cronico = Cronico::where([['idcronico', '=', (int)$cronicoInput]])->first();
+                    $updateData['idcronico'] = Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first() ? Cronico::where([['idcronico', '=', (int)$request->input('idcronico')]])->first()->enfermedadcronica : $request->input('idcronico');
+                }
+            }
+            // Map idalergia to its descripcionAlergia value or null if 0
+            if ($request->has('idalergia') && $request->filled('idalergia')) {
+                $alergiaInput = $request->input('idalergia');
+                if ($alergiaInput == '0') {
+                    $updateData['idalergia'] = null;
+                } else {
+                    //$alergia = Alergia::where([['idalergia', '=', (int)$alergiaInput]])->first();
+                    $updateData['idalergia'] = Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first() ? Alergia::where([['idalergia', '=', (int)$request->input('idalergia')]])->first()->descripcionAlergia : $request->input('idalergia');
+                }
+            }
+
+
+            \Log::info('Prepared update data', ['updateData' => $updateData]);
+
+            $projectId = env('FIREBASE_PROJECT_ID');
+            $credentialsPath = env('FIREBASE_CREDENTIALS');
+            if ($credentialsPath && !file_exists($credentialsPath)) {
+                $credentialsPath = base_path($credentialsPath);
+            }
+            if (!file_exists($credentialsPath)) {
+                throw new \Exception("Firebase credentials file not found at: {$credentialsPath}");
+            }
+
+            \Log::info('Creating Firestore client for update', [
+                'projectId' => $projectId,
+                'credentialsPath' => $credentialsPath
+            ]);
+
+            $db = new \Google\Cloud\Firestore\FirestoreClient([
+                'projectId' => $projectId,
+                'keyFilePath' => $credentialsPath
+            ]);
+
+            // Query for the document(s) with matching idfichamedica
+            $collection = $db->collection('fichamedica');
+            $query = $collection->where('idfichamedica', '=', (int)$id);
+            $documents = $query->documents();
+
+            $updatedCount = 0;
+            $updatedDocIds = [];
+
+            foreach ($documents as $document) {
+                if ($document->exists()) {
+                    $docId = $document->id();
+                    $docData = $document->data();
+
+                    \Log::info('Found document to update', [
+                        'firestore_doc_id' => $docId,
+                        'idfichamedica_field' => $docData['idfichamedica'] ?? 'N/A',
+                        'document_data' => $docData
+                    ]);
+
+                    // Build update array correctly
+                    $updateArray = [];
+                    foreach ($updateData as $field => $value) {
+                        $updateArray[] = ['path' => $field, 'value' => $value];
+                    }
+                    $collection->document($docId)->update($updateArray);
+
+                    $updatedCount++;
+                    $updatedDocIds[] = $docId;
+                    \Log::info('Document updated successfully', ['firestore_doc_id' => $docId]);
+                    \Log::info('UPDATED DATA', [$updateArray]);
+                }
+            }
+
+            if ($updatedCount === 0) {
+                \Log::warning('No documents found to update', ['idfichamedica' => $id]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ficha médica no encontrada con ID: ' . $id
+                ], 404);
+            }
+
+            \Log::info('Update completed', [
+                'updated_count' => $updatedCount,
+                'updated_firestore_doc_ids' => $updatedDocIds
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Ficha médica actualizada exitosamente',
+                'updated_count' => $updatedCount,
+                'updated_document_ids' => $updatedDocIds
+            ]);
+
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::error('Validation failed', ['errors' => $e->errors()]);
             return response()->json(['success' => false, 'message' => 'Validación fallida', 'errors' => $e->errors()], 422);
-            
         } catch (\Exception $e) {
             \Log::error('Exception in updateFichaMedica', [
                 'message' => $e->getMessage(),
@@ -744,8 +812,10 @@ class FirebaseController extends Controller
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
-            return response()->json(['success' => false, 'message' => 'Error al actualizar ficha médica: ' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar ficha médica: ' . $e->getMessage()
+            ], 500);
         }
     }
 
@@ -754,184 +824,78 @@ class FirebaseController extends Controller
         \Log::info('=== deleteFichaMedica method called ===', ['id' => $id]);
         
         try {
-            // CRITICAL INSIGHT: In Firestore, there are TWO types of IDs:
-            // 1. Document ID (the actual Firestore document identifier - auto-generated by Firestore)
-            // 2. Field values (like 'idfichamedica' field - user data stored in the document)
-            // 
-            // The $id parameter from the UI is the 'idfichamedica' FIELD value
-            // We need to find the DOCUMENT ID to delete it properly
+            $projectId = env('FIREBASE_PROJECT_ID');
+            $credentialsPath = env('FIREBASE_CREDENTIALS');
             
-            // Step 1: Find the document by searching the idfichamedica field
-            \Log::info('Step 1: Finding document by idfichamedica field', ['field_value' => $id]);
-            $ficha = FichaMedica::where(['idfichamedica', '=', $id])->first();
-            
-            // Try as integer if not found
-            if (!$ficha && is_numeric($id)) {
-                \Log::info('Not found as string, trying as integer');
-                $ficha = FichaMedica::where(['idfichamedica', '=', (int)$id])->first();
+            // Make credentials path absolute if needed
+            if ($credentialsPath && !file_exists($credentialsPath)) {
+                $credentialsPath = base_path($credentialsPath);
             }
             
-            if (!$ficha) {
-                \Log::error('Ficha not found for deletion', ['id' => $id]);
-                return response()->json(['success' => false, 'message' => 'Ficha médica no encontrada'], 404);
+            if (!file_exists($credentialsPath)) {
+                throw new \Exception("Firebase credentials file not found at: {$credentialsPath}");
             }
             
-            // Step 2: Extract ALL properties from the Roddy object to find document ID
-            $documentId = null;
-            $documentName = null;
-            $allProperties = [];
-            
-            try {
-                $reflection = new \ReflectionClass($ficha);
-                
-                // Get ALL properties (public, protected, private)
-                $properties = $reflection->getProperties();
-                foreach ($properties as $property) {
-                    $property->setAccessible(true);
-                    $propName = $property->getName();
-                    $propValue = $property->getValue($ficha);
-                    $allProperties[$propName] = is_object($propValue) ? get_class($propValue) : $propValue;
-                    
-                    // Look for document ID in various possible property names
-                    if (in_array($propName, ['id', 'documentId', 'documentName', '_id'])) {
-                        if ($propName === 'id' || $propName === 'documentId' || $propName === '_id') {
-                            $documentId = $propValue;
-                        }
-                        if ($propName === 'documentName') {
-                            $documentName = $propValue;
-                        }
-                    }
-                }
-                
-                \Log::info('ALL Roddy object properties', ['properties' => $allProperties]);
-                
-                // Also check the data array for document path information
-                if (isset($allProperties['data']) && is_array($allProperties['data'])) {
-                    \Log::info('Document data fields', ['data' => $allProperties['data']]);
-                }
-                
-            } catch (\Exception $reflectionEx) {
-                \Log::warning('Reflection failed', ['error' => $reflectionEx->getMessage()]);
-            }
-            
-            \Log::info('Found ficha - analyzing IDs', [
-                'field_idfichamedica' => $ficha->idfichamedica ?? 'unknown',
-                'extracted_document_id' => $documentId,
-                'extracted_document_name' => $documentName,
-                'ficha_class' => get_class($ficha)
+            \Log::info('Creating Firestore client', [
+                'projectId' => $projectId,
+                'credentialsPath' => $credentialsPath
             ]);
             
-            // Step 3: Try delete using the extracted document ID via REST API
-            $deleteResults = [];
+            // Create the Cloud Firestore client using Google Cloud Firestore SDK
+            $db = new \Google\Cloud\Firestore\FirestoreClient([
+                'projectId' => $projectId,
+                'keyFilePath' => $credentialsPath
+            ]);
             
-            // METHOD 1: Delete using the found instance (relies on Roddy tracking document ID)
-            try {
-                \Log::info('METHOD 1: Instance delete on found object');
-                $result1 = $ficha->delete();
-                $deleteResults['method_1_instance'] = [
-                    'result' => $result1,
-                    'type' => gettype($result1),
-                    'success' => true
-                ];
-                \Log::info('METHOD 1 result', $deleteResults['method_1_instance']);
-            } catch (\Exception $e1) {
-                $deleteResults['method_1_instance'] = ['error' => $e1->getMessage(), 'success' => false];
-                \Log::error('METHOD 1 failed', $deleteResults['method_1_instance']);
-            }
-            $documentId = "00X66fdXqxUQVeFbxQPM"; //hardcoded document id for testing
-            // METHOD 2: Manual REST API delete using extracted document ID
-            if ($documentId) {
-                try {
-                    \Log::info('METHOD 2: Manual REST API delete', ['doc_id' => $documentId]);
+            \Log::info('Querying for document with idfichamedica', ['field_value' => $id]);
+            
+            // Query the collection to find documents where idfichamedica field matches
+            $collection = $db->collection('fichamedica');
+            $query = $collection->where('idfichamedica', '=', (int)$id);
+            $documents = $query->documents();
+            
+            $deletedCount = 0;
+            $deletedDocIds = [];
+            
+            foreach ($documents as $document) {
+                if ($document->exists()) {
+                    $docId = $document->id();
+                    $docData = $document->data();
                     
-                    $projectId = env('FIREBASE_PROJECT_ID');
-                    $credentialsPath = env('FIREBASE_CREDENTIALS');
-                    
-                    // If credentials path is relative, make it absolute from Laravel base path
-                    if ($credentialsPath && !file_exists($credentialsPath)) {
-                        $credentialsPath = base_path($credentialsPath);
-                    }
-                    
-                    \Log::info('Using credentials file', ['path' => $credentialsPath, 'exists' => file_exists($credentialsPath)]);
-                    
-                    // Build the Firestore REST API URL
-                    $url = "https://firestore.googleapis.com/v1/projects/{$projectId}/databases/(default)/documents/fichamedica/{$documentId}";
-                    
-                    \Log::info('DELETE URL', ['url' => $url]);
-                    
-                    // Get access token from service account
-                    if (!file_exists($credentialsPath)) {
-                        throw new \Exception("Firebase credentials file not found at: {$credentialsPath}");
-                    }
-                    $credentials = json_decode(file_get_contents($credentialsPath), true);
-                    $jwt = $this->createJWT($credentials);
-                    
-                    // Make DELETE request
-                    $ch = curl_init($url);
-                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                        'Authorization: Bearer ' . $jwt,
-                        'Content-Type: application/json'
+                    \Log::info('Found document to delete', [
+                        'firestore_doc_id' => $docId,
+                        'idfichamedica_field' => $docData['idfichamedica'] ?? 'N/A',
+                        'document_data' => $docData
                     ]);
                     
-                    $response = curl_exec($ch);
-                    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                    curl_close($ch);
+                    // Delete the document using its Firestore document ID
+                    $db->collection('fichamedica')->document($docId)->delete();
                     
-                    $deleteResults['method_2_rest_api'] = [
-                        'document_id_used' => $documentId,
-                        'http_code' => $httpCode,
-                        'response' => $response,
-                        'success' => ($httpCode >= 200 && $httpCode < 300)
-                    ];
-                    \Log::info('METHOD 2 result', $deleteResults['method_2_rest_api']);
-                } catch (\Exception $e2) {
-                    $deleteResults['method_2_rest_api'] = ['error' => $e2->getMessage(), 'success' => false];
-                    \Log::error('METHOD 2 failed', $deleteResults['method_2_rest_api']);
+                    $deletedCount++;
+                    $deletedDocIds[] = $docId;
+                    
+                    \Log::info('Document deleted successfully', ['firestore_doc_id' => $docId]);
                 }
             }
             
-            // METHOD 3: Use Roddy's destroy with document ID
-            if ($documentId) {
-                try {
-                    \Log::info('METHOD 3: Roddy destroy with document ID', ['doc_id' => $documentId]);
-                    $result3 = FichaMedica::destroy($documentId);
-                    $deleteResults['method_3_destroy'] = [
-                        'document_id_used' => $documentId,
-                        'result' => $result3,
-                        'success' => true
-                    ];
-                    \Log::info('METHOD 3 result', $deleteResults['method_3_destroy']);
-                } catch (\Exception $e3) {
-                    $deleteResults['method_3_destroy'] = ['error' => $e3->getMessage(), 'success' => false];
-                    \Log::error('METHOD 3 failed', $deleteResults['method_3_destroy']);
-                }
+            if ($deletedCount === 0) {
+                \Log::warning('No documents found to delete', ['idfichamedica' => $id]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ficha médica no encontrada con ID: ' . $id
+                ], 404);
             }
             
-            \Log::info('All delete methods completed', ['results' => $deleteResults]);
-            
-            // Verification: Check if document still exists
-            sleep(1); // Give Firestore a moment to process
-            $verification = FichaMedica::where(['idfichamedica', '=', $id])->first();
-            $wasDeleted = ($verification === null);
-            
-            \Log::info('Deletion verification', [
-                'id' => $id,
-                'was_deleted' => $wasDeleted,
-                'status' => $wasDeleted ? 'SUCCESSFULLY DELETED' : 'STILL EXISTS'
+            \Log::info('Deletion completed', [
+                'deleted_count' => $deletedCount,
+                'deleted_firestore_doc_ids' => $deletedDocIds
             ]);
             
             return response()->json([
-                'success' => $wasDeleted,
-                'message' => $wasDeleted ? 'Ficha médica eliminada exitosamente' : 'Métodos ejecutados pero documento aún existe',
-                'delete_methods_results' => $deleteResults,
-                'extracted_document_id' => $documentId,
-                'extracted_document_name' => $documentName,
-                'verification' => [
-                    'was_deleted' => $wasDeleted,
-                    'status' => $wasDeleted ? 'Document successfully deleted' : 'Document still exists in Firestore'
-                ]
+                'success' => true,
+                'message' => 'Ficha médica eliminada exitosamente',
+                'deleted_count' => $deletedCount,
+                'deleted_document_ids' => $deletedDocIds
             ]);
             
         } catch (\Exception $e) {
@@ -942,33 +906,14 @@ class FirebaseController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             
-            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al eliminar ficha médica: ' . $e->getMessage()
+            ], 500);
         }
     }
     
-    // Helper function to create JWT for Firebase REST API authentication
-    private function createJWT($credentials)
-    {
-        $now = time();
-        $exp = $now + 3600; // 1 hour expiration
-        
-        $header = base64_encode(json_encode(['alg' => 'RS256', 'typ' => 'JWT']));
-        $payload = base64_encode(json_encode([
-            'iss' => $credentials['client_email'],
-            'scope' => 'https://www.googleapis.com/auth/datastore',
-            'aud' => 'https://oauth2.googleapis.com/token',
-            'iat' => $now,
-            'exp' => $exp
-        ]));
-        
-        $signatureInput = $header . '.' . $payload;
-        
-        $privateKey = openssl_pkey_get_private($credentials['private_key']);
-        openssl_sign($signatureInput, $signature, $privateKey, OPENSSL_ALGO_SHA256);
-        openssl_free_key($privateKey);
-        
-        $signatureEncoded = base64_encode($signature);
-        
-        return $header . '.' . $payload . '.' . $signatureEncoded;
-    }
+
+
 }
+

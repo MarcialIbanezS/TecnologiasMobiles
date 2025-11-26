@@ -6,10 +6,10 @@
 <div style="padding: 2rem 0 2rem 0; ">
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem;">
         
-        <!-- Hero Section -->
-        <div class="about-hero">
-            <h1 class="about-title">Acerca de Triple M.A.</h1>
-            <p class="about-subtitle">Revolucionando la tecnología médica móvil para un futuro más saludable</p>
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Acerca de Triple M.A.</h1>
+            <p class="page-subtitle">Revolucionando la tecnología médica móvil para un futuro más saludable</p>
         </div>
 
         <!-- Main Content Grid -->
@@ -74,13 +74,8 @@
             <h2>¿Listo para Comenzar?</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
             <div class="cta-buttons">
-                @auth
-                    <a class="btn btn-primary" href="{{ route('dashboard') }}">Ir al Dashboard</a>
-                    <a class="btn btn-ghost" href="/contact">Contactar</a>
-                @else
                     <a class="btn btn-primary" href="/register">Registrarse</a>
                     <a class="btn btn-ghost" href="/contact">Contactar</a>
-                @endauth
             </div>
         </div>
 
@@ -90,6 +85,32 @@
 
 @section('styles')
 <style>
+
+
+
+    /* Page Layout */
+    .page-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .page-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--text-primary), var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .page-subtitle {
+        font-size: 1.2rem;
+        color: #0b004dff;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
     /* About Page Specific Styles */
     .about-hero {
         text-align: center;
@@ -123,7 +144,7 @@
     }
 
     .about-card {
-        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        background: var(--card);
         border: 1px solid rgba(255,255,255,0.04);
         padding: 2.5rem;
         border-radius: 16px;
@@ -143,7 +164,7 @@
     }
 
     .about-card h2 {
-        color: var(--text-primary);
+        color: #00e68eff;
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 1rem;
@@ -171,7 +192,7 @@
     }
 
     .section-subtitle {
-        color: var(--muted);
+        color: #0b004dff;
         font-size: 1.1rem;
         text-align: center;
         max-width: 600px;
@@ -186,7 +207,7 @@
     }
 
     .team-member {
-        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        background: var(--card);
         border: 1px solid rgba(255,255,255,0.04);
         padding: 2rem;
         border-radius: 16px;
@@ -205,7 +226,7 @@
     }
 
     .team-member h3 {
-        color: var(--text-primary);
+        color: #00e68eff;
         font-size: 1.3rem;
         font-weight: 600;
         margin-bottom: 0.5rem;
@@ -224,48 +245,15 @@
         font-size: 0.9rem;
     }
 
-    /* Stats Section */
-    .stats-section {
-        margin-bottom: 4rem;
-    }
 
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 2rem;
-    }
 
-    .stat-item {
-        text-align: center;
-        padding: 2rem 1rem;
-        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-        border: 1px solid rgba(255,255,255,0.04);
-        border-radius: 12px;
-        transition: transform 0.3s ease;
-    }
 
-    .stat-item:hover {
-        transform: scale(1.05);
-    }
-
-    .stat-number {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--accent);
-        margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-        color: var(--muted);
-        font-weight: 500;
-        font-size: 0.9rem;
-    }
 
     /* CTA Section */
     .cta-section {
         text-align: center;
         padding: 3rem 2rem;
-        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+        background: var(--card);
         border: 1px solid rgba(255,255,255,0.04);
         border-radius: 16px;
         box-shadow: 0 10px 30px rgba(2,6,23,0.6);
@@ -273,7 +261,7 @@
     }
 
     .cta-section h2 {
-        color: var(--text-primary);
+        color: #00e68eff;
         font-size: 2rem;
         font-weight: 600;
         margin-bottom: 1rem;
@@ -318,9 +306,6 @@
             grid-template-columns: 1fr;
         }
 
-        .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
 
         .section-title {
             font-size: 2rem;

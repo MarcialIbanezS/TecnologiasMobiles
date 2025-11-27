@@ -1,0 +1,26 @@
+[
+    {
+        "idconsulta": 1,
+        "idmedicamento": 1
+    },
+    {
+        "idconsulta": 2,
+        "idmedicamento": 2
+    },
+    {
+        "idconsulta": 1,
+        "idmedicamento": 3
+    },
+    {
+        "idconsulta": 3,
+        "idmedicamento": 3
+    },
+    {
+        "idconsulta": 4,
+        "idmedicamento": 4
+    },
+    {
+        "idconsulta": 5,
+        "idmedicamento": 5
+    }
+]

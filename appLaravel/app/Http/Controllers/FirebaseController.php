@@ -846,6 +846,7 @@ class FirebaseController extends Controller
                 'projectId' => $projectId,
                 'keyFilePath' => $credentialsPath
             ]);
+            \Log::info('Firestore client created successfully');
             
             \Log::info('Querying for document with idfichamedica', ['field_value' => $id]);
             

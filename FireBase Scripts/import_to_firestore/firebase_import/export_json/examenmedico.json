@@ -1,0 +1,47 @@
+[
+    {
+        "idexamen": 1,
+        "idtipoexamen": 1,
+        "idtiposangre": 1,
+        "idsucursal": 1,
+        "idcliente": 1,
+        "tomamuestra": "2025-09-20T08:30:00",
+        "recepcion": "2025-09-20T09:00:00"
+    },
+    {
+        "idexamen": 2,
+        "idtipoexamen": 2,
+        "idtiposangre": 3,
+        "idsucursal": 2,
+        "idcliente": 2,
+        "tomamuestra": "2025-09-21T10:15:00",
+        "recepcion": "2025-09-21T10:45:00"
+    },
+    {
+        "idexamen": 3,
+        "idtipoexamen": 3,
+        "idtiposangre": 2,
+        "idsucursal": 1,
+        "idcliente": 1,
+        "tomamuestra": "2025-09-22T14:20:00",
+        "recepcion": "2025-09-22T14:50:00"
+    },
+    {
+        "idexamen": 4,
+        "idtipoexamen": 4,
+        "idtiposangre": 5,
+        "idsucursal": 3,
+        "idcliente": 3,
+        "tomamuestra": "2025-09-23T11:30:00",
+        "recepcion": "2025-09-23T12:00:00"
+    },
+    {
+        "idexamen": 5,
+        "idtipoexamen": 5,
+        "idtiposangre": 4,
+        "idsucursal": 2,
+        "idcliente": 2,
+        "tomamuestra": "2025-09-24T16:45:00",
+        "recepcion": "2025-09-24T17:15:00"
+    }
+]

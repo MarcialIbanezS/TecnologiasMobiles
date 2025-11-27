@@ -1,0 +1,27 @@
+[
+    {
+        "idmuestra": 1,
+        "idexamen": 1,
+        "resultado": "14.5"
+    },
+    {
+        "idmuestra": 2,
+        "idexamen": 3,
+        "resultado": "95"
+    },
+    {
+        "idmuestra": 3,
+        "idexamen": 4,
+        "resultado": "0.9"
+    },
+    {
+        "idmuestra": 4,
+        "idexamen": 2,
+        "resultado": "185"
+    },
+    {
+        "idmuestra": 5,
+        "idexamen": 1,
+        "resultado": "7500"
+    }
+]

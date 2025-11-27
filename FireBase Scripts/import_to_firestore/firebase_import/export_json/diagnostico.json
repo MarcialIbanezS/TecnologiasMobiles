@@ -1,0 +1,22 @@
+[
+    {
+        "iddiagnostico": 1,
+        "diagnostico": "Infección respiratoria aguda"
+    },
+    {
+        "iddiagnostico": 2,
+        "diagnostico": "Gastroenteritis viral"
+    },
+    {
+        "iddiagnostico": 3,
+        "diagnostico": "Fractura de radio distal"
+    },
+    {
+        "iddiagnostico": 4,
+        "diagnostico": "Migraña común"
+    },
+    {
+        "iddiagnostico": 5,
+        "diagnostico": "Hipertensión arterial esencial"
+    }
+]

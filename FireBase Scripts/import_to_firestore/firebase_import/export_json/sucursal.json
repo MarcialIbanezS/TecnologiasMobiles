@@ -1,0 +1,22 @@
+[
+    {
+        "idsucursal": 1,
+        "sucursal": "BIONET Centro"
+    },
+    {
+        "idsucursal": 2,
+        "sucursal": "BIONET Las Condes"
+    },
+    {
+        "idsucursal": 3,
+        "sucursal": "BIONET Maipú"
+    },
+    {
+        "idsucursal": 4,
+        "sucursal": "BIONET Valparaíso"
+    },
+    {
+        "idsucursal": 5,
+        "sucursal": "BIONET Concepción"
+    }
+]

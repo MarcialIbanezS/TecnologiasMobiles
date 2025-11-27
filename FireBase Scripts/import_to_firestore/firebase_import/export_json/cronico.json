@@ -1,0 +1,22 @@
+[
+    {
+        "idcronico": 1,
+        "enfermedadcronica": "Diabetes Mellitus Tipo 2"
+    },
+    {
+        "idcronico": 2,
+        "enfermedadcronica": "Hipertensión Arterial"
+    },
+    {
+        "idcronico": 3,
+        "enfermedadcronica": "Asma Bronquial"
+    },
+    {
+        "idcronico": 4,
+        "enfermedadcronica": "Artritis Reumatoide"
+    },
+    {
+        "idcronico": 5,
+        "enfermedadcronica": "Enfermedad Renal Crónica"
+    }
+]

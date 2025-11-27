@@ -1,0 +1,1 @@
+Requiere instalar node.js en cada carpeta por separado para correr los scripts

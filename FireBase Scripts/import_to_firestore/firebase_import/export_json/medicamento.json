@@ -1,0 +1,26 @@
+[
+    {
+        "idmedicamento": 1,
+        "medicamento": "Amoxicilina 500mg"
+    },
+    {
+        "idmedicamento": 2,
+        "medicamento": "Ibuprofeno 400mg"
+    },
+    {
+        "idmedicamento": 3,
+        "medicamento": "Paracetamol 500mg"
+    },
+    {
+        "idmedicamento": 4,
+        "medicamento": "Enalapril 10mg"
+    },
+    {
+        "idmedicamento": 5,
+        "medicamento": "Metformina 850mg"
+    },
+    {
+        "idmedicamento": 6,
+        "medicamento": "Eutirox 50mg"
+    }
+]

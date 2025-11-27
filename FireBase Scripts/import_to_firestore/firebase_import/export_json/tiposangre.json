@@ -1,0 +1,34 @@
+[
+    {
+        "idtiposangre": 1,
+        "tipoSangre": "O+"
+    },
+    {
+        "idtiposangre": 2,
+        "tipoSangre": "O-"
+    },
+    {
+        "idtiposangre": 3,
+        "tipoSangre": "A+"
+    },
+    {
+        "idtiposangre": 4,
+        "tipoSangre": "A-"
+    },
+    {
+        "idtiposangre": 5,
+        "tipoSangre": "B+"
+    },
+    {
+        "idtiposangre": 6,
+        "tipoSangre": "B-"
+    },
+    {
+        "idtiposangre": 7,
+        "tipoSangre": "AB+"
+    },
+    {
+        "idtiposangre": 8,
+        "tipoSangre": "AB-"
+    }
+]

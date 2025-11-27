@@ -1,0 +1,32 @@
+[
+    {
+        "idprofesional": 1,
+        "idespecialidad": 1,
+        "nombreprofesional": "Dr. Carlos Mendoza",
+        "rut": "15555666-7"
+    },
+    {
+        "idprofesional": 2,
+        "idespecialidad": 2,
+        "nombreprofesional": "Dra. Patricia Rojas",
+        "rut": "16666777-8"
+    },
+    {
+        "idprofesional": 3,
+        "idespecialidad": 3,
+        "nombreprofesional": "Dr. Miguel Sánchez",
+        "rut": "17777888-9"
+    },
+    {
+        "idprofesional": 4,
+        "idespecialidad": 4,
+        "nombreprofesional": "Dra. Isabel Vargas",
+        "rut": "18888999-0"
+    },
+    {
+        "idprofesional": 5,
+        "idespecialidad": 1,
+        "nombreprofesional": "Dr. Fernando López",
+        "rut": "19999000-1"
+    }
+]

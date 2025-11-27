@@ -1,0 +1,32 @@
+[
+    {
+        "idconsulta": 1,
+        "idservicio": 1,
+        "idprofesional": 1,
+        "fecha": "2025-09-20"
+    },
+    {
+        "idconsulta": 2,
+        "idservicio": 2,
+        "idprofesional": 2,
+        "fecha": "2025-09-21"
+    },
+    {
+        "idconsulta": 3,
+        "idservicio": 1,
+        "idprofesional": 3,
+        "fecha": "2025-09-22"
+    },
+    {
+        "idconsulta": 4,
+        "idservicio": 1,
+        "idprofesional": 4,
+        "fecha": "2025-09-23"
+    },
+    {
+        "idconsulta": 5,
+        "idservicio": 2,
+        "idprofesional": 5,
+        "fecha": "2025-09-24"
+    }
+]

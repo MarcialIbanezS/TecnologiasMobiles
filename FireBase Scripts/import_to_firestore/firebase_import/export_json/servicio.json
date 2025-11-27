@@ -1,0 +1,22 @@
+[
+    {
+        "idservicio": 1,
+        "servicio": "Consulta Externa"
+    },
+    {
+        "idservicio": 2,
+        "servicio": "Urgencias"
+    },
+    {
+        "idservicio": 3,
+        "servicio": "Hospitalización"
+    },
+    {
+        "idservicio": 4,
+        "servicio": "Cirugía Ambulatoria"
+    },
+    {
+        "idservicio": 5,
+        "servicio": "Laboratorio Clínico"
+    }
+]

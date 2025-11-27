@@ -1,0 +1,22 @@
+[
+    {
+        "idcliente": 1,
+        "cliente": "Hospital Regional de Los Ángeles"
+    },
+    {
+        "idcliente": 2,
+        "cliente": "Clínica Santa María"
+    },
+    {
+        "idcliente": 3,
+        "cliente": "Centro Médico Universidad Católica"
+    },
+    {
+        "idcliente": 4,
+        "cliente": "Hospital Salvador"
+    },
+    {
+        "idcliente": 5,
+        "cliente": "Clínica Las Condes"
+    }
+]

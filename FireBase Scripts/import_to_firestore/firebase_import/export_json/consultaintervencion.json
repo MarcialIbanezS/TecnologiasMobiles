@@ -1,0 +1,22 @@
+[
+    {
+        "idconsulta": 2,
+        "idintervencion": 1
+    },
+    {
+        "idconsulta": 3,
+        "idintervencion": 2
+    },
+    {
+        "idconsulta": 5,
+        "idintervencion": 3
+    },
+    {
+        "idconsulta": 1,
+        "idintervencion": 5
+    },
+    {
+        "idconsulta": 4,
+        "idintervencion": 5
+    }
+]

@@ -1,0 +1,22 @@
+[
+    {
+        "idoperacion": 1,
+        "operacion": "Apendicectomía laparoscópica"
+    },
+    {
+        "idoperacion": 2,
+        "operacion": "Colecistectomía"
+    },
+    {
+        "idoperacion": 3,
+        "operacion": "Herniorrafia inguinal"
+    },
+    {
+        "idoperacion": 4,
+        "operacion": "Artroscopia de rodilla"
+    },
+    {
+        "idoperacion": 5,
+        "operacion": "Cesárea"
+    }
+]

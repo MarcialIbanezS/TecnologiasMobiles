@@ -1,0 +1,47 @@
+[
+    {
+        "idmuestra": 1,
+        "idtipomuestra": 1,
+        "idmetodo": 1,
+        "nombremuestra": "Hemoglobina",
+        "unidad": "g/dL",
+        "valorSuperior": 16.0,
+        "valorInferior": 12.0
+    },
+    {
+        "idmuestra": 2,
+        "idtipomuestra": 1,
+        "idmetodo": 2,
+        "nombremuestra": "Glucosa",
+        "unidad": "mg/dL",
+        "valorSuperior": 110.0,
+        "valorInferior": 70.0
+    },
+    {
+        "idmuestra": 3,
+        "idtipomuestra": 2,
+        "idmetodo": 3,
+        "nombremuestra": "Creatinina",
+        "unidad": "mg/dL",
+        "valorSuperior": 1.2,
+        "valorInferior": 0.6
+    },
+    {
+        "idmuestra": 4,
+        "idtipomuestra": 1,
+        "idmetodo": 1,
+        "nombremuestra": "Colesterol Total",
+        "unidad": "mg/dL",
+        "valorSuperior": 200.0,
+        "valorInferior": 150.0
+    },
+    {
+        "idmuestra": 5,
+        "idtipomuestra": 1,
+        "idmetodo": 4,
+        "nombremuestra": "Leucocitos",
+        "unidad": "cel/uL",
+        "valorSuperior": 10000.0,
+        "valorInferior": 4000.0
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "idalergia": 1,
+        "idfichamedica": 1
+    },
+    {
+        "idalergia": 2,
+        "idfichamedica": 2
+    },
+    {
+        "idalergia": 1,
+        "idfichamedica": 3
+    },
+    {
+        "idalergia": 3,
+        "idfichamedica": 3
+    },
+    {
+        "idalergia": 4,
+        "idfichamedica": 4
+    },
+    {
+        "idalergia": 5,
+        "idfichamedica": 5
+    }
+]

@@ -1,0 +1,22 @@
+[
+    {
+        "idcronico": 3,
+        "idfichamedica": 2
+    },
+    {
+        "idcronico": 1,
+        "idfichamedica": 4
+    },
+    {
+        "idcronico": 2,
+        "idfichamedica": 4
+    },
+    {
+        "idcronico": 1,
+        "idfichamedica": 5
+    },
+    {
+        "idcronico": 2,
+        "idfichamedica": 5
+    }
+]

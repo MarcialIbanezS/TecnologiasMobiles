@@ -1,0 +1,22 @@
+[
+    {
+        "idmetodo": 1,
+        "nombremetodo": "Espectrofotometría"
+    },
+    {
+        "idmetodo": 2,
+        "nombremetodo": "Inmunoquímica"
+    },
+    {
+        "idmetodo": 3,
+        "nombremetodo": "Cromatografía"
+    },
+    {
+        "idmetodo": 4,
+        "nombremetodo": "Microscopia"
+    },
+    {
+        "idmetodo": 5,
+        "nombremetodo": "PCR"
+    }
+]

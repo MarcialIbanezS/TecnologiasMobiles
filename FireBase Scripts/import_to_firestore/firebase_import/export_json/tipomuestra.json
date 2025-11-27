@@ -1,0 +1,22 @@
+[
+    {
+        "idtipomuestra": 1,
+        "tipomuestra": "Sangre"
+    },
+    {
+        "idtipomuestra": 2,
+        "tipomuestra": "Orina"
+    },
+    {
+        "idtipomuestra": 3,
+        "tipomuestra": "Heces"
+    },
+    {
+        "idtipomuestra": 4,
+        "tipomuestra": "Saliva"
+    },
+    {
+        "idtipomuestra": 5,
+        "tipomuestra": "Líquido cefalorraquídeo"
+    }
+]

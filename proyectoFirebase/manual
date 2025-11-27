@@ -1,0 +1,5 @@
+#Requisitos:
+#Tener instalado node y npm (Node Package Manager, npm install, npm update)
+#Tener instalado Ionic (Correr el comando npm install -g @ionic/cli para instalar Ionic CLI)
+#Correr con Ionic serve dentro de la carpeta de proyecto
+

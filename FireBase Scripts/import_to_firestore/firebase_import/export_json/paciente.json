@@ -1,0 +1,42 @@
+[
+    {
+        "idpaciente": 1,
+        "nombrePaciente": "María González López",
+        "rut": "12345678-9",
+        "fechaNacimiento": "1985-03-15",
+        "sexo": "Femenino",
+        "direccion": "Av. Libertador 1234, Santiago"
+    },
+    {
+        "idpaciente": 2,
+        "nombrePaciente": "Juan Carlos Pérez",
+        "rut": "98765432-1",
+        "fechaNacimiento": "1978-07-22",
+        "sexo": "Masculino",
+        "direccion": "Calle Los Aromos 567, Valparaíso"
+    },
+    {
+        "idpaciente": 3,
+        "nombrePaciente": "Ana María Silva",
+        "rut": "11223344-5",
+        "fechaNacimiento": "1992-11-08",
+        "sexo": "Femenino",
+        "direccion": "Pasaje Las Flores 89, Concepción"
+    },
+    {
+        "idpaciente": 4,
+        "nombrePaciente": "Roberto Martínez",
+        "rut": "55667788-2",
+        "fechaNacimiento": "1965-01-30",
+        "sexo": "Masculino",
+        "direccion": "Av. Brasil 2345, Viña del Mar"
+    },
+    {
+        "idpaciente": 5,
+        "nombrePaciente": "Carolina Fernández",
+        "rut": "99887766-3",
+        "fechaNacimiento": "1988-09-12",
+        "sexo": "Femenino",
+        "direccion": "Los Pinos 456, La Serena"
+    }
+]

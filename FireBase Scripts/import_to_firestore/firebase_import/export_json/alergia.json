@@ -1,0 +1,27 @@
+[
+    {
+        "idalergia": 1,
+        "nombrealergia": "Penicilina",
+        "descripcionAlergia": "Alergia a antibióticos del grupo penicilina"
+    },
+    {
+        "idalergia": 2,
+        "nombrealergia": "Polen",
+        "descripcionAlergia": "Alergia estacional al polen de árboles y flores"
+    },
+    {
+        "idalergia": 3,
+        "nombrealergia": "Frutos secos",
+        "descripcionAlergia": "Alergia a almendras, nueces, avellanas"
+    },
+    {
+        "idalergia": 4,
+        "nombrealergia": "Lactosa",
+        "descripcionAlergia": "Intolerancia a productos lácteos"
+    },
+    {
+        "idalergia": 5,
+        "nombrealergia": "Gluten",
+        "descripcionAlergia": "Celiaquía o sensibilidad al gluten"
+    }
+]

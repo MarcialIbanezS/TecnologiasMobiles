@@ -1,0 +1,22 @@
+[
+    {
+        "idespecialidad": 1,
+        "especialidad": "Medicina General"
+    },
+    {
+        "idespecialidad": 2,
+        "especialidad": "Cardiología"
+    },
+    {
+        "idespecialidad": 3,
+        "especialidad": "Traumatología"
+    },
+    {
+        "idespecialidad": 4,
+        "especialidad": "Neurología"
+    },
+    {
+        "idespecialidad": 5,
+        "especialidad": "Gastroenterología"
+    }
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "idfichamedica": 1,
+        "idpaciente": 1,
+        "idconsulta": 1,
+        "fechaingreso": "2025-09-20"
+    },
+    {
+        "idfichamedica": 2,
+        "idpaciente": 2,
+        "idconsulta": 2,
+        "fechaingreso": "2025-09-21"
+    },
+    {
+        "idfichamedica": 3,
+        "idpaciente": 3,
+        "idconsulta": 3,
+        "fechaingreso": "2025-09-22"
+    },
+    {
+        "idfichamedica": 4,
+        "idpaciente": 4,
+        "idconsulta": 4,
+        "fechaingreso": "2025-09-23"
+    },
+    {
+        "idfichamedica": 5,
+        "idpaciente": 5,
+        "idconsulta": 5,
+        "fechaingreso": "2025-09-24"
+    }
+]

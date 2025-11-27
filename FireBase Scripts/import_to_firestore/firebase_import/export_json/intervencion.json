@@ -1,0 +1,22 @@
+[
+    {
+        "idintervencion": 1,
+        "intervencion": "Sutura de herida menor"
+    },
+    {
+        "idintervencion": 2,
+        "intervencion": "Reducción cerrada de fractura"
+    },
+    {
+        "idintervencion": 3,
+        "intervencion": "Drenaje de absceso"
+    },
+    {
+        "idintervencion": 4,
+        "intervencion": "Infiltración articular"
+    },
+    {
+        "idintervencion": 5,
+        "intervencion": "Electrocardiograma"
+    }
+]

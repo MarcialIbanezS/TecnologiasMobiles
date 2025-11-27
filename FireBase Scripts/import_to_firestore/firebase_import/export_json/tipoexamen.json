@@ -1,0 +1,22 @@
+[
+    {
+        "idtipoexamen": 1,
+        "nombreTipoExamen": "Hemograma Completo"
+    },
+    {
+        "idtipoexamen": 2,
+        "nombreTipoExamen": "Perfil Lipídico"
+    },
+    {
+        "idtipoexamen": 3,
+        "nombreTipoExamen": "Glicemia"
+    },
+    {
+        "idtipoexamen": 4,
+        "nombreTipoExamen": "Función Renal"
+    },
+    {
+        "idtipoexamen": 5,
+        "nombreTipoExamen": "Función Hepática"
+    }
+]

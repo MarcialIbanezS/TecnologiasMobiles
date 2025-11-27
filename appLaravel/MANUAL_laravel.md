@@ -4,6 +4,11 @@ Este documento explica los pasos mínimos para poner en marcha la aplicación La
 
 ## Requisitos
 - PHP >= 8.x (según versión del proyecto)
+- PHP extension: GRPC
+    Tutorial Windows: https://www.php.net/manual/en/install.pecl.windows.php 
+    - https://grpc.io/docs/languages/php/quickstart/
+    - https://docs.cloud.google.com/php/docs/reference/help/grpc 
+
 - Composer
 - Node.js + npm o Yarn
 - Base de datos MySQL
@@ -16,6 +21,7 @@ Este documento explica los pasos mínimos para poner en marcha la aplicación La
 ```bash
 git clone <repo-url> proyecto
 cd proyecto
+cd appLaravel
 ```
 
 2. Copiar archivo de entorno y configurar
@@ -45,8 +51,12 @@ GOOGLE_REDIRECT_URI="${APP_URL}/auth/google/callback"
 **Firebase Firestore**
 ```bash
 #
+FIREBASE_PROJECT=appLaravel
+FIREBASE_CREDENTIALS=laravel_keys.json
 FIREBASE_PROJECT_ID=appmoviles-b5003
 ```
+**Las credenciales de Firebase no se incluyen en el repositorio, se adjunta con la entrega**
+**Dejela dentro del root de Laravel ()**
 
 3. Instalar dependencias PHP
 ```bash
@@ -106,5 +116,11 @@ php artisan view:clear
 - Si hay errores de migración, revisar credenciales DB en `.env`.
 - Si cambios en `.env` no surten efecto: `php artisan config:clear`.
 - Errores de permisos: ajustar ownership/permissions en `storage` y `bootstrap/cache`.
+- Si le dice "the requested client requires the gRPC extension". Entonces tiene que ir a su php.ini
+    -cmd:   php --ini   #para encontrar la ruta de su php.ini
+    -ingrese a este archivo y agregue "extension=grpc"
+- Errores de conexion: revisar las credenciales de laravel_keys.json estan configuradas. 
+    - En caso de que el error persista, comunicarse con nosotros.
+
 
 Fin.  

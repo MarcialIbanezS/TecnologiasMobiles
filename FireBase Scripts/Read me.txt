@@ -1,1 +1,2 @@
 Requiere instalar node.js en cada carpeta por separado para correr los scripts
+Reemplazar la key en scripts por "nueva-clave.json"

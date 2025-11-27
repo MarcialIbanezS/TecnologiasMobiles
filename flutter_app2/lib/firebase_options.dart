@@ -51,38 +51,38 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAlGIXy7lbCKwPdrJel8xDslzEsHQRL-78',
-    appId: '1:1056544919141:android:6180e6b98f708d3f68c08c',
-    messagingSenderId: '1056544919141',
-    projectId: 'fichamedica-app',
-    storageBucket: 'fichamedica-app.firebasestorage.app',
+    apiKey: "AIzaSyBko6PFIC3QOZ3CXtsyN-4vrFJR2ooAeas",
+    appId: "1:264276022373:android:c4a5d2cfdc85421e5b628c",
+    messagingSenderId: "264276022373",
+    projectId: "appmoviles-b5003",
+    storageBucket: "appmoviles-b5003.firebasestorage.app",
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB3fMwq5kX8gGQIv0fsCtz61rFzCkc2uKE',
-    appId: '1:1056544919141:ios:65e05a01c053c22868c08c',
-    messagingSenderId: '1056544919141',
-    projectId: 'fichamedica-app',
-    storageBucket: 'fichamedica-app.firebasestorage.app',
-    iosBundleId: 'com.example.flutterApp2',
+    apiKey: "AIzaSyBko6PFIC3QOZ3CXtsyN-4vrFJR2ooAeas",
+    appId: "1:264276022373:ios:2087b53416967ac85b628c",
+    messagingSenderId: "264276022373",
+    projectId: "appmoviles-b5003",
+    storageBucket: "appmoviles-b5003.firebasestorage.app",
+    iosBundleId: 'com.example.flutterApp2', // ajusta al bundle real si difiere
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyB3fMwq5kX8gGQIv0fsCtz61rFzCkc2uKE',
-    appId: '1:1056544919141:ios:65e05a01c053c22868c08c',
-    messagingSenderId: '1056544919141',
-    projectId: 'fichamedica-app',
-    storageBucket: 'fichamedica-app.firebasestorage.app',
-    iosBundleId: 'com.example.flutterApp2',
+    apiKey: "AIzaSyBko6PFIC3QOZ3CXtsyN-4vrFJR2ooAeas",
+    appId: "1:264276022373:ios:2087b53416967ac85b628c",
+    messagingSenderId: "264276022373",
+    projectId: "appmoviles-b5003",
+    storageBucket: "appmoviles-b5003.firebasestorage.app",
+    iosBundleId: 'com.example.flutterApp2', // ajusta al bundle real si difiere
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyA8HoDHt64Ext9nUHsJeotMiJ5P3yNIqzU',
-    appId: '1:1056544919141:web:7dd92233cf9f921768c08c',
-    messagingSenderId: '1056544919141',
-    projectId: 'fichamedica-app',
-    authDomain: 'fichamedica-app.firebaseapp.com',
-    storageBucket: 'fichamedica-app.firebasestorage.app',
-    measurementId: 'G-RTM9SRGVDE',
+    apiKey: "AIzaSyBko6PFIC3QOZ3CXtsyN-4vrFJR2ooAeas",
+    appId: "1:264276022373:web:66db567fd6ee7d225b628c",
+    messagingSenderId: "264276022373",
+    projectId: "appmoviles-b5003",
+    authDomain: "appmoviles-b5003.firebaseapp.com",
+    storageBucket: "appmoviles-b5003.firebasestorage.app",
+    measurementId: "G-RXGREWNXX8",
   );
 }

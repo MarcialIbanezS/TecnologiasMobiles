@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonSpinner } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { Firestore, doc, setDoc, onSnapshot } from '@angular/fire/firestore';
-import { QRCodeComponent} from 'angularx-qrcode'
+
 
 
 @Component({
@@ -12,7 +12,7 @@ import { QRCodeComponent} from 'angularx-qrcode'
   templateUrl: './fingerprint.page.html',
   styleUrls: ['./fingerprint.page.scss'],
     standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonSpinner, QRCodeComponent]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonSpinner]
 })
 
 export class FingerprintPage {
@@ -23,11 +23,6 @@ export class FingerprintPage {
   constructor(private router: Router) {}
 
   startFakeScan() {
-
-    this.state = 'qr';
-
-    
-    this.qrUrl = 'https://tu-url-firebase-o-lo-que-sea';
 
     setTimeout(() => {
       this.moveToWaiting();
